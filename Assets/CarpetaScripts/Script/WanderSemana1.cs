@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wander : MonoBehaviour
+public class WanderSemana1 : MonoBehaviour
 {
     public float velocity = 4f;
     public float MaxAngle = 360;

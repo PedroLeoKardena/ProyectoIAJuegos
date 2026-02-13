@@ -9,7 +9,7 @@ public class Face : Align
     private Agent auxTargetAgent;
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         this.nameSteering = "Face";
 
@@ -28,10 +28,15 @@ public class Face : Align
     // Update is called once per frame
     public override Steering GetSteering(Agent agent)
     {
+        // Si no hay target, no podemos mirar a nadie
+        if (this.target == null){
+            return new Steering();
+        }
+
         Vector3 direction = target.Position - agent.Position;
 
         if (direction.magnitude == 0){
-            return null;
+            return new Steering();
         }
         
         float targetOrientation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;

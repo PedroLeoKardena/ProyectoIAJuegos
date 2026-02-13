@@ -48,6 +48,7 @@ public class AgentNPC : Agent
         
         //Actualizamos aceleracion angular y rotacion
         float angularAcceleration = this.steer.angular;
+
         this.Rotation += angularAcceleration * deltaTime; // NewtonEuler: ω = ω0 + α*t
         
         //Actualizamos posicion y orientacion
