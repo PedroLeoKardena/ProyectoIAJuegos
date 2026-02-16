@@ -47,18 +47,18 @@ public class PathFollowingSinOffset : Seek
         if (distanceToTarget <= radius)
         {
             // Si hemos llegado, pasar al siguiente nodo
-            Debug.Log($"[PathFollowing] Nodo {currentNode} alcanzado. Pasando al siguiente nodo.");
+            //Debug.Log($"[PathFollowing] Nodo {currentNode} alcanzado. Pasando al siguiente nodo.");
             currentNode += pathDir;
 
             // Opción 1. Me quedo en el final.
             if (currentNode >= path.nodes.Length)
             {
                 currentNode = path.nodes.Length - 1;
-                Debug.Log($"[PathFollowing] Llegado al final del camino. Nodo final: {currentNode}");
+                //Debug.Log($"[PathFollowing] Llegado al final del camino. Nodo final: {currentNode}");
             }
             else
             {
-                Debug.Log($"[PathFollowing] Nuevo nodo objetivo: {currentNode}");
+                //Debug.Log($"[PathFollowing] Nuevo nodo objetivo: {currentNode}");
             }
 
             // Opción 2. Hago vigilancia (Vuelvo atrás)

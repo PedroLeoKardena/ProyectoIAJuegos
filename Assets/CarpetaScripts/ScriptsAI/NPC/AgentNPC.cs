@@ -11,7 +11,6 @@ public class AgentNPC : Agent
     [SerializeField] protected Steering steer;
     // Todos los steering que tiene que calcular el agente.
     private List<SteeringBehaviour> listSteerings;
-    
 
     protected  void Awake()
     {
