@@ -50,6 +50,7 @@ public class AgentNPC : Agent
         //Actualizamos aceleracion lineal y velocidad
         Acceleration = this.steer.linear;
         Velocity += Acceleration * deltaTime; // Newton: v = v0 + a*t
+        Velocity = new Vector3(Velocity.x, 0, Velocity.z); // Forzamos Y=0 para evitar hundimientos
 
         //Actualizamos aceleracion angular y rotacion
         float angularAcceleration = this.steer.angular;

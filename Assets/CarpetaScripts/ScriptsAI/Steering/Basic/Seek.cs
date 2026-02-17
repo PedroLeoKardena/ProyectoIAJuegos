@@ -20,6 +20,7 @@ public class Seek : SteeringBehaviour
 
         // Calcula el steering.
         Vector3 direccion = target.Position - agent.Position;
+        direccion.y = 0; // Importante para no hundirse en el suelo
         //Calculamos la direccion deseada
         Vector3 desiredVelocity = direccion.normalized * agent.MaxSpeed;
 
