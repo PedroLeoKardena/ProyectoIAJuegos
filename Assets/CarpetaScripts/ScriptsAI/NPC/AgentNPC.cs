@@ -9,15 +9,21 @@ public class AgentNPC : Agent
 
     // Este será el steering final que se aplique al personaje.
     [SerializeField] protected Steering steer;
-    // Todos los steering que tiene que calcular el agente.
-    private List<SteeringBehaviour> listSteerings;
 
-    protected  void Awake()
+    // Todos los steering que tiene que calcular el agente.
+    private ArbitroSteer arbitroSteer;
+
+    protected void Awake()
     {
         this.steer = new Steering();
         //Construimos la lista de listSteerings buscando todos aquellos scripts hijos de
         //steeringBehaviour.
-        listSteerings = new List<SteeringBehaviour>(GetComponents<SteeringBehaviour>());
+        arbitroSteer = GetComponent<ArbitroSteer>();
+
+        if (arbitroSteer == null)
+        {
+            Debug.LogError("Error: El AgentNPC " + gameObject.name + " no tiene un componente 'BlenderSteering' o derivado de 'ArbitroSteering'.");
+        }
     }
 
 
@@ -44,7 +50,7 @@ public class AgentNPC : Agent
         //Actualizamos aceleracion lineal y velocidad
         Acceleration = this.steer.linear;
         Velocity += Acceleration * deltaTime; // Newton: v = v0 + a*t
-        
+
         //Actualizamos aceleracion angular y rotacion
         float angularAcceleration = this.steer.angular;
 
@@ -66,57 +72,17 @@ public class AgentNPC : Agent
 
     public virtual void LateUpdate()
     {
-        Steering kinematicFinal = new Steering();
-
-        kinematicFinal.linear = Vector3.zero;
-        kinematicFinal.angular = 0;
-        // Reseteamos el steering final.
-        this.steer = new Steering();
-
-
-        // Recorremos cada steering
-        //foreach (SteeringBehaviour behavior in listSteerings)
-        //    Steering kinematic = behavior.GetSteering(this);
-        //// La cinemática de este SteeringBehaviour se tiene que combinar
-        //// con las cinemáticas de los demás SteeringBehaviour.
-        //// Debes usar kinematic con el árbitro desesado para combinar todos
-        //// los SteeringBehaviour.
-        //// Llamaremos kinematicFinal a la aceleraciones finales de esas combinaciones.
-
-        foreach(SteeringBehaviour behavior in listSteerings){
-
-            if(behavior.enabled){
-                Steering kinematic = behavior.GetSteering(this);
-                if (kinematic != null) 
-                {
-                    kinematicFinal.linear += kinematic.linear * behavior.weight;
-                    kinematicFinal.angular += kinematic.angular * behavior.weight;
-                }
-
-            }    
-        }
-        
-
-        // A continuación debería entrar a funcionar el actuador para comprobar
-        // si la propuesta de movimiento es factible:
-        // kinematicFinal = Actuador(kinematicFinal, self)
-
-        if (kinematicFinal.linear.magnitude > this.MaxAcceleration)
+        //Delegamos trabajo al arbitro para que nos devuelva el steering final a aplicar.
+        if (arbitroSteer != null)
         {
-            kinematicFinal.linear = kinematicFinal.linear.normalized * this.MaxAcceleration;
+            // El árbitro ya hace el bucle, la suma ponderada y el recorte de máximos.
+            this.steer = arbitroSteer.GetSteering();
         }
-                
-        float angularAccAbs = Mathf.Abs(kinematicFinal.angular);
-        if (angularAccAbs > this.MaxAngularAcc)
+        else
         {
-            // Mantenemos el signo pero recortamos el valor
-            kinematicFinal.angular /= angularAccAbs; // Normalizamos (se queda en 1 o -1)
-            kinematicFinal.angular *= this.MaxAngularAcc;
+            // Fallback por si se te olvidó poner el script
+            this.steer = new Steering(); 
         }
-
-
-        // El resultado final se guarda para ser aplicado en el siguiente frame.
-        this.steer = kinematicFinal;
     }
 
     protected override void OnDrawGizmos()
