@@ -18,15 +18,18 @@ public class Jump : VelocityMatching
 
     public Vector3 gravity = new Vector3(0, -9.81f, 0);
 
-    private Agent projectileTarget;
+    private GameObject projectileTargetObj; // GameObject auxiliar para el target
+    private Agent projectileTarget; //Agent auxiliar
 
     void Start()
     {
         this.NameSteering = "Jump";
+        
         // Crea un gameObject oculto para actuar como target para VelocityMatching
-        GameObject go = new GameObject("JumpTarget_Internal");
-        go.hideFlags = HideFlags.HideInHierarchy;
-        projectileTarget = go.AddComponent<Agent>();
+        projectileTargetObj = new GameObject("JumpTarget_Internal");
+
+        //Vamos a probar inicialmente sin esto:  projectileTargetObj.hideFlags = HideFlags.HideInHierarchy;
+        projectileTarget = projectileTargetObj.AddComponent<Agent>();
         
         // Asigna el target de la clase base al nuestro interno
         this.target = projectileTarget;
@@ -36,8 +39,8 @@ public class Jump : VelocityMatching
     {
         if (projectileTarget != null)
         {
-            if (Application.isPlaying) Destroy(projectileTarget.gameObject);
-            else DestroyImmediate(projectileTarget.gameObject);
+            if (Application.isPlaying) Destroy(projectileTargetObj);
+            else DestroyImmediate(projectileTargetObj);
         }
     }
 
@@ -56,8 +59,14 @@ public class Jump : VelocityMatching
         }
 
         // Comprueba si hemos alcanzado el punto de salto
-        bool nearPos = IsNear(agent.Position, target.Position, agent);
-        bool nearVel = IsNear(agent.Velocity, target.Velocity, agent);
+        //Usamos jumpPoint por que se trata de un lugar fijo. Podríamos usar target.Position pero el salto se haría justo al llegar a ese punto, y queremos que se haga al llegar al punto de salto, no al de aterrizaje.
+        bool nearPos = Vector3.Distance(agent.Position, jumpPoint.jumpLocation) < 1f;
+        
+        Vector3 agentVelPlane = agent.Velocity; 
+        agentVelPlane.y = 0;
+        Vector3 targetVelPlane = target.Velocity; 
+        targetVelPlane.y = 0;
+        bool nearVel = Vector3.Distance(agentVelPlane, targetVelPlane) < 1f;
         
         if (nearPos && nearVel)
         {
@@ -72,29 +81,36 @@ public class Jump : VelocityMatching
     
     private void CalculateTarget(Agent agent)
     {
-        // Referencia al target interno
-        target = projectileTarget;
+        // El target fantasma se coloca en el punto de aterrizaje
+        projectileTarget.Position = jumpPoint.landingLocation;
         
-        target.Position = jumpPoint.jumpLocation;
+        // Ecuación de la diapositiva 22 del tema 6
+        float sqrtTermArg = 2 * gravity.y * jumpPoint.deltaPosition.y + maxYVelocity * maxYVelocity;
         
-        // Calcula el tiempo del primer salto
-        float sqrtTerm = Mathf.Sqrt(2 * gravity.y * jumpPoint.deltaPosition.y + maxYVelocity * maxYVelocity);
-        
-        float time = (-maxYVelocity - sqrtTerm) / gravity.y;
+        if (sqrtTermArg < 0) {
+            Debug.LogWarning("Salto imposible: No hay suficiente fuerza vertical.");
+            return; 
+        }
+
+        float sqrtTerm = Mathf.Sqrt(sqrtTermArg);
+
+        float time1 = (-maxYVelocity - sqrtTerm) / gravity.y;
+        float time2 = (-maxYVelocity + sqrtTerm) / gravity.y;
 
         // Comprueba si podemos usarlo
-        if (!CheckJumpTime(time))
+        if (!CheckJumpTime(time1))
         {
             // De lo contrario prueba el otro tiempo
-            time = (-maxYVelocity + sqrtTerm) / gravity.y;
-            
-            CheckJumpTime(time);
+            if (!CheckJumpTime(time2))
+            {
+                canAchieve = false;
+            }
         }
     }
 
     private bool CheckJumpTime(float time)
     {
-        if (time <= 0) return false;
+        if (time <= 0.001f) return false;
 
         // Calcula la velocidad planar
         Vector3 deltaPos = jumpPoint.deltaPosition;
@@ -104,15 +120,10 @@ public class Jump : VelocityMatching
         
         if (speedSq < maxSpeed * maxSpeed)
         {
-            // Tenemos una solución válida
-            Vector3 newVel = target.Velocity;
-            newVel.x = vx;
-            newVel.z = vz;
-            // Para la aproximación queremos Y=0
-            newVel.y = 0; 
-            
-            target.Velocity = newVel;
+            // Tenemos una solución válida. Configuramos la velocidad del target fantasma y marcamos que podemos realizar el salto.
+            projectileTarget.Velocity = new Vector3(vx, 0, vz);
             canAchieve = true;
+
             return true;
         }
         return false;
@@ -126,10 +137,11 @@ public class Jump : VelocityMatching
         agent.Velocity = velocity;
     }
     
-    private bool IsNear(Vector3 a, Vector3 b, Agent agent)
+    /*private bool IsNear(Vector3 a, Vector3 b, Agent agent)
     {
         return Vector3.Distance(a, b) < 1f; 
     }
+    */
     
 }
 

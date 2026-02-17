@@ -523,9 +523,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxMass: 3
   _minMass: 1
-  _maxSpeed: 7
+  _maxSpeed: 5
   _maxRotation: 180
-  _maxAcceleration: 10
+  _maxAcceleration: 3.5
   _maxAngularAcc: 360
   _maxForce: 1
   _interiorRadius: 1
@@ -550,7 +550,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 4.99
   jumpPoint:
     jumpLocation: {x: 8, y: 0, z: -5}
     landingLocation: {x: -3, y: 0, z: -5}
