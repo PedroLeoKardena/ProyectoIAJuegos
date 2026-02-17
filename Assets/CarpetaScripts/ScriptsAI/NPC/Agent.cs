@@ -21,6 +21,17 @@ public class Agent : Bodi
 
 
     public bool drawGizmos = true;
+
+    [Header("Grid System")]
+    [Tooltip("Referencia al Grid Manager de la escena")]
+    public GridManager gridManager;
+
+    // Obtiene el nodo de la rejilla en el que se encuentra actualmente el agente.
+    public Node GetCurrentNode()
+    {
+        if (gridManager == null) return null;
+        return gridManager.NodeFromWorldPoint(this.Position);
+    }
     
     // AÑADIR LAS PROPIEDADES PARA ESTOS ATRIBUTOS. SI LO VES NECESARIO.
     public float InteriorRadius{
