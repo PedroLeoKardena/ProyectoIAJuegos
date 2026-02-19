@@ -8,7 +8,7 @@ public class Align : SteeringBehaviour
 
     // Declara las variables que necesites para este SteeringBehaviour
     // Tiempo en el que tenemos que llegar a la velocidad del target.
-    float timeToTarget = 0.1f;
+    float timeToTarget = 0.5f; // Aumentado para evitar oscilaciones bruscas
     
 
     void Start()
