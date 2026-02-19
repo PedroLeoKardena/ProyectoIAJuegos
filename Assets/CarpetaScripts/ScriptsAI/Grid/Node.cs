@@ -14,12 +14,12 @@ public class Node
     public bool isWalkable;
 
     // Pathfinding
-    public int gCost;
-    public int hCost;
+    public float gCost;
+    public float hCost;
     public Node parent;
     
     // Coste total fCost = gCost + hCost
-    public int fCost { get { return gCost + hCost; } }
+    public float fCost { get { return gCost + hCost; } }
 
     // Formaciones
     // El NPC asignado a esta celda

@@ -16,13 +16,13 @@ public class GridManager : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("GridManager Awake started.");
+        //Debug.Log("GridManager Awake started.");
         // Inicializa la rejilla con nodos vacíos
         grid = new Grid<Node>(width, height, cellSize, transform.position, (Grid<Node> g, int x, int z) => new Node(x, z, Vector3.zero));
         
         // Calcula posiciones y detecta obstáculos
         BakeGrid();
-        Debug.Log($"Grid Initialized. Width: {width}, Height: {height}. Grid object is null? {grid == null}");
+        //Debug.Log($"Grid Initialized. Width: {width}, Height: {height}. Grid object is null? {grid == null}");
     }
 
     private void Update()
@@ -33,6 +33,22 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public List<Node> GetAllNodesWalkables()
+    {
+        List<Node> nodes = new List<Node>();
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < height; z++)
+            {
+                Node node = grid.GetGridObject(x, z);
+                if (node.isWalkable)
+                {
+                    nodes.Add(node);
+                }
+            }
+        }
+        return nodes;
+    }
 
     // Recorre la rejilla y verifica colisiones para marcar zonas transitables.
     public void BakeGrid()
@@ -68,6 +84,30 @@ public class GridManager : MonoBehaviour
     public Node NodeFromWorldPoint(Vector3 worldPosition)
     {
         return grid.GetGridObject(worldPosition);
+    }
+
+    // Devuelve los vecinos de un nodo (horizontal, vertical y diagonal)
+    public List<Node> GetNeighbors(Node node)
+    {
+        List<Node> neighbors = new List<Node>();
+
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int z = -1; z <= 1; z++)
+            {
+                if (x == 0 && z == 0) continue;
+
+                int checkX = node.x + x;
+                int checkZ = node.z + z;
+
+                if (checkX >= 0 && checkX < width && checkZ >= 0 && checkZ < height)
+                {
+                    neighbors.Add(grid.GetGridObject(checkX, checkZ));
+                }
+            }
+        }
+
+        return neighbors;
     }
 
     // Dibuja la rejilla en el editor para depuración visual.
