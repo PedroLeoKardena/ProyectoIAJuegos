@@ -22,7 +22,7 @@ public class AgentNPC : Agent
 
         if (arbitroSteer == null)
         {
-            Debug.LogWarning("Warning: AgentNPC operando en modo Target (sin árbitro). Si quieres que el agente calcule su propio steering, añade un componente ArbitroSteer al GameObject.");
+            Debug.LogWarning("Warning: AgentNPC operando en modo Target/Ghost (sin árbitro). Si quieres que el agente calcule su propio steering, añade un componente ArbitroSteer al GameObject.");
         }
     }
 
