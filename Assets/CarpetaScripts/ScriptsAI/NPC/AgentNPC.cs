@@ -22,7 +22,7 @@ public class AgentNPC : Agent
 
         if (arbitroSteer == null)
         {
-            Debug.LogError("Error: El AgentNPC " + gameObject.name + " no tiene un componente 'BlenderSteering' o derivado de 'ArbitroSteering'.");
+            Debug.LogWarning("Warning: AgentNPC operando en modo Target (sin árbitro). Si quieres que el agente calcule su propio steering, añade un componente ArbitroSteer al GameObject.");
         }
     }
 
