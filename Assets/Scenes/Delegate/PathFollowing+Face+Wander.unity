@@ -505,9 +505,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 340832532}
-    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 340832533}
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
@@ -521,18 +518,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
   m_PrefabInstance: {fileID: 340832530}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &340832532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 340832531}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50355d86585dc4c4797ea31f622cd440, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &340832533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -557,6 +542,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -1127,6 +1113,7 @@ MonoBehaviour:
   _interiorAngle: 1
   _exteriorAngle: 30
   drawGizmos: 1
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
