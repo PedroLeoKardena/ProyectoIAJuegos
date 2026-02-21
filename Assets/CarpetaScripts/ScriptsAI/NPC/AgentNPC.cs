@@ -10,6 +10,11 @@ public class AgentNPC : Agent
     // Este será el steering final que se aplique al personaje.
     [SerializeField] protected Steering steer;
 
+
+    //Para hacer pruebas con el inspector.
+    [Tooltip("Ángulo inicial del personaje en grados (Eje Y)")]
+    [SerializeField] private float initialOrientation = 0f;
+
     // Todos los steering que tiene que calcular el agente.
     private ArbitroSteer arbitroSteer;
 
@@ -31,6 +36,7 @@ public class AgentNPC : Agent
     void Start()
     {
         this.Velocity = Vector3.zero;
+        this.Orientation = initialOrientation;
     }
 
     // Update is called once per frame
@@ -65,7 +71,7 @@ public class AgentNPC : Agent
         Orientation += Rotation * deltaTime; // Euler: θ = θ0 + ω*t
 
         //Reseteamos la rotacion en cada frame.
-        transform.rotation = Quaternion.identity;
+        transform.rotation = new Quaternion();
         transform.Rotate(Vector3.up, Orientation);
     }
 
