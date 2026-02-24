@@ -110,6 +110,13 @@ public class PropuestaOrdenarIrAUnLugar : MonoBehaviour
                 thing.tag = "NPC";
             }
 
+            //Eliminamos tambien el target del Script Arrive para que deje de ir al target
+            Arrive arriveScript = thing.GetComponent<Arrive>();
+            if (arriveScript != null)
+            {
+                arriveScript.target = null;
+            }
+
             markedObjects.Remove(thing); // Quitamos el objeto de la lista de marcados
 
         }
@@ -129,6 +136,13 @@ public class PropuestaOrdenarIrAUnLugar : MonoBehaviour
 
                 // Si alguno era el líder, vuelve a ser NPC
                 if (obj.CompareTag("Lider")) obj.tag = "NPC";
+
+                //Eliminamos tambien el target del Script Arrive para que deje de ir al target
+                Arrive arriveScript = obj.GetComponent<Arrive>();
+                if (arriveScript != null)
+                {
+                    arriveScript.target = null;
+                }
             }
         }
         
