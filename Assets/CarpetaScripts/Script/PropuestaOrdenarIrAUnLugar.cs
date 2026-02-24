@@ -4,12 +4,36 @@ using UnityEngine;
 
 public class PropuestaOrdenarIrAUnLugar : MonoBehaviour
 {
+
+    /*
+    IMPORTANTE: Este script solo funcionará con aquellos objetos (Prefabs, Personajes, etc...) que 
+    tengan un collider con el que detectar el click.
+    */
     public GameObject markSpecial;
 
     public Transform target;
 
+    [Header("Interfaz")]
+    [Tooltip("Botón (UI) limpiar selección")]
+    public GameObject botonLimpiarSeleccion;
+
+
     private List<GameObject> markedObjects = new List<GameObject>();
 
+
+    void Start()
+    {
+        // Nos aseguramos de que el botón empiece oculto
+        if (botonLimpiarSeleccion != null) botonLimpiarSeleccion.SetActive(false);
+
+
+        //Nos aseguramos de que el target tenga un componente Agent para que los NPCs puedan ir a él
+        if (target != null && target.GetComponent<Agent>() == null)
+        {
+            target.gameObject.AddComponent<Agent>();
+        }
+    }
+    
     // Update is called once per frame
     void Update()
     {
@@ -22,25 +46,39 @@ public class PropuestaOrdenarIrAUnLugar : MonoBehaviour
                     //Código para ordenar que todos los objetos marcados vayan a la posición clicada
                     if (target != null){
                         target.position = hit.point;
+                        
+                        Agent targetAgent = target.GetComponent<Agent>();
+
                         foreach (GameObject obj in markedObjects){
-                            SeekAceleration seekScript = obj.GetComponent<SeekAceleration>();
-                            if (seekScript != null)
+                            
+                            Arrive arriveScript = obj.GetComponent<Arrive>();
+                            if (arriveScript != null)
                             {
                                 // Le asignamos el puntero como objetivo
-                                seekScript.target = target;
+                                arriveScript.target = targetAgent;
                             }
+                            
                         }
                     }
                 }
-                else if (hit.transform.tag == "NPC"){
-                    //Aqui no hace falta hacer la diferenciación entre clickar en marca o en NPC, ya que las marcas
-                    //generadas son hijas de los NPCs y por tanto no tienen tag "NPC"
-                    mark(hit.transform.gameObject);
+                else{
+                    
+                    //Lo que hacemos es comprobar de manera intrínseca si el objeto clicado tiene un componente AgentNPC, y si es así, lo marcamos (o desmarcamos)
+                    AgentNPC agenteTocado = hit.transform.GetComponentInParent<AgentNPC>();
+
+                    if (agenteTocado != null)
+                    {
+                        mark(agenteTocado.gameObject);
+                    }
                 }
                 
             }
         }
 
+        if (botonLimpiarSeleccion != null)
+        {
+            botonLimpiarSeleccion.SetActive(markedObjects.Count > 0);
+        }
         
     }
 
@@ -57,14 +95,47 @@ public class PropuestaOrdenarIrAUnLugar : MonoBehaviour
             //Creamos instancia de un objeto Mark
             marker = Instantiate (markSpecial, thing.transform);
 
-            marker.transform.localPosition = Vector3.up * 1; //Cambiamos la posicion relativa
+            marker.transform.localPosition = Vector3.up * 2.5f; //Cambiamos la posicion relativa
             marker.name = "Mark"; //Cambiamos el nombre del objeto
 
+            if(markedObjects.Count == 0){
+                thing.tag = "Lider"; // Si es el primer objeto marcado, le asignamos el tag de líder
+            }
+            
             markedObjects.Add(thing); // Añadimos el objeto a la lista de marcados
         }else{// If there is no reference then
             Destroy(marker); // Destroy the marker
-            
+
+            if (thing.CompareTag("Lider")) {
+                thing.tag = "NPC";
+            }
+
             markedObjects.Remove(thing); // Quitamos el objeto de la lista de marcados
+
         }
+
+        
+    }
+    
+    public void LimpiarSeleccion()
+    {
+        foreach (GameObject obj in markedObjects)
+        {
+            if (obj != null)
+            {
+                // Destruimos la marca
+                Transform marker = obj.transform.Find("Mark");
+                if (marker != null) Destroy(marker.gameObject);
+
+                // Si alguno era el líder, vuelve a ser NPC
+                if (obj.CompareTag("Lider")) obj.tag = "NPC";
+            }
+        }
+        
+        // Actualizamos el estado del botón de limpiar selección
+        if (botonLimpiarSeleccion != null) botonLimpiarSeleccion.SetActive(false);
+        
+        // Vaciamos la lista de golpe
+        markedObjects.Clear();
     }
 }

@@ -19,7 +19,10 @@ public class Arrive : SteeringBehaviour
     public override Steering GetSteering(Agent agent)
     {
 
-       
+        if (target == null)
+        {
+            return new Steering();
+        }
 
         Steering steer = new Steering();
 
