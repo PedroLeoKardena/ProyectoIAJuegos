@@ -231,6 +231,13 @@ public class Bodi : MonoBehaviour
         return new Vector3(Mathf.Sin(radians), 0, Mathf.Cos(radians));
     }
 
+
+    //Metodo que convierte cualquier vector a Angulo.
+    public float VectorToAngle(Vector3 direction)
+    {
+        return Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+    }
+
     //Retorna un vector a partir de una orientación usando Z como primer eje
     public Vector3 OrientationToVector(){
         float actual = Heading();
