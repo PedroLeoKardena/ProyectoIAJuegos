@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PropuestaOrdenarIrAUnLugar : MonoBehaviour
 {
@@ -75,9 +76,31 @@ public class PropuestaOrdenarIrAUnLugar : MonoBehaviour
             }
         }
 
+        // Actualizamos el estado del botón de limpiar selección.
+        
         if (botonLimpiarSeleccion != null)
         {
-            botonLimpiarSeleccion.SetActive(markedObjects.Count > 0);
+            bool haySeleccionados = markedObjects.Count > 0;
+            botonLimpiarSeleccion.SetActive(haySeleccionados);
+
+            if(haySeleccionados){
+                bool todosParados = true;
+                foreach (GameObject obj in markedObjects)
+                {
+                    Agent agente = obj.GetComponent<Agent>();                    
+                    if (agente != null && agente.Speed > 0.01f) // Si el agente tiene una velocidad significativa, consideramos que no está parado
+                    {
+                        todosParados = false;
+                        break;
+                    }
+                }
+
+                Button btnComponente = botonLimpiarSeleccion.GetComponent<Button>();
+                if (btnComponente != null)
+                {
+                    btnComponente.interactable = todosParados;
+                }
+            }
         }
         
     }
@@ -126,8 +149,9 @@ public class PropuestaOrdenarIrAUnLugar : MonoBehaviour
     
     public void LimpiarSeleccion()
     {
+        
         foreach (GameObject obj in markedObjects)
-        {
+        {   
             if (obj != null)
             {
                 // Destruimos la marca
@@ -137,7 +161,8 @@ public class PropuestaOrdenarIrAUnLugar : MonoBehaviour
                 // Si alguno era el líder, vuelve a ser NPC
                 if (obj.CompareTag("Lider")) obj.tag = "NPC";
 
-                //Eliminamos tambien el target del Script Arrive para que deje de ir al target
+                //Eliminamos tambien el target del Script Arrive para que deje de ir al target.
+                //En cambio, lo que hacemos es frenar su movimiento asignando el target a la posicion actual del NPC, así alejan infinitamente al NPC del target y por tanto se queda quieto. Si asignamos el target a null, el script Arrive no hace nada y el NPC sigue con su último target asignado.
                 Arrive arriveScript = obj.GetComponent<Arrive>();
                 if (arriveScript != null)
                 {
