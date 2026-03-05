@@ -4,224 +4,223 @@ using UnityEngine;
 
 public class WallAvoidance : SteeringBehaviour
 {
-    [Tooltip("Distancia de los bigotes (cuánto miramos hacia adelante)")]
-    [SerializeField] protected float avoidDistance = 5f;
+    [Tooltip("Distancia de los bigotes")]
+    [SerializeField] protected float distanciaEvasion = 5f;
 
-    [Tooltip("Ángulo de separación entre bigotes (o ángulo total si es 2)")]
-    [SerializeField] protected float secondaryWhiskerAngle = 30f; 
+    [Tooltip("Ángulo de separación entre bigotes")]
+    [SerializeField] protected float anguloBigotes = 30f; 
 
     [Tooltip("MULTIPLICADOR DE FUERZA DE REPULSIÓN")]
-    [SerializeField] protected float repulsionMultiplier = 5f; 
+    [SerializeField] protected float multiplicadorRepulsion = 5f; 
 
-    [Tooltip("Número de bigotes: 1, 2 ... n")]
+    [Tooltip("Número de bigotes:")]
     [Range(1, 10)]
-    [SerializeField] public int whiskersCount = 3;
+    [SerializeField] public int numeroBigotes = 3;
 
-    [Tooltip("Tiempo que recordamos la pared tras dejar de verla (evita girar antes de tiempo)")]
-    [SerializeField] protected float memoryDuration = 1.5f;
+    [Tooltip("Tiempo que recordamos la pared tras dejar de verla")]
+    [SerializeField] protected float duracionMemoria = 1.5f;
 
-    private float _memoryTimer = 0f;
-    private Vector3 _rememberedNormal = Vector3.zero;
+    private float temporizadorMem = 0f;
+    private Vector3 normalRecordada = Vector3.zero;
 
     void Start()
     {
         this.nameSteering = "WallAvoidance";
     }
 
-    public void SetWhiskersCount(int count)
+    public void SetNumBigotes(int count)
     {
-        if(count >= 1) whiskersCount = count;
+        if(count >= 1) numeroBigotes = count;
     }
 
     public override Steering GetSteering(Agent agent)
     {
         Steering steer = new Steering();
 
-        List<Vector3> rayDirections = GetWhiskerDirections(agent);
+        List<Vector3> direcciones = GetDireccionBigotes(agent);
 
         RaycastHit hit;
-        bool collisionDetected = false;
+        bool colision = false;
         Vector3 bestNormal = Vector3.zero;
         Vector3 bestPoint = Vector3.zero; 
-        float minDistance = float.MaxValue;
+        float minDistancia = float.MaxValue;
         
         int hitCount = 0;
         List<Vector3> hitNormals = new List<Vector3>();
-        List<float> hitDistances = new List<float>();
+        List<float> hitDistancias = new List<float>();
         
-        foreach (Vector3 rayDir in rayDirections)
+        foreach (Vector3 rayDir in direcciones)
         {
-            if (Physics.Raycast(agent.Position, rayDir, out hit, avoidDistance))
+            if (Physics.Raycast(agent.Position, rayDir, out hit, distanciaEvasion))
             {
                 hitCount++;
                 hitNormals.Add(hit.normal);
-                hitDistances.Add(hit.distance);
+                hitDistancias.Add(hit.distance);
 
-                if (hit.distance < minDistance)
+                if (hit.distance < minDistancia)
                 {
-                    minDistance = hit.distance;
+                    minDistancia = hit.distance;
                     bestNormal = hit.normal;
                     bestPoint = hit.point;
-                    collisionDetected = true;
+                    colision = true;
                 }
             }
         }
 
-        Vector3 closestWallNormal = bestNormal; 
-        bool inVShape = false;
-        Vector3 vShapeEscapeDir = Vector3.zero;
+        Vector3 closestWnormal = bestNormal; 
+        bool enEsquina = false;
+        Vector3 direccionEscape = Vector3.zero;
 
-        // --- DETECCIÓN DE V-SHAPE (INTACTA, LA QUE VA PERFECTA) ---
-        if (whiskersCount > 1 && hitCount >= whiskersCount) 
+        // DETECCIÓN DE ESQUINA 
+        if (numeroBigotes > 1 && hitCount >= numeroBigotes) 
         {
-            float dotProduct = Vector3.Dot(hitNormals[0], hitNormals[hitNormals.Count - 1]);
+            float productoP = Vector3.Dot(hitNormals[0], hitNormals[hitNormals.Count - 1]);
             
-            bool distanceIsTight = true;
-            if (whiskersCount == 2)
+            bool distanciaCercana = true;
+            if (numeroBigotes == 2)
             {
-                foreach(float d in hitDistances) 
+                foreach(float d in hitDistancias) 
                 {
-                    if (d > avoidDistance * 0.65f) distanceIsTight = false; 
+                    if (d > distanciaEvasion * 0.65f) distanciaCercana = false; 
                 }
             }
 
-            if (distanceIsTight && dotProduct < 0.2f && dotProduct > -0.8f)
+            if (distanciaCercana && productoP < 0.2f && productoP > -0.8f)
             {
-                inVShape = true;
-                foreach(Vector3 n in hitNormals) vShapeEscapeDir += n;
-                if (vShapeEscapeDir.sqrMagnitude < 0.001f) vShapeEscapeDir = bestNormal;
-                vShapeEscapeDir.y = 0;
-                vShapeEscapeDir.Normalize();
+                enEsquina = true;
+                foreach(Vector3 n in hitNormals) direccionEscape += n;
+                if (direccionEscape.sqrMagnitude < 0.001f) direccionEscape = bestNormal;
+                direccionEscape.y = 0;
+                direccionEscape.Normalize();
 
-                Vector3 currentDir = agent.Velocity.magnitude > 0.1f ? agent.Velocity.normalized : agent.OrientationToVector();
-                Vector3 lateralDir = new Vector3(-vShapeEscapeDir.z, 0, vShapeEscapeDir.x);
+                Vector3 actualDir = agent.Velocity.magnitude > 0.1f ? agent.Velocity.normalized : agent.OrientationToVector();
+                Vector3 lateralDir = new Vector3(-direccionEscape.z, 0, direccionEscape.x);
                 
-                if (Vector3.Dot(currentDir, lateralDir) < 0)
+                if (Vector3.Dot(actualDir, lateralDir) < 0)
                 {
-                    lateralDir = new Vector3(vShapeEscapeDir.z, 0, -vShapeEscapeDir.x); 
+                    lateralDir = new Vector3(direccionEscape.z, 0, -direccionEscape.x); 
                 }
 
-                vShapeEscapeDir = (vShapeEscapeDir + lateralDir * 1.5f).normalized;
+                direccionEscape = (direccionEscape + lateralDir * 1.5f).normalized;
             }
         }
 
         // --- MANEJO DE MEMORIA ---
-        if (whiskersCount == 1)
+        if (numeroBigotes == 1)
         {
-            if (collisionDetected)
+            if (colision)
             {
-                _memoryTimer = memoryDuration;
-                _rememberedNormal = bestNormal;
-                _rememberedNormal.y = 0;
+                temporizadorMem = duracionMemoria;
+                normalRecordada = bestNormal;
+                normalRecordada.y = 0;
             }
-            else if (_memoryTimer > 0)
+            else if (temporizadorMem > 0)
             {
-                collisionDetected = true;
-                bestNormal = _rememberedNormal;
-                minDistance = avoidDistance * 0.5f; 
-                _memoryTimer -= Time.deltaTime;
+                colision = true;
+                bestNormal = normalRecordada;
+                minDistancia = distanciaEvasion * 0.5f; 
+                temporizadorMem -= Time.deltaTime;
             }
         }
         else
         {
-            if (inVShape)
+            if (enEsquina)
             {
-                _memoryTimer = memoryDuration;
-                _rememberedNormal = vShapeEscapeDir; 
-                bestNormal = vShapeEscapeDir; 
-                minDistance = avoidDistance * 0.2f; 
+                temporizadorMem = duracionMemoria;
+                normalRecordada = direccionEscape; 
+                bestNormal = direccionEscape; 
+                minDistancia = distanciaEvasion * 0.2f; 
             }
-            else if (_memoryTimer > 0)
+            else if (temporizadorMem > 0)
             {
-                if (collisionDetected)
+                if (colision)
                 {
-                    _memoryTimer = memoryDuration;
-                    bestNormal = _rememberedNormal; 
-                    inVShape = true; 
+                    temporizadorMem = duracionMemoria;
+                    bestNormal = normalRecordada; 
+                    enEsquina = true; 
                 }
                 else
                 {
-                    collisionDetected = true;
-                    inVShape = true; 
-                    bestNormal = _rememberedNormal;
-                    minDistance = avoidDistance * 0.4f;
-                    _memoryTimer -= Time.deltaTime;
+                    colision = true;
+                    enEsquina = true; 
+                    bestNormal = normalRecordada;
+                    minDistancia = distanciaEvasion * 0.4f;
+                    temporizadorMem -= Time.deltaTime;
                 }
             }
-            else if (collisionDetected)
+            else if (colision)
             {
-                _memoryTimer = 0f;
+                temporizadorMem = 0f;
             }
         }
 
         // --- APLICACIÓN DE FUERZAS ---
-        if (collisionDetected)
+        if (colision)
         {
             bestNormal.y = 0;
             if (bestNormal.sqrMagnitude > 0.001f) bestNormal.Normalize();
 
-            if (whiskersCount == 1)
+            if (numeroBigotes == 1)
             {
-                // AQUÍ ESTÁN LAS CORRECCIONES PARA EL DE 1 BIGOTE
-                float dominantMultiplier = 50.0f; 
+                float multiply = 50.0f; 
 
-                if (minDistance < avoidDistance * 0.35f)
+                if (minDistancia < distanciaEvasion * 0.35f)
                 {
-                   // Calculamos la tangente real basada en la normal de la pared, no en el eje X global
-                   Vector3 escapeTangent = Vector3.Cross(Vector3.up, bestNormal).normalized;
-                   Vector3 escapeDir = (bestNormal + escapeTangent * 0.5f).normalized; 
-                   steer.linear = escapeDir * agent.MaxAcceleration * dominantMultiplier; 
+                   // Calculamos la tangente real basada en la normal de la pared
+                   Vector3 escapeTang = Vector3.Cross(Vector3.up, bestNormal).normalized;
+                   Vector3 escapeDir = (bestNormal + escapeTang * 0.5f).normalized; 
+                   steer.linear = escapeDir * agent.MaxAcceleration * multiply; 
                 }
                 else
                 {
-                   Vector3 currentDir = agent.Velocity.magnitude > 0.1f ? agent.Velocity.normalized : agent.OrientationToVector();
-                   Vector3 slideDir = Vector3.ProjectOnPlane(currentDir, bestNormal).normalized;
-                   if (slideDir.sqrMagnitude < 0.001f) slideDir = Vector3.Cross(Vector3.up, bestNormal);
+                   Vector3 actualDir = agent.Velocity.magnitude > 0.1f ? agent.Velocity.normalized : agent.OrientationToVector();
+                   Vector3 deslizaDir = Vector3.ProjectOnPlane(actualDir, bestNormal).normalized;
+                   if (deslizaDir.sqrMagnitude < 0.001f) deslizaDir = Vector3.Cross(Vector3.up, bestNormal);
 
-                   // Usamos 'urgency' para que empuje suavemente hacia afuera desde lejos y no vaya directo al choque
-                   float urgency = (avoidDistance - minDistance) / avoidDistance;
-                   Vector3 targetDir = (slideDir + bestNormal * (0.2f + urgency * 1.5f)).normalized;
-                   steer.linear = targetDir * agent.MaxAcceleration * dominantMultiplier;
+                   // Usamos 'urgencia' para que empuje suavemente hacia afuera desde lejos y no vaya directo al choque
+                   float urgencia = (distanciaEvasion - minDistancia) / distanciaEvasion;
+                   Vector3 dirObjetivo = (deslizaDir + bestNormal * (0.2f + urgencia * 1.5f)).normalized;
+                   steer.linear = dirObjetivo * agent.MaxAcceleration * multiply;
                 }
             }
             else
             {
-                // MULTIPLES BIGOTES (INTACTO, EL QUE VA PERFECTO)
-                if (inVShape)
+                // MULTIPLES BIGOTES
+                if (enEsquina)
                 {
-                    float vShapeDominantForce = 50.0f; 
+                    float multiplyM = 50.0f; 
 
                     if (hitCount > 0)
                     {
-                        Vector3 antiClipDir = (bestNormal + closestWallNormal * 1.5f).normalized;
-                        steer.linear = antiClipDir * agent.MaxAcceleration * vShapeDominantForce; 
+                        Vector3 dirSalida = (bestNormal + closestWnormal * 1.5f).normalized;
+                        steer.linear = dirSalida * agent.MaxAcceleration * multiplyM; 
                     }
                     else
                     {
-                        steer.linear = bestNormal * agent.MaxAcceleration * vShapeDominantForce; 
+                        steer.linear = bestNormal * agent.MaxAcceleration * multiplyM; 
                     }
                 }
                 else
                 {
-                    if (minDistance < avoidDistance * 0.25f)
+                    if (minDistancia < distanciaEvasion * 0.25f)
                     {
                         steer.linear = bestNormal * agent.MaxAcceleration * 2.0f;
                     }
                     else
                     {
-                       Vector3 currentDir = agent.Velocity.magnitude > 0.1f ? agent.Velocity.normalized : agent.OrientationToVector();
-                       Vector3 slideDir = Vector3.ProjectOnPlane(currentDir, bestNormal).normalized;
-                       if (slideDir.sqrMagnitude < 0.001f) slideDir = Vector3.Cross(Vector3.up, bestNormal);
+                       Vector3 actualDir = agent.Velocity.magnitude > 0.1f ? agent.Velocity.normalized : agent.OrientationToVector();
+                       Vector3 deslizaDir = Vector3.ProjectOnPlane(actualDir, bestNormal).normalized;
+                       if (deslizaDir.sqrMagnitude < 0.001f) deslizaDir = Vector3.Cross(Vector3.up, bestNormal);
 
-                       float urgency = (avoidDistance - minDistance) / avoidDistance;
+                       float urgencia = (distanciaEvasion - minDistancia) / distanciaEvasion;
 
-                       Vector3 targetDir = (slideDir + bestNormal * (urgency * repulsionMultiplier)).normalized;
-                       steer.linear = targetDir * agent.MaxAcceleration;
+                       Vector3 dirObjetivo = (deslizaDir + bestNormal * (urgencia * multiplicadorRepulsion)).normalized;
+                       steer.linear = dirObjetivo * agent.MaxAcceleration;
 
-                       float headingTowardsWall = Vector3.Dot(currentDir, -bestNormal);
-                       if (headingTowardsWall > 0.5f) 
+                       float mirandoPared = Vector3.Dot(actualDir, -bestNormal);
+                       if (mirandoPared > 0.5f) 
                        {
-                           steer.linear += -currentDir * agent.MaxAcceleration * headingTowardsWall * urgency * 1.0f;
+                           steer.linear += -actualDir * agent.MaxAcceleration * mirandoPared * urgencia * 1.0f;
                        }
                     }
                 }
@@ -231,9 +230,9 @@ public class WallAvoidance : SteeringBehaviour
         return steer;
     }
 
-    private List<Vector3> GetWhiskerDirections(Agent agent)
+    private List<Vector3> GetDireccionBigotes(Agent agent)
     {
-        List<Vector3> directions = new List<Vector3>();
+        List<Vector3> dir = new List<Vector3>();
         
         Vector3 mainDir;
         if (agent.Velocity.magnitude > 0.1f)
@@ -241,31 +240,31 @@ public class WallAvoidance : SteeringBehaviour
         else
              mainDir = agent.OrientationToVector();
 
-        if (whiskersCount == 1)
+        if (numeroBigotes == 1)
         {
-            directions.Add(mainDir);
-            return directions;
+            dir.Add(mainDir);
+            return dir;
         }
 
-        bool hasCenter = (whiskersCount % 2 != 0);
-        if (hasCenter) directions.Add(mainDir);
+        bool tieneCentro = (numeroBigotes % 2 != 0);
+        if (tieneCentro) dir.Add(mainDir);
 
-        int pairs = whiskersCount / 2;
-        for (int i = 1; i <= pairs; i++)
+        int pares = numeroBigotes / 2;
+        for (int i = 1; i <= pares; i++)
         {
-            float angle = secondaryWhiskerAngle * i;
-            directions.Add(RotateVector(mainDir, angle));
-            directions.Add(RotateVector(mainDir, -angle));
+            float angulo = anguloBigotes * i;
+            dir.Add(RotarVector(mainDir, angulo));
+            dir.Add(RotarVector(mainDir, -angulo));
         }
         
-        return directions;
+        return dir;
     }
 
-    private Vector3 RotateVector(Vector3 v, float angleDegrees)
+    private Vector3 RotarVector(Vector3 v, float anguloGrados)
     {
-        float radians = angleDegrees * Mathf.Deg2Rad;
-        float sin = Mathf.Sin(radians);
-        float cos = Mathf.Cos(radians);
+        float radian = anguloGrados * Mathf.Deg2Rad;
+        float sin = Mathf.Sin(radian);
+        float cos = Mathf.Cos(radian);
         
         return new Vector3(cos * v.x - sin * v.z, v.y, sin * v.x + cos * v.z);
     }
@@ -277,11 +276,11 @@ public class WallAvoidance : SteeringBehaviour
             AgentNPC agent = GetComponent<AgentNPC>();
             if (agent != null)
             {
-                List<Vector3> dirs = GetWhiskerDirections(agent);
+                List<Vector3> dirs = GetDireccionBigotes(agent);
                 foreach (Vector3 d in dirs)
                 {
                     RaycastHit hit;
-                    if (Physics.Raycast(agent.Position, d, out hit, avoidDistance))
+                    if (Physics.Raycast(agent.Position, d, out hit, distanciaEvasion))
                     {
                         Gizmos.color = Color.red;
                         Gizmos.DrawLine(agent.Position, hit.point);
@@ -290,7 +289,7 @@ public class WallAvoidance : SteeringBehaviour
                     else
                     {
                         Gizmos.color = Color.cyan;
-                        Gizmos.DrawLine(agent.Position, agent.Position + d * avoidDistance);
+                        Gizmos.DrawLine(agent.Position, agent.Position + d * distanciaEvasion);
                     }
                 }
             }
