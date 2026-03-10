@@ -18,6 +18,11 @@ public class AgentNPC : Agent
     // Todos los steering que tiene que calcular el agente.
     private ArbitroSteer arbitroSteer;
 
+    private GameObject selectionVisual;
+
+    // Se usa para las formaciones
+    public Location TargetFormacion { get; set; } = new Location();
+
     protected void Awake()
     {
         this.steer = new Steering();
@@ -32,6 +37,19 @@ public class AgentNPC : Agent
 
         //Asignamos el tag "NPC"
         this.gameObject.tag = "NPC";
+
+        // Asiganmos el SelectorVisual
+        if (selectionVisual == null)
+        {
+            Transform t = transform.Find("SelectorVisual"); 
+            if (t != null) 
+            {
+                selectionVisual = t.gameObject;
+            }
+        }
+
+        // Nos aseguramos de que empiece apagado
+        if (selectionVisual != null) selectionVisual.SetActive(false);
     }
 
 
@@ -93,6 +111,15 @@ public class AgentNPC : Agent
             // Fallback por si se te olvidó poner el script
             this.steer = new Steering(); 
         }
+    }
+
+    public void SetTarget(Vector3 pos, float ori) {
+        TargetFormacion = new Location { position = pos, orientation = ori };
+    }
+
+    public void SetSelected(bool isSelected)
+    {
+        if (selectionVisual != null) selectionVisual.SetActive(isSelected);
     }
 
     protected override void OnDrawGizmos()

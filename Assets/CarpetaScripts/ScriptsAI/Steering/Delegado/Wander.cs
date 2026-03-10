@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Wander : Face 
@@ -13,6 +15,10 @@ public class Wander : Face
     private GameObject auxTargetObjWander;
     private Agent auxTargetAgentWander;
 
+    //En el caso de haber un grid, se usa para que no se intente ir a un lugar inaccesible
+    public GridManager gridManager;
+    public int radioBusqueda = 2;
+
     protected override void Start()
     {
         //Llamar al Start() del padre (Face) para inicializar auxTargetAgent
@@ -23,8 +29,9 @@ public class Wander : Face
         // Inicializamos el target fantasma igual que hiciste en Pursue
         auxTargetObjWander = new GameObject("WanderGhost");
         auxTargetAgentWander = auxTargetObjWander.AddComponent<AgentNPC>();
-                
-        wanderOrientation = 0.0f;
+ 
+        if (gridManager == null)
+            gridManager = FindAnyObjectByType<GridManager>();
     }
 
     void OnDestroy()
@@ -34,6 +41,8 @@ public class Wander : Face
 
     public override Steering GetSteering(Agent agent)
     {
+        if (auxTargetAgentWander == null) return new Steering();
+
         // 1. Calcular el cambio de orientación aleatorio y actualizamos el ángulo 
         float randomBinomial = Random.value - Random.value;
         wanderOrientation += randomBinomial * wanderRate;
@@ -50,6 +59,10 @@ public class Wander : Face
         float targetOrientationRad = targetOrientation * Mathf.Deg2Rad;
         target += wanderRadius * new Vector3(Mathf.Sin(targetOrientationRad), 0, Mathf.Cos(targetOrientationRad));
 
+        //Tenemos en cuenta si hay grid
+        if (gridManager != null)
+            target = AjustarAEntorno(target);
+
         // 5. Delegamos en Face
         auxTargetAgentWander.Position = target;
         this.target = auxTargetAgentWander;
@@ -60,6 +73,28 @@ public class Wander : Face
         steering.linear = agent.MaxAcceleration * new Vector3(Mathf.Sin(charOrientationRad), 0, Mathf.Cos(charOrientationRad));
 
         return steering;
+    }
+
+    // Tiene en cuenta el grid
+    Vector3 AjustarAEntorno(Vector3 pos)
+    {
+        Node nodo = gridManager.NodeFromWorldPoint(pos);
+        if (nodo != null && nodo.isWalkable)
+            return pos;
+        Node centro = gridManager.NodeFromWorldPoint(transform.position);
+        if (centro == null)
+            return transform.position;
+        List<Node> candidatos = new List<Node>();
+        List<Node> vecinos = gridManager.GetNeighbors(centro);
+        foreach (Node v in vecinos)
+            if (v.isWalkable)
+                candidatos.Add(v);
+        if (candidatos.Count > 0)
+        {
+            Node elegido = candidatos[Random.Range(0, candidatos.Count)];
+            return elegido.worldPosition;
+        }
+        return transform.position;
     }
 
     // Dibuja el círculo y el target para entender qué está pasando

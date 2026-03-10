@@ -10,14 +10,15 @@ public class LookWhereYouGoing : Align
 
     void Start()
     {
+        if (!enabled) return;
         this.nameSteering = "LookWhereYouGoing";
-
+        
         // Creamos el "Fantasma" interno
         auxTargetObj = new GameObject("LookWhereGhost");
         auxTargetAgent = auxTargetObj.AddComponent<AgentNPC>();
         
         // Desactivamos gizmos del fantasma para que no molesten (Opción rápida)
-        auxTargetObj.SetActive(false);
+        //auxTargetObj.SetActive(false);
     }
 
     // Limpieza de memoria
