@@ -32,6 +32,21 @@ public class SteeringBehaviour : MonoBehaviour
         return null;
     }
 
+    // Gestión lista de steerings árbrito
+    void OnEnable()
+    {
+        var arb = GetComponent<ArbitroSteer>();
+        if (arb != null && !arb.steeringList.Contains(this))
+            arb.steeringList.Add(this);
+    }
+
+    void OnDisable()
+    {
+        var arb = GetComponent<ArbitroSteer>();
+        if (arb != null)
+            arb.steeringList.Remove(this);
+    }
+
 
     protected virtual void OnGUI()
     {

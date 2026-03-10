@@ -18,6 +18,8 @@ public class AgentNPC : Agent
     // Todos los steering que tiene que calcular el agente.
     private ArbitroSteer arbitroSteer;
 
+    private GameObject selectionVisual;
+
     // Se usa para las formaciones
     public Location TargetFormacion { get; set; } = new Location();
 
@@ -35,6 +37,19 @@ public class AgentNPC : Agent
 
         //Asignamos el tag "NPC"
         this.gameObject.tag = "NPC";
+
+        // Asiganmos el SelectorVisual
+        if (selectionVisual == null)
+        {
+            Transform t = transform.Find("SelectorVisual"); 
+            if (t != null) 
+            {
+                selectionVisual = t.gameObject;
+            }
+        }
+
+        // Nos aseguramos de que empiece apagado
+        if (selectionVisual != null) selectionVisual.SetActive(false);
     }
 
 
@@ -102,11 +117,9 @@ public class AgentNPC : Agent
         TargetFormacion = new Location { position = pos, orientation = ori };
     }
 
-    public void ActivarMovimiento(bool estado) {
-        if (TryGetComponent<Arrive>(out var arr)) arr.enabled = estado;
-        if (TryGetComponent<Align>(out var aln)) aln.enabled = estado;
-        if (TryGetComponent<Separation>(out var sep)) sep.enabled = estado;
-        if (TryGetComponent<WallAvoidance>(out var wall)) wall.enabled = estado;
+    public void SetSelected(bool isSelected)
+    {
+        if (selectionVisual != null) selectionVisual.SetActive(isSelected);
     }
 
     protected override void OnDrawGizmos()

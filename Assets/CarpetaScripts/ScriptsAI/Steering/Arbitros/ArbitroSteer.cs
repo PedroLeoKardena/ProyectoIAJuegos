@@ -12,8 +12,7 @@ public abstract class ArbitroSteer : MonoBehaviour
     [SerializeField] protected Steering finalSteering;
 
 
-    [SerializeField]
-    protected List<SteeringBehaviour> steeringList; // Lista con todos los steering
+    public List<SteeringBehaviour> steeringList { get; private set; } // Lista con todos los steering
 
     // Usamos Awake para crer los steering necesarios antes de cualquier Start
     protected virtual void Awake()
@@ -27,7 +26,7 @@ public abstract class ArbitroSteer : MonoBehaviour
 
         foreach(var b in behaviours)
         {
-            steeringList.Add(b);
+            if (b.enabled) steeringList.Add(b);
         }
 
     }
