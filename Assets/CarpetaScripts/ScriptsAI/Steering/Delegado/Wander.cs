@@ -34,6 +34,8 @@ public class Wander : Face
 
     public override Steering GetSteering(Agent agent)
     {
+        if (auxTargetAgentWander == null) return new Steering();
+
         // 1. Calcular el cambio de orientación aleatorio y actualizamos el ángulo 
         float randomBinomial = Random.value - Random.value;
         wanderOrientation += randomBinomial * wanderRate;

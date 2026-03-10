@@ -18,6 +18,9 @@ public class AgentNPC : Agent
     // Todos los steering que tiene que calcular el agente.
     private ArbitroSteer arbitroSteer;
 
+    // Se usa para las formaciones
+    public Location TargetFormacion { get; set; } = new Location();
+
     protected void Awake()
     {
         this.steer = new Steering();
@@ -93,6 +96,17 @@ public class AgentNPC : Agent
             // Fallback por si se te olvidó poner el script
             this.steer = new Steering(); 
         }
+    }
+
+    public void SetTarget(Vector3 pos, float ori) {
+        TargetFormacion = new Location { position = pos, orientation = ori };
+    }
+
+    public void ActivarMovimiento(bool estado) {
+        if (TryGetComponent<Arrive>(out var arr)) arr.enabled = estado;
+        if (TryGetComponent<Align>(out var aln)) aln.enabled = estado;
+        if (TryGetComponent<Separation>(out var sep)) sep.enabled = estado;
+        if (TryGetComponent<WallAvoidance>(out var wall)) wall.enabled = estado;
     }
 
     protected override void OnDrawGizmos()

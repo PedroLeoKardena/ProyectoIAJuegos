@@ -19,19 +19,38 @@ public class Align : SteeringBehaviour
 
     public override Steering GetSteering(Agent agent)
     {
-        Steering steer = new Steering();
+        float targetOr;
+        float currentInteriorAngle;
+        float currentExteriorAngle;
 
-        float interiorAngle = agent.InteriorAngle;
-        float exteriorAngle = agent.ExteriorAngle;
+        // Extracción de datos dependiendo de si es un target asignado o es por una formación
+        if (this.target != null) 
+        {
+            // Escena de Test: Usamos el objeto físico asignado
+            targetOr = this.target.Orientation;
+            currentInteriorAngle = agent.InteriorAngle;
+            currentExteriorAngle = agent.ExteriorAngle;
+        } 
+        else 
+        {
+            // Escena de Formación: Usamos la orientación enviada por el FormationManager [cite: 77, 84]
+            targetOr = ((AgentNPC)agent).TargetFormacion.orientation;
+            
+            // Valores por defecto para formación si el agente no tiene radios definidos
+            currentInteriorAngle = 1.0f; // Grados de margen para detenerse
+            currentExteriorAngle = 5.0f; // Grados de margen para empezar a frenar
+        }
+
+        Steering steer = new Steering();
 
         // Calcula el steering.
 
-        float rotacion = target.Orientation - agent.Orientation;
+        float rotacion = targetOr - agent.Orientation;
         rotacion = Bodi.MapToRange(rotacion);
 
         float tamañoRotacion = Mathf.Abs(rotacion);
 
-        if (tamañoRotacion < interiorAngle){
+        if (tamañoRotacion < currentInteriorAngle){
             //Si estamos dentro del circulo tenemos que intentar quedarnos parados mirando
             //al target
             steer.angular = -agent.Rotation / timeToTarget;
@@ -49,10 +68,10 @@ public class Align : SteeringBehaviour
         }
 
         float targetRotacion;
-        if (tamañoRotacion > exteriorAngle){
+        if (tamañoRotacion > currentExteriorAngle){
             targetRotacion = agent.MaxRotation;
         }else{
-            targetRotacion = agent.MaxRotation * tamañoRotacion / exteriorAngle;
+            targetRotacion = agent.MaxRotation * tamañoRotacion / currentExteriorAngle;
         }
 
         targetRotacion *= rotacion / tamañoRotacion;

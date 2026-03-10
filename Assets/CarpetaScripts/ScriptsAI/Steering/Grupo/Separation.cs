@@ -9,9 +9,6 @@ public class Separation : SteeringBehaviour
     
     public float decayCoefficient = 100f; // Coeficiente de decaimiento para la fuerza de separación
     // Start is called before the first frame update
-
-    [SerializeField]
-    public List<Agent> neighbors; // Lista de agentes vecinos que se deben considerar para la separación
     
     void Start()
     {
@@ -26,9 +23,15 @@ public class Separation : SteeringBehaviour
         Vector3 totalSeparationForce = Vector3.zero;
         int count = 0; // Contador de vecinos cercanos
 
-        foreach (Agent neighbor in neighbors)
+        // Si el agente actual es el líder, no calculamos separación para él
+        if (agent.CompareTag("Lider")) { return steer; }
+
+        Collider[] closeEntities = Physics.OverlapSphere(agent.Position, threshold);
+
+        foreach (Collider col in closeEntities)
         {
-            if (agent == neighbor || neighbor == null) continue; // No consideramos al propio agente como vecino
+            Agent neighbor = col.GetComponent<Agent>();
+            if (neighbor == null || neighbor == agent) continue; // No consideramos al propio agente como vecino
 
 
             //Comprobamos si el vecino está dentro del umbral de separación
