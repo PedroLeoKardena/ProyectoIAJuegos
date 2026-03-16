@@ -85,11 +85,7 @@ public class FormationManager : MonoBehaviour
         foreach (var sa in slotAssignments)
         {
             if (sa.character == liderNPC) continue;
-            AgentNPC npc = sa.character;
-            if (npc.TryGetComponent<Arrive>(out var arrive)) arrive.enabled = true;
-            if (npc.TryGetComponent<WallAvoidance>(out var wall)) wall.enabled = true;
-            if (npc.TryGetComponent<Wander>(out var wander)) wander.enabled = false;
-            if (npc.TryGetComponent<Separation>(out var sep)) sep.enabled = false;
+            sa.character.SetModoFormacionEstricta();
         }
     }
 
@@ -98,26 +94,14 @@ public class FormationManager : MonoBehaviour
         foreach (var sa in slotAssignments)
         {
             if (sa.character == liderNPC) continue;
-            AgentNPC npc = sa.character;
-
-            if (npc.TryGetComponent<Arrive>(out var arrive)) arrive.enabled = true;
-            if (npc.TryGetComponent<Align>(out var align)) align.enabled = false;
-            if (npc.TryGetComponent<LookWhereYouGoing>(out var look)) look.enabled = true;
-            if (npc.TryGetComponent<WallAvoidance>(out var wall)) wall.enabled = true;
-            if (npc.TryGetComponent<Wander>(out var wander)) wander.enabled = false;
-            if (npc.TryGetComponent<Separation>(out var sep)) sep.enabled = true;
+            sa.character.SetModoViaje();
         }
     }
 
     void ActivarWanderLider()
     {
         Agent npc = liderNPC;
-        if (npc.TryGetComponent<Arrive>(out var arrive)) arrive.enabled = false;
-        if (npc.TryGetComponent<Align>(out var align)) align.enabled = false;
-        if (npc.TryGetComponent<LookWhereYouGoing>(out var look)) look.enabled = false;
-        if (npc.TryGetComponent<WallAvoidance>(out var wall)) wall.enabled = true;
-        if (npc.TryGetComponent<Wander>(out var wander)) wander.enabled = true;
-        if (npc.TryGetComponent<Separation>(out var sep)) sep.enabled = false;
+        npc.SetModoLiderWander();
     }
 
     bool HaLlegado(AgentNPC npc)

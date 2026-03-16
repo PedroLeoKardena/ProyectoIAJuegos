@@ -129,7 +129,17 @@ public class Agent : Bodi
     // .AddComponent<Agent>();
     // Establece los valores del Bodi y radios/ángulos a los valores adecuados.
     // Esta es solo una de las muchas posiblidades para resolver este problema.
-
+    
+    //Steerings Modo Lider Wander
+    public void SetModoLiderWander()
+    {
+        if (TryGetComponent<Arrive>(out var arrive)) arrive.enabled = false;
+        if (TryGetComponent<Align>(out var align)) align.enabled = false;
+        if (TryGetComponent<LookWhereYouGoing>(out var look)) look.enabled = false;
+        if (TryGetComponent<Wander>(out var wander)) wander.enabled = true;
+        if (TryGetComponent<Separation>(out var sep)) sep.enabled = false;
+        if (TryGetComponent<WallAvoidance>(out var wall)) wall.enabled = true;
+    }    
 
 
     

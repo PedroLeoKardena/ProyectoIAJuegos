@@ -56,7 +56,7 @@ public class SelectionManager : MonoBehaviour
             DeselectAllUnits();
         }
 
-        // Formar las unidades seleccionadas con la tecla "Esc"
+        // Formar las unidades seleccionadas con la tecla "F"
         if (Input.GetKeyDown("f"))
         {
             FormarSeleccionados();
@@ -66,32 +66,17 @@ public class SelectionManager : MonoBehaviour
     // Funciones genéricas para activar solo lo que interesa
     void SetSteeringsViaje(AgentNPC npc)
     {
-        if (npc.TryGetComponent<Arrive>(out var arrive)) arrive.enabled = true;
-        if (npc.TryGetComponent<Align>(out var align)) align.enabled = false;
-        if (npc.TryGetComponent<LookWhereYouGoing>(out var look)) look.enabled = true;
-        if (npc.TryGetComponent<Wander>(out var wander)) wander.enabled = false;
-        if (npc.TryGetComponent<Separation>(out var sep)) sep.enabled = true;
-        if (npc.TryGetComponent<WallAvoidance>(out var wall)) wall.enabled = true;
+        npc.SetModoViaje();
     }
 
     void SetSteeringsFormacionEstricta(AgentNPC npc)
     {
-        if (npc.TryGetComponent<Arrive>(out var arrive)) arrive.enabled = true;
-        if (npc.TryGetComponent<Align>(out var align)) align.enabled = true;
-        if (npc.TryGetComponent<LookWhereYouGoing>(out var look)) look.enabled = false;
-        if (npc.TryGetComponent<Wander>(out var wander)) wander.enabled = false;
-        if (npc.TryGetComponent<Separation>(out var sep)) sep.enabled = false;
-        if (npc.TryGetComponent<WallAvoidance>(out var wall)) wall.enabled = true;
+        npc.SetModoFormacionEstricta();
     }
 
     void SetSteeringsLiderWander(AgentNPC npc)
     {
-        if (npc.TryGetComponent<Arrive>(out var arrive)) arrive.enabled = false;
-        if (npc.TryGetComponent<Align>(out var align)) align.enabled = false;
-        if (npc.TryGetComponent<LookWhereYouGoing>(out var look)) look.enabled = false;
-        if (npc.TryGetComponent<Wander>(out var wander)) wander.enabled = true;
-        if (npc.TryGetComponent<Separation>(out var sep)) sep.enabled = false;
-        if (npc.TryGetComponent<WallAvoidance>(out var wall)) wall.enabled = true;
+        npc.SetModoLiderWander();
     }
 
     void SelectUnit()
