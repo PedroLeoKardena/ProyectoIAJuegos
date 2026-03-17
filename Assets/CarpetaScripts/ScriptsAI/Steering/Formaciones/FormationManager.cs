@@ -147,6 +147,10 @@ public class FormationManager : MonoBehaviour
 
     // Actualiza la asignación de slots cuando cambia el número de personajes
     public void UpdateSlotAssignments() {
+        if (pattern != null) {
+            pattern.SetNumberOfSlots(slotAssignments.Count);
+        }
+        
         for (int i = 0; i < slotAssignments.Count; i++) {
             var assignment = slotAssignments[i];
             assignment.slotNumber = i + 1;

@@ -9,4 +9,8 @@ public abstract class FormationPattern : MonoBehaviour
     public abstract Location GetDriftOffset(List<SlotAssignment> slotAssignments);
     public abstract Location GetSlotLocation(int slotNumber);
     public abstract bool SupportsSlots(int slotCount);
+
+    public void SetNumberOfSlots(int count) {
+        numberOfSlots = count;
+    }
 }
