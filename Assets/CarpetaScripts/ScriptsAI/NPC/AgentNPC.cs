@@ -65,9 +65,32 @@ public class AgentNPC : Agent
     {
         // En cada frame se actualiza el movimiento
         ApplySteering(Time.deltaTime);
-
-        // En cada frame podría ejecutar otras componentes IA
     }
+
+
+    //Scripts para encender steerings dependiendo del movimiento a hacer.
+    //Steerings Modo viaje
+    public void SetModoViaje()
+    {
+        if (TryGetComponent<Arrive>(out var arrive)) arrive.enabled = true;
+        if (TryGetComponent<Align>(out var align)) align.enabled = false;
+        if (TryGetComponent<LookWhereYouGoing>(out var look)) look.enabled = true;
+        if (TryGetComponent<WallAvoidance>(out var wall)) wall.enabled = true;
+        if (TryGetComponent<Wander>(out var wander)) wander.enabled = false;
+        if (TryGetComponent<Separation>(out var sep)) sep.enabled = true;
+    }
+
+    //Steerings Modo Formacion Estricta
+    public void SetModoFormacionEstricta()
+    {
+        if (TryGetComponent<Arrive>(out var arrive)) arrive.enabled = true;
+        if (TryGetComponent<Align>(out var align)) align.enabled = true;
+        if (TryGetComponent<LookWhereYouGoing>(out var look)) look.enabled = false;
+        if (TryGetComponent<Wander>(out var wander)) wander.enabled = false;
+        if (TryGetComponent<Separation>(out var sep)) sep.enabled = false;
+        if (TryGetComponent<WallAvoidance>(out var wall)) wall.enabled = true;
+    }
+
 
 
     private void ApplySteering(float deltaTime)
