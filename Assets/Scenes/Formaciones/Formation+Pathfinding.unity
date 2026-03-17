@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17713617, g: 0.22174884, b: 0.30400884, a: 1}
+  m_IndirectSpecularColor: {r: 0.17713535, g: 0.221748, b: 0.30400684, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -326,9 +326,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 131088711}
-    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 131088718}
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
@@ -354,29 +351,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
   m_PrefabInstance: {fileID: 131088709}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &131088711
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 131088710}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1.82
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!114 &131088712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,11 +384,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   weight: 2
-  avoidDistance: 5
-  secondaryWhiskerAngle: 30
-  repulsionMultiplier: 5
-  whiskersCount: 3
-  memoryDuration: 1.5
+  distanciaEvasion: 5
+  anguloBigotes: 30
+  multiplicadorRepulsion: 5
+  numeroBigotes: 3
+  duracionMemoria: 1.5
 --- !u!114 &131088714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -500,7 +474,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 0}
+  gridManager: {fileID: 669406969}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -667,9 +641,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 354082755}
-    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 354082762}
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
@@ -695,29 +666,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
   m_PrefabInstance: {fileID: 354082753}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &354082755
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 354082754}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1.82
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!114 &354082756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -751,11 +699,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   weight: 2
-  avoidDistance: 5
-  secondaryWhiskerAngle: 30
-  repulsionMultiplier: 5
-  whiskersCount: 3
-  memoryDuration: 1.5
+  distanciaEvasion: 5
+  anguloBigotes: 30
+  multiplicadorRepulsion: 5
+  numeroBigotes: 3
+  duracionMemoria: 1.5
 --- !u!114 &354082758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -841,7 +789,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 0}
+  gridManager: {fileID: 669406969}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -905,9 +853,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 455173626}
-    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 455173633}
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
@@ -933,29 +878,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
   m_PrefabInstance: {fileID: 455173624}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &455173626
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 455173625}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1.82
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!114 &455173627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -989,11 +911,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   weight: 2
-  avoidDistance: 5
-  secondaryWhiskerAngle: 30
-  repulsionMultiplier: 5
-  whiskersCount: 3
-  memoryDuration: 1.5
+  distanciaEvasion: 5
+  anguloBigotes: 30
+  multiplicadorRepulsion: 5
+  numeroBigotes: 3
+  duracionMemoria: 1.5
 --- !u!114 &455173629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1079,7 +1001,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 0}
+  gridManager: {fileID: 669406969}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -1709,9 +1631,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 786670257}
-    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 786670264}
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
@@ -1737,29 +1656,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
   m_PrefabInstance: {fileID: 786670255}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &786670257
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 786670256}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1.82
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!114 &786670258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1793,11 +1689,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   weight: 2
-  avoidDistance: 5
-  secondaryWhiskerAngle: 30
-  repulsionMultiplier: 5
-  whiskersCount: 3
-  memoryDuration: 1.5
+  distanciaEvasion: 5
+  anguloBigotes: 30
+  multiplicadorRepulsion: 5
+  numeroBigotes: 3
+  duracionMemoria: 1.5
 --- !u!114 &786670260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1883,7 +1779,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 0}
+  gridManager: {fileID: 669406969}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -1947,9 +1843,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 873819596}
-    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 873819603}
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
@@ -1975,29 +1868,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
   m_PrefabInstance: {fileID: 873819594}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &873819596
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 873819595}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1.82
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!114 &873819597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2031,11 +1901,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   weight: 2
-  avoidDistance: 5
-  secondaryWhiskerAngle: 30
-  repulsionMultiplier: 5
-  whiskersCount: 3
-  memoryDuration: 1.5
+  distanciaEvasion: 5
+  anguloBigotes: 30
+  multiplicadorRepulsion: 5
+  numeroBigotes: 3
+  duracionMemoria: 1.5
 --- !u!114 &873819599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2121,7 +1991,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 0}
+  gridManager: {fileID: 669406969}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -2216,9 +2086,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 986271524}
-    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 986271531}
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
@@ -2244,29 +2111,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
   m_PrefabInstance: {fileID: 986271522}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &986271524
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 986271523}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1.82
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!114 &986271525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2300,11 +2144,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   weight: 2
-  avoidDistance: 5
-  secondaryWhiskerAngle: 30
-  repulsionMultiplier: 5
-  whiskersCount: 3
-  memoryDuration: 1.5
+  distanciaEvasion: 5
+  anguloBigotes: 30
+  multiplicadorRepulsion: 5
+  numeroBigotes: 3
+  duracionMemoria: 1.5
 --- !u!114 &986271527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2390,7 +2234,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 0}
+  gridManager: {fileID: 669406969}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -2558,7 +2402,6 @@ MonoBehaviour:
   unitLayer:
     serializedVersion: 2
     m_Bits: 0
-  selectedUnits: []
   formationManager: {fileID: 1806773032}
   selectionTexture: {fileID: 0}
 --- !u!4 &1277388384
@@ -2710,9 +2553,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1312684169}
-    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1312684176}
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
@@ -2738,29 +2578,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
   m_PrefabInstance: {fileID: 1312684167}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &1312684169
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1312684168}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1.82
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!114 &1312684170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2794,11 +2611,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   weight: 2
-  avoidDistance: 5
-  secondaryWhiskerAngle: 30
-  repulsionMultiplier: 5
-  whiskersCount: 3
-  memoryDuration: 1.5
+  distanciaEvasion: 5
+  anguloBigotes: 30
+  multiplicadorRepulsion: 5
+  numeroBigotes: 3
+  duracionMemoria: 1.5
 --- !u!114 &1312684172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2884,7 +2701,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 0}
+  gridManager: {fileID: 669406969}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -3370,9 +3187,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1587759120}
-    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1587759127}
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
@@ -3398,29 +3212,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
   m_PrefabInstance: {fileID: 1587759118}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &1587759120
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1587759119}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1.82
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!114 &1587759121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3454,11 +3245,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   weight: 2
-  avoidDistance: 5
-  secondaryWhiskerAngle: 30
-  repulsionMultiplier: 5
-  whiskersCount: 3
-  memoryDuration: 1.5
+  distanciaEvasion: 5
+  anguloBigotes: 30
+  multiplicadorRepulsion: 5
+  numeroBigotes: 3
+  duracionMemoria: 1.5
 --- !u!114 &1587759123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3544,7 +3335,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 0}
+  gridManager: {fileID: 669406969}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -3759,6 +3550,7 @@ MonoBehaviour:
     slotNumber: 7
   - character: {fileID: 354082762}
     slotNumber: 8
+  autoCargarAlInicio: 0
   enFormacionEstricta: 1
   gridManager: {fileID: 669406969}
   tiempoEsperaReconstruccion: 0
@@ -3928,9 +3720,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1833212947}
-    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1833212954}
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
@@ -3956,29 +3745,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
   m_PrefabInstance: {fileID: 1833212945}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &1833212947
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1833212946}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1.82
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!114 &1833212948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4012,11 +3778,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   weight: 2
-  avoidDistance: 5
-  secondaryWhiskerAngle: 30
-  repulsionMultiplier: 5
-  whiskersCount: 3
-  memoryDuration: 1.5
+  distanciaEvasion: 5
+  anguloBigotes: 30
+  multiplicadorRepulsion: 5
+  numeroBigotes: 3
+  duracionMemoria: 1.5
 --- !u!114 &1833212950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4102,7 +3868,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 0}
+  gridManager: {fileID: 669406969}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0

@@ -390,14 +390,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3854269363171675655}
   - component: {fileID: 4985691113074979274}
-  - component: {fileID: 9092942979624326962}
-  - component: {fileID: 408852321456530039}
-  - component: {fileID: 5815065687513682957}
-  - component: {fileID: 600540691390240500}
-  - component: {fileID: 9014266116922857556}
-  - component: {fileID: 3896739111002964883}
-  - component: {fileID: 7548842528693436796}
-  - component: {fileID: 7426044663162280058}
+  - component: {fileID: 3245454472132821564}
   m_Layer: 7
   m_Name: mini simple skeleton demo_01 1
   m_TagString: NPC
@@ -448,7 +441,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!136 &9092942979624326962
+--- !u!136 &3245454472132821564
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -467,136 +460,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1.82
+  m_Radius: 0.4248662
+  m_Height: 1.6022321
   m_Direction: 1
-  m_Center: {x: 0, y: 0.75, z: 0}
---- !u!114 &408852321456530039
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3136820629370392942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77d203e69b7ce4a82b2f0a212520fdf0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxMass: 3
-  _minMass: 1
-  _maxSpeed: 4
-  _maxRotation: 1
-  _maxAcceleration: 5
-  _maxAngularAcc: 1
-  _maxForce: 1
-  _interiorRadius: 1
-  _arrivalRadius: 3
-  _interiorAngle: 3
-  _exteriorAngle: 8
-  drawGizmos: 1
-  gridManager: {fileID: 0}
-  drawGizmosSteerNPC: 0
-  steer:
-    angular: 0
-    linear: {x: 0, y: 0, z: 0}
-  initialOrientation: 0
---- !u!114 &5815065687513682957
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3136820629370392942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80fe444fcda48f244819fb04500bdae9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debug: 1
-  finalSteering:
-    angular: 0
-    linear: {x: 0, y: 0, z: 0}
-  behaviorAndWeights: []
---- !u!114 &600540691390240500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3136820629370392942}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e91628ddac4d454ea525c6ae36c754c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  weight: 1
-  arrivalRadiusFormacion: 4
-  interiorRadiusFormacion: 0.5
---- !u!114 &9014266116922857556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3136820629370392942}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bca2cd7023fbf8d488d2b5678bbc4300, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  weight: 1
---- !u!114 &3896739111002964883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3136820629370392942}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7d07c9e7502ac546b6b748512d6378f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  weight: 2
-  avoidDistance: 5
-  secondaryWhiskerAngle: 30
-  repulsionMultiplier: 5
-  whiskersCount: 3
-  memoryDuration: 1.5
---- !u!114 &7548842528693436796
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3136820629370392942}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  weight: 1
-  threshold: 1.5
-  decayCoefficient: 10
---- !u!114 &7426044663162280058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3136820629370392942}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62bb77dd3472a1d469cae322b818310d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  weight: 1
+  m_Center: {x: 0, y: 0.7172423, z: -0.04045677}
 --- !u!1 &3190320679450232660
 GameObject:
   m_ObjectHideFlags: 0

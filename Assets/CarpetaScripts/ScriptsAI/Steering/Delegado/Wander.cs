@@ -61,7 +61,7 @@ public class Wander : Face
 
         //Tenemos en cuenta si hay grid
         if (gridManager != null)
-            target = AjustarAEntorno(target);
+            target = AjustarAEntorno(target, agent);
 
         // 5. Delegamos en Face
         auxTargetAgentWander.Position = target;
@@ -76,25 +76,39 @@ public class Wander : Face
     }
 
     // Tiene en cuenta el grid
-    Vector3 AjustarAEntorno(Vector3 pos)
+    Vector3 AjustarAEntorno(Vector3 pos, Agent agent)
     {
-        Node nodo = gridManager.NodeFromWorldPoint(pos);
-        if (nodo != null && nodo.isWalkable)
+        Node nodoTarget = gridManager.NodeFromWorldPoint(pos);
+        // Si el punto es válido, no hacemos nada
+        if (nodoTarget != null && nodoTarget.isWalkable)
             return pos;
-        Node centro = gridManager.NodeFromWorldPoint(transform.position);
-        if (centro == null)
-            return transform.position;
-        List<Node> candidatos = new List<Node>();
-        List<Node> vecinos = gridManager.GetNeighbors(centro);
+
+        Node nodoAgente = gridManager.NodeFromWorldPoint(agent.Position);
+        if (nodoAgente == null) return agent.Position;
+
+        // Buscamos el mejor vecino para "rebotar" hacia adentro
+        List<Node> vecinos = gridManager.GetNeighbors(nodoAgente);
+        Node mejorNodo = nodoAgente;
+        
+        // Calculamos el centro del grid una sola vez
+        Vector3 centroGrid = transform.position + new Vector3(gridManager.width * gridManager.cellSize * 0.5f, 0, gridManager.height * gridManager.cellSize * 0.5f);
+        float menorDistanciaAlCentro = Vector3.Distance(agent.Position, centroGrid);
+
         foreach (Node v in vecinos)
-            if (v.isWalkable)
-                candidatos.Add(v);
-        if (candidatos.Count > 0)
         {
-            Node elegido = candidatos[Random.Range(0, candidatos.Count)];
-            return elegido.worldPosition;
+            if (v.isWalkable)
+            {
+                float dist = Vector3.Distance(v.worldPosition, centroGrid);
+                // Elegimos el vecino que más nos acerque al centro (lejos de la esquina/muro)
+                if (dist < menorDistanciaAlCentro)
+                {
+                    menorDistanciaAlCentro = dist;
+                    mejorNodo = v;
+                }
+            }
         }
-        return transform.position;
+
+        return mejorNodo.worldPosition;
     }
 
     // Dibuja el círculo y el target para entender qué está pasando
