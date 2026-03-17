@@ -45,10 +45,10 @@ public class Face : Align
         // Guardamos el target REAL en una variable temporal
         Agent realTarget = this.target;
 
-        // Cambiamos el target del Seek (this.target) por el Fantasma
+        // Cambiamos el target del Align (this.target) por el Fantasma
         this.target = auxTargetAgent;
 
-        // Llamamos al Seek original (base) para que calcule la fuerza hacia el fantasma
+        // Llamamos al Align (base) para que calcule la fuerza hacia el fantasma
         Steering steer = base.GetSteering(agent);
 
         this.target = realTarget;

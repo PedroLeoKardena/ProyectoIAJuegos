@@ -1844,7 +1844,7 @@ MonoBehaviour:
   target: {fileID: 0}
   weight: 1
   grid: {fileID: 1402028765}
-  heuristicType: 2
+  heuristicType: 0
   objetivoFinal: {fileID: 354082756}
   lookaheadDepth: 5
   nodeReachedDistance: 0.6
@@ -1864,7 +1864,7 @@ MonoBehaviour:
   _minMass: 1
   _maxSpeed: 5
   _maxRotation: 180
-  _maxAcceleration: 2
+  _maxAcceleration: 3
   _maxAngularAcc: 360
   _maxForce: 1
   _interiorRadius: 1
