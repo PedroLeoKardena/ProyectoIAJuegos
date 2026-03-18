@@ -98,26 +98,4 @@ public class Grid<T>
         GetXZ(worldPosition, out x, out z);
         return GetGridObject(x, z);
     }
-
-    // Dibuja la rejilla para visualización de depuración
-    // Ahora permite pasar una función que decide el color por cada celda
-    public void DebugDrawGrid(Func<T, Color> getColor, float duration = 0f)
-    {
-        for (int x = 0; x < width; x++)
-        {
-            for (int z = 0; z < height; z++)
-            {
-                T gridObject = GetGridObject(x, z);
-                Color color = getColor(gridObject);
-
-                Vector3 worldPos = GetWorldPosition(x, z);
-                // Dibuja las líneas inferior e izquierda de cada celda con su color correspondiente
-                Debug.DrawLine(worldPos, GetWorldPosition(x, z + 1), color, duration);
-                Debug.DrawLine(worldPos, GetWorldPosition(x + 1, z), color, duration);
-            }
-        }
-        // Dibuja los bordes exteriores de la derecha y de arriba (en blanco por defecto)
-        Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width, height), Color.white, duration);
-        Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height), Color.white, duration);
-    }
 }

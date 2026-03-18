@@ -34,6 +34,8 @@ public class FormationManager : MonoBehaviour
     public float tiempoEsperaReconstruccion = 10.0f;
     public float tiempoVagando = 7.0f;
 
+    public bool drawGizmos = false;
+
     void Start() 
     {
         if (autoCargarAlInicio)
@@ -306,6 +308,8 @@ public class FormationManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (!drawGizmos) return;
+
         if (!Application.isPlaying || liderNPC == null || pattern == null) return;
 
         // Dibujamos el "Forward" y "Right" del líder para validar AngleToVector
@@ -323,7 +327,6 @@ public class FormationManager : MonoBehaviour
             
             // REPETIMOS EL CÁLCULO DE UPDATESLOTS
             Vector3 rotPos = (rgt * relLoc.position.x) + (fwd * relLoc.position.z);
-            // Nota: Asegúrate de que driftOffset esté actualizado antes de dibujar
             Vector3 rotDrift = (rgt * driftOffset.position.x) + (fwd * driftOffset.position.z);
             Vector3 slotWorldPos = liderNPC.Position + rotPos - rotDrift;
 

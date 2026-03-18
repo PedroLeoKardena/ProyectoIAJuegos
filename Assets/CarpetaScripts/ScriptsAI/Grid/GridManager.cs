@@ -10,7 +10,7 @@ public class GridManager : MonoBehaviour
     public int height = 20;
     public float cellSize = 1f;
     public LayerMask obstacleLayer;
-    public bool showDebug = true;
+    public bool drawGizmos = true;
 
     private Grid<Node> grid;
 
@@ -23,14 +23,6 @@ public class GridManager : MonoBehaviour
         // Calcula posiciones y detecta obstáculos
         BakeGrid();
         //Debug.Log($"Grid Initialized. Width: {width}, Height: {height}. Grid object is null? {grid == null}");
-    }
-
-    private void Update()
-    {
-        if (showDebug && grid != null)
-        {
-            grid.DebugDrawGrid((Node n) => n.isWalkable ? Color.white : Color.red);
-        }
     }
 
     public List<Node> GetAllNodesWalkables()
@@ -113,9 +105,9 @@ public class GridManager : MonoBehaviour
     // Dibuja la rejilla en el editor para depuración visual.
     private void OnDrawGizmos()
     {
-        if (!showDebug) return;
+        if (!drawGizmos) return;
 
-        // Draw bounds always (WireCube)
+        // Dibujar siempre los límites del área total
         Gizmos.color = Color.yellow;
         Vector3 center = transform.position + new Vector3(width * cellSize, 0, height * cellSize) * 0.5f;
         Vector3 size = new Vector3(width * cellSize, 1, height * cellSize);
@@ -123,7 +115,7 @@ public class GridManager : MonoBehaviour
 
         if (grid != null)
         {
-            // Use existing grid data (Play Mode usually)
+            // MODO EJECUCIÓN (Play Mode): Usa los datos reales de la rejilla ya calculada.
             for (int x = 0; x < width; x++)
             {
                 for (int z = 0; z < height; z++)
@@ -132,7 +124,7 @@ public class GridManager : MonoBehaviour
                     if (node != null)
                     {
                         Gizmos.color = node.isWalkable ? new Color(1, 1, 1, 0.3f) : new Color(1, 0, 0, 0.5f);
-                        // Draw flatter cubes to sit on ground better, or wireframes
+                        // Dibuja cubos planos sobre el suelo para representar cada celda
                         Gizmos.DrawCube(node.worldPosition, new Vector3(cellSize, 0.1f, cellSize) * 0.9f); 
                     }
                 }
@@ -140,7 +132,7 @@ public class GridManager : MonoBehaviour
         }
         else
         {
-            // Calculate on the fly for Editor visualization (Edit Mode)
+            // MODO EDICIÓN (Edit Mode): Calcula la rejilla al vuelo para previsualizarla antes de dar al Play.
             for (int x = 0; x < width; x++)
             {
                 for (int z = 0; z < height; z++)

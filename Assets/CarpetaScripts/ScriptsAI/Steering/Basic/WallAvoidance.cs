@@ -20,6 +20,8 @@ public class WallAvoidance : SteeringBehaviour
     [Tooltip("Tiempo que recordamos la pared tras dejar de verla")]
     [SerializeField] protected float duracionMemoria = 1.5f;
 
+    public bool drawGizmos = false;
+
     private float temporizadorMem = 0f;
     private Vector3 normalRecordada = Vector3.zero;
 
@@ -271,6 +273,8 @@ public class WallAvoidance : SteeringBehaviour
 
     private void OnDrawGizmos()
     {
+        if (!drawGizmos) return;
+        
         if (Application.isPlaying)
         {
             AgentNPC agent = GetComponent<AgentNPC>();

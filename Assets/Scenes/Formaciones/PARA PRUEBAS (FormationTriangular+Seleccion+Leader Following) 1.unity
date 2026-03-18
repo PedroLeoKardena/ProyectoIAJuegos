@@ -1770,7 +1770,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   liderNPC: {fileID: 0}
   pattern: {fileID: 682413268}
-  slotAssignments: []
   autoCargarAlInicio: 0
   enFormacionEstricta: 0
   gridManager: {fileID: 466528316}
@@ -4002,7 +4001,7 @@ MonoBehaviour:
   _exteriorAngle: 8
   drawGizmos: 1
   gridManager: {fileID: 466528316}
-  drawGizmosSteerNPC: 0
+  drawGizmosSteerNPC: 1
   steer:
     angular: 0
     linear: {x: 0, y: 0, z: 0}

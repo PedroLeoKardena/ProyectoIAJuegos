@@ -150,7 +150,7 @@ public class AgentNPC : Agent
         base.OnDrawGizmos(); // ¡Llama al código de Agent! (Pinta círculos)
 
         if(!drawGizmosSteerNPC) return;
-        // Ahora pinta la línea del árbitro (Aquí sí tienes acceso directo a 'steer')
+        // Ahora pinta la línea del árbitro
         if (this.steer != null && this.steer.linear.magnitude > 0.1f)
         {
             Gizmos.color = Color.magenta;

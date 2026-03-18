@@ -79,7 +79,6 @@ public class Agent : Bodi
     protected virtual void OnDrawGizmos()
     {
         if (!drawGizmos) return;
-        //Hay que tener en cuenta que gizmos dibuja el siguiente objeto del color que indiquemos secuencialmente.
         //Dibujamos el radio interior de rojo.
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(this.Position, _interiorRadius);
