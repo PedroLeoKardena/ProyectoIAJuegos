@@ -18,12 +18,10 @@ public class LRTA : Arrive
     [SerializeField] private Transform objetivoFinal;
 
     [Header("Espacio de busqueda local")]
-    [Range(1, 20)]
-    [SerializeField] private int lookaheadDepth = 5;
+    [Tooltip("Si es 0 se usará el tamaño total del grid (width * height)")]
+    [SerializeField] private int lookaheadDepth = 0;
 
-    [Header("Afinacion de Arrive")]
-    [Tooltip("Distancia al centro del nodo para considerarlo alcanzado.")]
-    [SerializeField] private float nodeReachedDistance = 0.6f;
+
 
     private Node targetNode;
     private Node nextStepNode;
@@ -44,7 +42,8 @@ public class LRTA : Arrive
         nextStepNode = null;
 
         nodeTargetHelper.ArrivalRadius  = grid.cellSize * 2f;
-        nodeTargetHelper.InteriorRadius = nodeReachedDistance;
+        nodeTargetHelper.InteriorRadius = grid.cellSize * 0.1f;
+
     }
 
     private void OnDestroy()
@@ -70,8 +69,7 @@ public class LRTA : Arrive
 
         // Hay que calcular el siguiente paso?
         bool needNewStep = nextStepNode == null
-            || currentNode == nextStepNode
-            || Vector3.Distance(agent.Position, nextStepNode.worldPosition) < nodeReachedDistance;
+            || currentNode == nextStepNode;
 
         if (needNewStep)
         {
@@ -93,6 +91,11 @@ public class LRTA : Arrive
                 Debug.Log("LRTA*: [" + currentNode.x + "," + currentNode.z + "]->[" + nextStepNode.x + "," + nextStepNode.z + "]  h=" + updatedH.ToString("F3"));
                 nodeTargetHelper.transform.position = nextStepNode.worldPosition;
             }
+        }
+
+        if(nextStepNode == null){
+            Debug.Log("LRTA*: No se encontro camino al objetivo");
+            return new Steering();
         }
 
         // Delegar movimiento a Arrive
@@ -263,4 +266,34 @@ public class LRTA : Arrive
                 return 0f;
         }
     }
+
+#if UNITY_EDITOR
+    [Header("Debug Visual")]
+    [SerializeField] private bool drawNodeWeights = true;
+
+    private void OnDrawGizmos()
+    {
+        if (!drawNodeWeights || grid == null || !Application.isPlaying) return;
+
+        GUIStyle style = new GUIStyle();
+        style.normal.textColor = Color.black;
+        style.alignment = TextAnchor.MiddleCenter;
+        style.fontSize = 8;
+
+        foreach (Node n in grid.GetAllNodesWalkables())
+        {
+            Vector3 labelPos = grid.GridToWorld(n.x, n.z);
+
+            if (n.hCost > 0f && n.hCost < float.MaxValue)
+            {
+                // Mostramos el hCost con 1 decimal
+                UnityEditor.Handles.Label(labelPos, n.hCost.ToString("F1"), style);
+            }
+            else if (n == targetNode)
+            {
+                UnityEditor.Handles.Label(labelPos, "0.0", style);
+            }
+        }
+    }
+#endif
 }

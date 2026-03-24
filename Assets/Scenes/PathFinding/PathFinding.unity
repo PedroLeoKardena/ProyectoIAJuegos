@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17713535, g: 0.221748, b: 0.30400684, a: 1}
+  m_IndirectSpecularColor: {r: 0.17713617, g: 0.22174884, b: 0.30400884, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1658,7 +1658,7 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 8
-  showDebug: 1
+  drawGizmos: 1
 --- !u!4 &1402028766
 Transform:
   m_ObjectHideFlags: 0
@@ -1730,11 +1730,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400070, guid: 3353e4f866c39d043a315b41717c9bb7, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.5
+      value: 1.4170799
       objectReference: {fileID: 0}
     - target: {fileID: 400070, guid: 3353e4f866c39d043a315b41717c9bb7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.93317
+      value: 9.98
       objectReference: {fileID: 0}
     - target: {fileID: 400070, guid: 3353e4f866c39d043a315b41717c9bb7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1742,7 +1742,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400070, guid: 3353e4f866c39d043a315b41717c9bb7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 11.736191
+      value: 11.81
       objectReference: {fileID: 0}
     - target: {fileID: 400070, guid: 3353e4f866c39d043a315b41717c9bb7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1847,8 +1847,8 @@ MonoBehaviour:
   grid: {fileID: 1402028765}
   heuristicType: 0
   objetivoFinal: {fileID: 354082756}
-  lookaheadDepth: 5
-  nodeReachedDistance: 0.6
+  lookaheadDepth: 900
+  drawNodeWeights: 1
 --- !u!114 &1431405709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1861,7 +1861,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77d203e69b7ce4a82b2f0a212520fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxMass: 3
+  _maxMass: 1
   _minMass: 1
   _maxSpeed: 5
   _maxRotation: 180
@@ -2624,50 +2624,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.2796451, y: 2.0666578, z: 1.1568518}
   m_Center: {x: 0, y: 1.0333289, z: -0.0000002682209}
---- !u!1 &2105623429
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2105623431}
-  - component: {fileID: 2105623430}
-  m_Layer: 0
-  m_Name: PathfinderManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2105623430
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2105623429}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ecef40ebdc3b8c41ae2157e20305a11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &2105623431
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2105623429}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.1485176, y: 13.367433, z: 14.650782}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2109764835
 GameObject:
   m_ObjectHideFlags: 0
@@ -2712,4 +2668,3 @@ SceneRoots:
   - {fileID: 1431405705}
   - {fileID: 2109764836}
   - {fileID: 1402028766}
-  - {fileID: 2105623431}
