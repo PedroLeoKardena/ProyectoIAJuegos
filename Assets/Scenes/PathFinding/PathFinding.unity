@@ -1652,13 +1652,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc775183245d4740a2f7ec06f37998d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 30
-  height: 30
-  cellSize: 2
+  groundCollider: {fileID: 91811079}
+  gridSize: {x: 30, y: 30}
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 8
   drawGizmos: 1
+  cellSize: 1
 --- !u!4 &1402028766
 Transform:
   m_ObjectHideFlags: 0
@@ -1668,7 +1668,7 @@ Transform:
   m_GameObject: {fileID: 1402028764}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.99, y: 0.1, z: -15.07}
+  m_LocalPosition: {x: -18.35, y: 0.1, z: 3.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
