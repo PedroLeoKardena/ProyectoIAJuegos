@@ -1654,7 +1654,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 30
   height: 30
-  cellSize: 1
+  cellSize: 2
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -1847,7 +1847,7 @@ MonoBehaviour:
   grid: {fileID: 1402028765}
   heuristicType: 0
   objetivoFinal: {fileID: 354082756}
-  lookaheadDepth: 900
+  lookaheadDepth: 1
   drawNodeWeights: 1
 --- !u!114 &1431405709
 MonoBehaviour:

@@ -6,23 +6,56 @@ using UnityEngine;
 // Gestiona la generación, visualización y lógica de la cuadrícula en la escena
 public class GridManager : MonoBehaviour
 {
-    public int width = 20;
-    public int height = 20;
-    public float cellSize = 1f;
+    [Header("Configuración del Escenario")]
+    [Tooltip("Selecciona el Collider que hace de suelo. Sus medidas definirán el área total del grid.")]
+    public Collider groundCollider;
+
+    [Tooltip("Tamaño de la cuadrícula (ej. 30x30, 100x100)")]
+    public Vector2Int gridSize = new Vector2Int(30, 30);
+    
+    [Tooltip("Layer que designa a los obstáculos")]
     public LayerMask obstacleLayer;
     public bool drawGizmos = true;
 
+    // Propiedades internas
+    public int width => gridSize.x;
+    public int height => gridSize.y;
+
+    // Calculado automáticamente a partir del tamaño del suelo y gridSize
+    [HideInInspector]
+    public float cellSize;
+    
+    private Vector3 originPosition;
     private Grid<Node> grid;
 
     private void Awake()
     {
-        //Debug.Log("GridManager Awake started.");
+        CalculateGridParameters();
+
         // Inicializa la rejilla con nodos vacíos
-        grid = new Grid<Node>(width, height, cellSize, transform.position, (Grid<Node> g, int x, int z) => new Node(x, z, Vector3.zero));
+        grid = new Grid<Node>(width, height, cellSize, originPosition, (Grid<Node> g, int x, int z) => new Node(x, z, Vector3.zero));
         
         // Calcula posiciones y detecta obstáculos
         BakeGrid();
-        //Debug.Log($"Grid Initialized. Width: {width}, Height: {height}. Grid object is null? {grid == null}");
+    }
+
+    // Método para recalcular cellSize y originPosition según el suelo asignado
+    private void CalculateGridParameters()
+    {
+        if (groundCollider != null)
+        {
+            Bounds bounds = groundCollider.bounds;
+            // Se asume división simétrica
+            cellSize = bounds.size.x / gridSize.x;
+            
+            // El origen es la esquina inferior izquierda (X, Z min.) manteniendo la Y del collider
+            originPosition = new Vector3(bounds.min.x, bounds.max.y, bounds.min.z);
+        }
+        else
+        {
+            cellSize = 1f;
+            originPosition = transform.position;
+        }
     }
 
     public List<Node> GetAllNodesWalkables()
@@ -107,13 +140,16 @@ public class GridManager : MonoBehaviour
     {
         if (!drawGizmos) return;
 
-        // Dibujar siempre los límites del área total
+        // Calcular parametros para poder mostrar los Gizmos incluso si el juego no está corriendo
+        CalculateGridParameters();
+
+        // Dibujar siempre los límites del área total esperada
         Gizmos.color = Color.yellow;
-        Vector3 center = transform.position + new Vector3(width * cellSize, 0, height * cellSize) * 0.5f;
+        Vector3 center = originPosition + new Vector3(width * cellSize, 0, height * cellSize) * 0.5f;
         Vector3 size = new Vector3(width * cellSize, 1, height * cellSize);
         Gizmos.DrawWireCube(center, size);
 
-        if (grid != null)
+        if (grid != null && Application.isPlaying)
         {
             // MODO EJECUCIÓN (Play Mode): Usa los datos reales de la rejilla ya calculada.
             for (int x = 0; x < width; x++)
@@ -137,7 +173,7 @@ public class GridManager : MonoBehaviour
             {
                 for (int z = 0; z < height; z++)
                 {
-                    Vector3 worldPos = transform.position + new Vector3(x * cellSize, 0, z * cellSize) + new Vector3(cellSize, 0, cellSize) * 0.5f;
+                    Vector3 worldPos = originPosition + new Vector3(x * cellSize, 0, z * cellSize) + new Vector3(cellSize, 0, cellSize) * 0.5f;
                     bool isWalkable = !Physics.CheckSphere(worldPos, cellSize * 0.4f, obstacleLayer);
                     
                     Gizmos.color = isWalkable ? new Color(1, 1, 1, 0.3f) : new Color(1, 0, 0, 0.5f);
