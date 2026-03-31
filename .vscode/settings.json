@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "ProyectoIAJuegos.sln"
+    "dotnet.defaultSolution": "ProyectoSemana1IA.sln"
 }
