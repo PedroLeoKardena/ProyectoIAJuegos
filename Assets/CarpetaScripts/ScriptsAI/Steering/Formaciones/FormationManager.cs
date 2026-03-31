@@ -27,9 +27,6 @@ public class FormationManager : MonoBehaviour
     public bool enFormacionEstricta = false;
     private bool bucleWanderActivo = false; 
 
-    [Header("Referencias de Terreno")]
-    public GridManager gridManager; 
-
     [Header("Configuración del Ciclo")]
     public float tiempoEsperaReconstruccion = 10.0f;
     public float tiempoVagando = 7.0f;
@@ -188,16 +185,6 @@ public class FormationManager : MonoBehaviour
         }
     }
 
-    public Node BuscarVecinoCaminable(Node nodoOriginal) {
-        if (nodoOriginal == null) return null;
-        
-        List<Node> vecinos = gridManager.GetNeighbors(nodoOriginal);
-        foreach (Node n in vecinos) {
-            if (n.isWalkable) return n;
-        }
-        return null;
-    }
-
     // Calcula y envía los destinos a cada personaje
     public void UpdateSlots() {
         // Obtenemos el vector "Forward" y el vector "Right" del líder
@@ -217,21 +204,8 @@ public class FormationManager : MonoBehaviour
             Vector3 rotatedDrift = (rightLider * driftOffset.position.x) + (forwardLider * driftOffset.position.z);
 
             Vector3 finalPos = liderNPC.Position + rotatedPos - rotatedDrift;
-            
-            if (gridManager != null) {
-                Node nodoSlot = gridManager.NodeFromWorldPoint(finalPos);
-                
-                // Si el nodo no existe o no es caminable
-                if (nodoSlot == null || !nodoSlot.isWalkable) {
-                    // Buscamos el vecino caminable más cercano para no perder al NPC
-                    Node vecinoValido = BuscarVecinoCaminable(nodoSlot);
-                    if (vecinoValido != null) {
-                        finalPos = vecinoValido.worldPosition;
-                    } 
-                }
-            }
-
             float orientacion = liderNPC.Orientation + relativeLoc.orientation - driftOffset.orientation;
+            
             npc.SetTarget(finalPos, orientacion);
             ActualizarSteeringsNPC(npc, false);
         }
