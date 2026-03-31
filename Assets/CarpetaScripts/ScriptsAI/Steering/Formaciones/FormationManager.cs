@@ -33,6 +33,11 @@ public class FormationManager : MonoBehaviour
 
     public bool drawGizmos = false;
 
+    //Extraido de: https://code.tutsplus.com/understanding-steering-behaviors-leader-following--gamedev-10810t
+    [Header("Configuración del Leader Following")]
+    public float LEADER_BEHIND_DIST = 2f;
+    public float LEADER_SIGHT_RADIUS = 1.5f;
+
     void Start() 
     {
         if (autoCargarAlInicio)
@@ -64,6 +69,33 @@ public class FormationManager : MonoBehaviour
         
         // Control del bucle Wander (Pulsar 'S' para parar)
         if (Input.GetKeyDown(KeyCode.S)) DetenerTodo();
+    }
+
+    //Código extraido de: https://code.tutsplus.com/understanding-steering-behaviors-leader-following--gamedev-10810t
+    void UpdateLeaderFollow(){
+        Vector3 tv = liderNPC.Velocity.magnitude > 0.1f ? liderNPC.Velocity.normalized : liderNPC.AngleToVector(liderNPC.Orientation);
+
+        Vector3 behind = liderNPC.Position + (tv * -1 * LEADER_BEHIND_DIST);     
+        Vector3 ahead = liderNPC.Position + (tv * LEADER_BEHIND_DIST);
+
+        foreach (var sa in slotAssignments){
+            if (sa.character == liderNPC) continue;
+            AgentNPC npc = sa.character;
+
+            //Comprobamos si el npc está en frente molestando al lider.
+            bool isBlocking = Vector3.Distance(ahead, npc.Position) < LEADER_SIGHT_RADIUS ||
+                                Vector3.Distance(liderNPC.Position, npc.Position) < LEADER_SIGHT_RADIUS;
+
+            if (npc.TryGetComponent<Flee>(out var flee)){
+                if (isBlocking) {
+                    flee.enabled = true;
+                    flee.target = liderNPC;
+                }else{
+                    flee.enabled = false;
+                }
+            }
+            npc.SetTarget(behind, liderNPC.Orientation);
+        }   
     }
 
     public void AsignarUnidadesPreestablecidas()
@@ -228,6 +260,7 @@ public class FormationManager : MonoBehaviour
         }
     }
 
+    
     IEnumerator BucleWander()
     {
         // 1. Fase de Viaje (Solo si el líder NO es el jugador, ya que el jugador no usa TargetFormacion)
@@ -237,7 +270,8 @@ public class FormationManager : MonoBehaviour
             while (Vector3.Distance(liderNPC.Position, (liderNPC as AgentNPC).TargetFormacion.position) > 2f ||
                 liderNPC.Velocity.magnitude > 0.5f)
             {
-                yield return new WaitForSeconds(0.5f);
+                UpdateLeaderFollow();
+                yield return null;
             }
         }
 
@@ -263,7 +297,16 @@ public class FormationManager : MonoBehaviour
                     ActivarWanderLider();
                     enFormacionEstricta = false;
                     ActivarSteeringsViaje();
-                    yield return new WaitForSeconds(tiempoVagando);
+
+                    //Seguimos al leader con leaderFollow mientras el vaga.
+                    float timer = 0;
+                    while(timer < tiempoVagando && bucleWanderActivo)
+                    {
+                        UpdateLeaderFollow();
+                        timer += Time.deltaTime;
+                        yield return null;
+                    }
+
                     w.enabled = false;
                     npc.Velocity = Vector3.zero;
                     if (npc.TryGetComponent<Arrive>(out var arr1))
@@ -271,6 +314,7 @@ public class FormationManager : MonoBehaviour
                         npc.SetTarget(npc.Position, npc.Orientation);
                         arr1.enabled = true;
                     }
+
                     enFormacionEstricta = true;
                     ActivarSteeringsEstrictos();
                     yield return new WaitForSeconds(tiempoEsperaReconstruccion);

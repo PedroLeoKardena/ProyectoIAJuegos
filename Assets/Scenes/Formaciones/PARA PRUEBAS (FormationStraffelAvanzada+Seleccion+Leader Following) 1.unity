@@ -412,7 +412,7 @@ PrefabInstance:
     - target: {fileID: 408852321456530039, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       propertyPath: gridManager
       value: 
-      objectReference: {fileID: 466528316}
+      objectReference: {fileID: 0}
     - target: {fileID: 600540691390240500, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       propertyPath: weight
       value: 1.5
@@ -486,6 +486,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 131088717}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 131088719}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 131088718}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &131088710 stripped
 GameObject:
@@ -509,8 +515,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &131088712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -538,7 +542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &131088714
@@ -599,7 +603,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -622,6 +626,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &131088718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131088710}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &131088719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131088710}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1001 &132114691
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -919,6 +954,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 179075005}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 179075007}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 179075006}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &179074998 stripped
 GameObject:
@@ -942,8 +983,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &179075000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -991,7 +1030,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &179075003
@@ -1032,7 +1071,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -1055,6 +1094,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &179075006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179074998}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &179075007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179074998}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1 &250141285
 GameObject:
   m_ObjectHideFlags: 0
@@ -1360,6 +1430,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 495761217}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 495761219}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 495761218}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1001 &354082753
 PrefabInstance:
@@ -1586,6 +1662,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 354082761}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 354082763}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 354082762}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &354082754 stripped
 GameObject:
@@ -1609,8 +1691,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &354082756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1638,7 +1718,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &354082758
@@ -1699,7 +1779,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -1722,6 +1802,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &354082762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354082754}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &354082763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354082754}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1001 &380494510
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1947,6 +2058,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 380494518}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 380494520}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 380494519}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &380494511 stripped
 GameObject:
@@ -1970,8 +2087,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &380494513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2019,7 +2134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &380494516
@@ -2060,7 +2175,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -2083,6 +2198,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &380494519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380494511}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &380494520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380494511}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1001 &455173624
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2308,6 +2454,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 455173632}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 455173634}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 455173633}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &455173625 stripped
 GameObject:
@@ -2331,8 +2483,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &455173627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2360,7 +2510,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &455173629
@@ -2421,7 +2571,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -2444,6 +2594,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &455173633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455173625}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &455173634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455173625}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1 &462271076 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1000011035781986, guid: 3d609541b623cc24a85fcc89ee9fa9e6, type: 3}
@@ -2475,57 +2656,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.02, y: 1.3803365, z: 0.996912}
   m_Center: {x: 0.00000023841858, y: 0.69016826, z: 0.000000074505806}
---- !u!1 &466528315
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 466528317}
-  - component: {fileID: 466528316}
-  m_Layer: 0
-  m_Name: GridManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &466528316
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 466528315}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fc775183245d4740a2f7ec06f37998d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  width: 60
-  height: 60
-  cellSize: 1
-  obstacleLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  drawGizmos: 1
---- !u!4 &466528317
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 466528315}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -30, y: 0.1, z: -30}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &495761210 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
@@ -2548,8 +2678,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &495761212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2577,7 +2705,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &495761214
@@ -2638,7 +2766,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -2661,6 +2789,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &495761218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 495761210}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &495761219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 495761210}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1001 &510669888
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2886,6 +3045,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 510669896}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 510669898}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 510669897}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &510669889 stripped
 GameObject:
@@ -2909,8 +3074,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &510669891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2958,7 +3121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &510669894
@@ -2999,7 +3162,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -3022,6 +3185,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &510669897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510669889}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &510669898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510669889}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1001 &522205025
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3120,8 +3314,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &535844872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3149,7 +3341,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &535844874
@@ -3210,7 +3402,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -3233,6 +3425,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &535844878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535844870}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &535844879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535844870}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1001 &630221878
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3565,6 +3788,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 657210267}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 657210269}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 657210268}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &657210260 stripped
 GameObject:
@@ -3588,8 +3817,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &657210262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3637,7 +3864,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &657210265
@@ -3678,7 +3905,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -3701,6 +3928,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &657210268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 657210260}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &657210269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 657210260}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1 &682413265
 GameObject:
   m_ObjectHideFlags: 0
@@ -3735,10 +3993,11 @@ MonoBehaviour:
   pattern: {fileID: 682413268}
   autoCargarAlInicio: 0
   enFormacionEstricta: 0
-  gridManager: {fileID: 466528316}
   tiempoEsperaReconstruccion: 15
   tiempoVagando: 4
   drawGizmos: 0
+  LEADER_BEHIND_DIST: 2
+  LEADER_SIGHT_RADIUS: 1.5
 --- !u!4 &682413267
 Transform:
   m_ObjectHideFlags: 0
@@ -3995,6 +4254,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 691684440}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 691684442}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 691684441}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &691684433 stripped
 GameObject:
@@ -4018,8 +4283,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &691684435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4067,7 +4330,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &691684438
@@ -4108,7 +4371,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -4131,6 +4394,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &691684441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 691684433}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &691684442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 691684433}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1001 &732194249
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4653,6 +4947,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 786670263}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 786670265}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 786670264}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &786670256 stripped
 GameObject:
@@ -4676,8 +4976,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &786670258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4705,7 +5003,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &786670260
@@ -4766,7 +5064,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -4789,6 +5087,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &786670264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786670256}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &786670265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786670256}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1001 &873819594
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5010,6 +5339,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 873819602}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 873819604}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 873819603}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &873819595 stripped
 GameObject:
@@ -5033,8 +5368,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &873819597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5062,7 +5395,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &873819599
@@ -5123,7 +5456,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -5146,6 +5479,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &873819603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873819595}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &873819604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873819595}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1 &932836604 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1000011035781986, guid: 3d609541b623cc24a85fcc89ee9fa9e6, type: 3}
@@ -5402,6 +5766,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 986271530}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 986271532}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 986271531}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &986271523 stripped
 GameObject:
@@ -5425,8 +5795,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &986271525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5454,7 +5822,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &986271527
@@ -5515,7 +5883,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -5538,6 +5906,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &986271531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986271523}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &986271532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986271523}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1 &1007944332 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1000011894741232, guid: a0304cd1c89ed5f47b1c609d88092942, type: 3}
@@ -5934,6 +6333,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 535844877}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 535844879}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 535844878}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1001 &1123305507
 PrefabInstance:
@@ -6160,6 +6565,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1123305515}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1123305517}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1123305516}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &1123305508 stripped
 GameObject:
@@ -6183,8 +6594,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &1123305510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6232,7 +6641,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &1123305513
@@ -6273,7 +6682,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -6296,6 +6705,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &1123305516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1123305508}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &1123305517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1123305508}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1 &1190139802
 GameObject:
   m_ObjectHideFlags: 0
@@ -6826,6 +7266,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1312684175}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1312684177}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1312684176}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &1312684168 stripped
 GameObject:
@@ -6849,8 +7295,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &1312684170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6878,7 +7322,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &1312684172
@@ -6939,7 +7383,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -6962,6 +7406,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &1312684176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1312684168}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &1312684177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1312684168}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1001 &1365940031
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7677,6 +8152,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1489402992}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1489402994}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1489402993}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &1489402985 stripped
 GameObject:
@@ -7700,8 +8181,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &1489402987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7749,7 +8228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &1489402990
@@ -7790,7 +8269,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -7813,6 +8292,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &1489402993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489402985}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &1489402994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489402985}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1001 &1511034762
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8038,6 +8548,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1511034770}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1511034772}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1511034771}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &1511034763 stripped
 GameObject:
@@ -8061,8 +8577,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &1511034765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8110,7 +8624,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &1511034768
@@ -8151,7 +8665,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -8174,6 +8688,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &1511034771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1511034763}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &1511034772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1511034763}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1 &1540102201
 GameObject:
   m_ObjectHideFlags: 0
@@ -8666,6 +9211,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1564059153}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1564059155}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1564059154}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &1564059146 stripped
 GameObject:
@@ -8689,8 +9240,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &1564059148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8738,7 +9287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &1564059151
@@ -8779,7 +9328,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -8802,6 +9351,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &1564059154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1564059146}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &1564059155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1564059146}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1001 &1587759118
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9023,6 +9603,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1587759126}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1587759128}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1587759127}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &1587759119 stripped
 GameObject:
@@ -9046,8 +9632,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &1587759121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9075,7 +9659,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &1587759123
@@ -9136,7 +9720,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -9159,6 +9743,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &1587759127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587759119}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &1587759128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587759119}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1001 &1629215807
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9253,8 +9868,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &1735668618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9282,7 +9895,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &1735668620
@@ -9343,7 +9956,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -9366,6 +9979,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &1735668624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735668616}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &1735668625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735668616}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1001 &1796170672
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9751,6 +10395,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1833212953}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1833212955}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1833212954}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &1833212946 stripped
 GameObject:
@@ -9774,8 +10424,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &1833212948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9803,7 +10451,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &1833212950
@@ -9864,7 +10512,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -9887,6 +10535,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &1833212954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833212946}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &1833212955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833212946}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1001 &1842226051
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10112,6 +10791,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1842226059}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1842226061}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1842226060}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &1842226052 stripped
 GameObject:
@@ -10135,8 +10820,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &1842226054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10184,7 +10867,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &1842226057
@@ -10225,7 +10908,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -10248,6 +10931,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &1842226060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1842226052}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &1842226061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1842226052}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1 &1855120838
 GameObject:
   m_ObjectHideFlags: 0
@@ -10596,7 +11310,7 @@ PrefabInstance:
     - target: {fileID: 408852321456530039, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       propertyPath: gridManager
       value: 
-      objectReference: {fileID: 466528316}
+      objectReference: {fileID: 0}
     - target: {fileID: 600540691390240500, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       propertyPath: weight
       value: 1.5
@@ -10674,6 +11388,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1995969808}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1995969810}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1995969809}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &1995969801 stripped
 GameObject:
@@ -10697,8 +11417,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &1995969803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10746,7 +11464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &1995969806
@@ -10787,7 +11505,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -10810,6 +11528,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &1995969809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1995969801}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &1995969810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1995969801}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1001 &1997072868
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11035,6 +11784,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1997072876}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1997072878}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1997072877}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &1997072869 stripped
 GameObject:
@@ -11058,8 +11813,6 @@ MonoBehaviour:
   wanderOffset: 4
   wanderRadius: 2
   wanderRate: 10
-  gridManager: {fileID: 466528316}
-  radioBusqueda: 2
 --- !u!114 &1997072871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11107,7 +11860,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  weight: 1
+  weight: 2
   arrivalRadiusFormacion: 2
   interiorRadiusFormacion: 0.5
 --- !u!114 &1997072874
@@ -11148,7 +11901,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
-  gridManager: {fileID: 466528316}
+  gridManager: {fileID: 0}
   drawGizmosSteerNPC: 0
   steer:
     angular: 0
@@ -11171,6 +11924,37 @@ MonoBehaviour:
     angular: 0
     linear: {x: 0, y: 0, z: 0}
   behaviorAndWeights: []
+--- !u!114 &1997072877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997072869}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f1741b29b65149bd68e2cf6fb07be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  panicDistance: 5
+--- !u!114 &1997072878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997072869}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc3806fb8a9bc44ead28b551c275bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 4
+  threshold: 2.5
+  decayCoefficient: 100
 --- !u!1 &2109764835
 GameObject:
   m_ObjectHideFlags: 0
@@ -11430,6 +12214,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1735668623}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1735668625}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1735668624}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -11451,7 +12241,6 @@ SceneRoots:
   - {fileID: 313426028}
   - {fileID: 2139737063}
   - {fileID: 682413267}
-  - {fileID: 466528317}
   - {fileID: 250141287}
   - {fileID: 1989533806}
   - {fileID: 1420626322}
