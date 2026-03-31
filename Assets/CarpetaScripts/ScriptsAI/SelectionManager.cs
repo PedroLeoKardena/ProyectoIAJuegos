@@ -194,19 +194,11 @@ public class SelectionManager : MonoBehaviour
     {
         if (selectedUnits.Count == 0) return;
 
-        int count = selectedUnits.Count;
-        float spacing = 2f;
-        int perRow = Mathf.CeilToInt(Mathf.Sqrt(count));
-
-        for (int i = 0; i < count; i++)
+        foreach(var npc in selectedUnits)
         {
-            AgentNPC npc = selectedUnits[i];
             npc.tag = "NPC";
             SetSteeringsViaje(npc);
-            int row = i / perRow;
-            int col = i % perRow;
-            Vector3 offset = new Vector3(col * spacing, 0, -row * spacing);
-            npc.SetTarget(destination + offset, 0);
+            npc.SetTarget(destination, 0);
         }
     }
 

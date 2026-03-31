@@ -72,12 +72,16 @@ public class AgentNPC : Agent
     //Steerings Modo viaje
     public void SetModoViaje()
     {
+
         if (TryGetComponent<Arrive>(out var arrive)) arrive.enabled = true;
-        if (TryGetComponent<Align>(out var align)) align.enabled = false;
+        if (TryGetComponent<Separation>(out var sep)) sep.enabled = true;
         if (TryGetComponent<LookWhereYouGoing>(out var look)) look.enabled = true;
         if (TryGetComponent<WallAvoidance>(out var wall)) wall.enabled = true;
+
+        if (TryGetComponent<Align>(out var align)) align.enabled = false;
         if (TryGetComponent<Wander>(out var wander)) wander.enabled = false;
-        if (TryGetComponent<Separation>(out var sep)) sep.enabled = true;
+
+        if (TryGetComponent<Flee>(out var flee)) flee.enabled = false;
     }
 
     //Steerings Modo Formacion Estricta

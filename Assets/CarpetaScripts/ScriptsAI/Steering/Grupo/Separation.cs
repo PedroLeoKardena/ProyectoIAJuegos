@@ -53,18 +53,8 @@ public class Separation : SteeringBehaviour
             //Si hay vecinos cercanos, aplicamos la fuerza de separación promedio
             steer.linear = totalSeparationForce / count;
         }
-        else if(agent.Speed > 0.1f) {
-            float timeToBrake = 0.2f; 
-            steer.linear = -agent.Velocity / timeToBrake;
-            
-            if (steer.linear.magnitude > agent.MaxAcceleration)
-            {
-                steer.linear = steer.linear.normalized * agent.MaxAcceleration;
-            }
-        }
         else {
             //Si no hay vecinos cercanos y vamos muy lentos, no aplicamos ninguna fuerza de separación
-            agent.Velocity = Vector3.zero; // Frenado total (trampa física opcional)
             steer.linear = Vector3.zero;
         }
 
