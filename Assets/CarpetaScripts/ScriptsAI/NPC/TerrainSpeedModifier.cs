@@ -20,7 +20,7 @@ public class TerrainSpeedModifier : MonoBehaviour
     [SerializeField] private LayerMask groundLayer = ~0; 
 
     private Bodi bodi;
-    private string currentTerrain = "Llanura"; // Terreno asumido por defecto
+    public string currentTerrain { get; private set; } = "Llanura"; // Terreno asumido por defecto
 
     private void Awake()
     {

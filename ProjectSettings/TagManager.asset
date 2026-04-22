@@ -10,6 +10,7 @@ TagManager:
   - Camino
   - Bosque
   - Llanura
+  - Enemigo
   layers:
   - Default
   - TransparentFX
