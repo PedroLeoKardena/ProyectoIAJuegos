@@ -16,7 +16,7 @@ public class Proyectil : MonoBehaviour
         // El proyectil vuela hacia el frente constantemente
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
-        rb.linearVelocity = transform.forward * velocidad;
+        rb.velocity = transform.forward * velocidad;
 
         // Limpieza automática por si se pierde en el infinito
         Destroy(gameObject, tiempoVida);

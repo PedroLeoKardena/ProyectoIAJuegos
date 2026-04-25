@@ -99,7 +99,7 @@ public class Bodi : MonoBehaviour
             if (value.magnitude > _maxSpeed)
             {
                 _velocity = value.normalized * _maxSpeed;
-                Debug.LogWarning("Velocidad ajustada al máximo permitido.");
+                // Debug.LogWarning("Velocidad ajustada al máximo permitido.");
             }else {
                 _velocity = value;
             }
