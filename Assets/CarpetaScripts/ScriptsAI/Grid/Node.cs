@@ -12,6 +12,8 @@ public class Node
 
     // Indica si la celda es transitable o es un obstáculo
     public bool isWalkable;
+    // Tag del terreno bajo este nodo, detectado en BakeGrid. Usado por el CostProvider de A*.
+    public string terrainTag = "Llanura";
 
     // Pathfinding
     public float gCost;
