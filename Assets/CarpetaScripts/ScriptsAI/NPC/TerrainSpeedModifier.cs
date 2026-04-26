@@ -17,29 +17,25 @@ public class TerrainSpeedModifier : MonoBehaviour
     [Tooltip("Distancia del raycast hacia abajo")]
     [SerializeField] private float raycastDistance = 2f;
     [Tooltip("Filtro de capas para el raycast")]
-    [SerializeField] private LayerMask groundLayer = ~0; 
+    [SerializeField] private LayerMask groundLayer = ~0;
 
     private Bodi bodi;
-    public string currentTerrain { get; private set; } = "Llanura"; // Terreno asumido por defecto
+    public string currentTerrain { get; private set; } = "Llanura";
 
     private void Awake()
     {
         bodi = GetComponent<Bodi>();
-        // Aplicamos la velocidad inicial asumiendo Llanura
         ApplySpeedForTerrain(currentTerrain);
     }
 
     private void Update()
     {
-        // Detectar el suelo debajo del personaje
-        // Se lanza el rayo desde un poco más arriba del objeto hacia abajo
         Vector3 origin = transform.position + Vector3.up * 0.5f;
-        
+
         if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, raycastDistance, groundLayer))
         {
             string detectedTag = hit.collider.tag;
-            
-            // Si el tag detectado es uno de nuestros terrenos y ha cambiado
+
             if (detectedTag != currentTerrain && IsValidTerrainTag(detectedTag))
             {
                 currentTerrain = detectedTag;
@@ -53,32 +49,46 @@ public class TerrainSpeedModifier : MonoBehaviour
         return tag == "Camino" || tag == "Bosque" || tag == "Llanura";
     }
 
-    private void ApplySpeedForTerrain(string terrain)
+    /// <summary>
+    /// Obtiene la velocidad de la unidad en el terreno dado. Fuente única de verdad para movimiento y pathfinding.
+    /// </summary>
+    public static float GetSpeed(UnitType unitType, string terrainTag)
     {
-        float newSpeed = 0f;
-
         switch (unitType)
         {
             case UnitType.InfanteriaPesada:
-                if (terrain == "Camino") newSpeed = 3.5f;
-                else if (terrain == "Bosque") newSpeed = 2f;
-                else if (terrain == "Llanura") newSpeed = 3f;
-                break;
-            
+                if (terrainTag == "Camino") return 3.5f;
+                if (terrainTag == "Bosque") return 2f;
+                return 3f;
             case UnitType.Velites:
-                if (terrain == "Camino") newSpeed = 5f;
-                else if (terrain == "Bosque") newSpeed = 3.5f;
-                else if (terrain == "Llanura") newSpeed = 4f;
-                break;
-                
+                if (terrainTag == "Camino") return 5f;
+                if (terrainTag == "Bosque") return 3.5f;
+                return 4f;
             case UnitType.Exploradores:
-                if (terrain == "Camino") newSpeed = 7f;
-                else if (terrain == "Bosque") newSpeed = 5.5f;
-                else if (terrain == "Llanura") newSpeed = 6f;
-                break;
+                if (terrainTag == "Camino") return 7f;
+                if (terrainTag == "Bosque") return 5.5f;
+                return 6f;
+            default:
+                return 3f;
         }
+    }
 
-        // Asignamos el valor al script que maneja las velocidades del agente
-        bodi.MaxSpeed = newSpeed;
+    /// <summary>
+    /// Obtiene la velocidad máxima posible de la unidad (en Camino), usada para escalar la heurística de A*.
+    /// </summary>
+    public static float GetMaxSpeed(UnitType unitType)
+    {
+        switch (unitType)
+        {
+            case UnitType.InfanteriaPesada: return 3.5f;
+            case UnitType.Velites:          return 5f;
+            case UnitType.Exploradores:     return 7f;
+            default:                        return 3f;
+        }
+    }
+
+    private void ApplySpeedForTerrain(string terrain)
+    {
+        bodi.MaxSpeed = GetSpeed(unitType, terrain);
     }
 }
