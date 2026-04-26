@@ -96,6 +96,9 @@ public class BinaryHeap
 // Usar NodeRecord para todo el estado de búsqueda y preservar la integridad del grid.
 public static class AStarAlgorithm
 {
+    // Raíz cuadrada de 2, precalculada para el coste diagonal en Chebyshev.
+    private static readonly float Sqrt2 = Mathf.Sqrt(2f);
+
     // Delegado que encapsula el coste de traversar una arista (terreno + táctica).
     public delegate float CostProvider(Node from, Node to);
 
@@ -104,7 +107,8 @@ public static class AStarAlgorithm
     public static Path FindPath(Node start, Node target, GridManager grid,
         CostProvider costProvider, HeuristicType heuristic)
     {
-        if (start == null || target == null || !start.isWalkable || !target.isWalkable)
+        if (grid == null || costProvider == null || start == null || target == null
+            || !start.isWalkable || !target.isWalkable)
             return null;
 
         var open       = new BinaryHeap();
@@ -123,11 +127,10 @@ public static class AStarAlgorithm
             // Registro obsoleto: el nodo ya fue procesado con un coste menor (lazy deletion).
             if (closed.Contains(current.node)) continue;
 
-            openLookup.Remove(current.node);
-
             if (current.node == target)
                 return ReconstructPath(current);
 
+            openLookup.Remove(current.node);
             closed.Add(current.node);
 
             foreach (Node neighbor in grid.GetNeighbors(current.node))
@@ -173,18 +176,20 @@ public static class AStarAlgorithm
         float dx = Mathf.Abs(a.x - b.x);
         float dz = Mathf.Abs(a.z - b.z);
         float D  = cellSize;
-        float D2 = Mathf.Sqrt(2f) * D;
 
         switch (type)
         {
             case HeuristicType.Manhattan:
+                // Admisible solo con movimiento en 4 direcciones.
+                // Con 8 direcciones (este grid), usar Chebyshev o Euclidean.
                 return D * (dx + dz);
             case HeuristicType.Chebyshev:
                 float hDiag = Mathf.Min(dx, dz);
-                return D2 * hDiag + D * (dx + dz - 2f * hDiag);
+                return Sqrt2 * D * hDiag + D * (dx + dz - 2f * hDiag);
             case HeuristicType.Euclidean:
                 return D * Mathf.Sqrt(dx * dx + dz * dz);
             default:
+                Debug.LogWarning($"[AStarAlgorithm] HeuristicType desconocido: {type}. Usando h=0.");
                 return 0f;
         }
     }
