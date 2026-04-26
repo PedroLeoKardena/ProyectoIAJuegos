@@ -7,6 +7,7 @@ public class AStarPathfinder : MonoBehaviour
 {
     [Header("Configuración A*")]
     [SerializeField] private GridManager grid;
+    [Tooltip("Transform del destino final del agente.")]
     [SerializeField] private Transform objetivo;
     [SerializeField] private HeuristicType heuristicType = HeuristicType.Euclidean;
 
@@ -16,6 +17,7 @@ public class AStarPathfinder : MonoBehaviour
     [Tooltip("Tecla para recalcular el camino en tiempo de ejecución (demo al profesor).")]
     [SerializeField] private KeyCode recomputeKey = KeyCode.Space;
 
+    // Controla la visibilidad de los Gizmos de depuración (usado en OnDrawGizmos).
     [Header("Debug")]
     [SerializeField] private bool drawDebug = true;
 
@@ -28,6 +30,7 @@ public class AStarPathfinder : MonoBehaviour
 
     private void Start()
     {
+        // Depende de que GridManager.Awake() haya ejecutado primero (seguro en escena estática).
         if (grid == null) grid = FindFirstObjectByType<GridManager>();
         ComputePath();
     }
