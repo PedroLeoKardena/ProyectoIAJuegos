@@ -7,6 +7,7 @@ public enum UnitType
     Exploradores
 }
 
+// Detecta el terreno bajo la unidad mediante raycast y ajusta su velocidad de movimiento según el tipo de unidad.
 [RequireComponent(typeof(Bodi))]
 public class TerrainSpeedModifier : MonoBehaviour
 {
@@ -49,9 +50,7 @@ public class TerrainSpeedModifier : MonoBehaviour
         return tag == "Camino" || tag == "Bosque" || tag == "Llanura";
     }
 
-    /// <summary>
-    /// Obtiene la velocidad de la unidad en el terreno dado. Fuente única de verdad para movimiento y pathfinding.
-    /// </summary>
+    // Devuelve la velocidad de la unidad en el terreno dado. Fuente única de verdad para movimiento y pathfinding.
     public static float GetSpeed(UnitType unitType, string terrainTag)
     {
         switch (unitType)
@@ -73,9 +72,7 @@ public class TerrainSpeedModifier : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Obtiene la velocidad máxima posible de la unidad (en Camino), usada para escalar la heurística de A*.
-    /// </summary>
+    // Devuelve la velocidad máxima de la unidad (en Camino), usada para escalar la heurística de A*.
     public static float GetMaxSpeed(UnitType unitType)
     {
         switch (unitType)
