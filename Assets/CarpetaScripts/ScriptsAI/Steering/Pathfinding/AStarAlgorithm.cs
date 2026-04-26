@@ -40,6 +40,8 @@ public class BinaryHeap
     // Extrae y devuelve el registro con menor fCost (o mayor hCost en empate).
     public NodeRecord ExtractMin()
     {
+        if (heap.Count == 0)
+            throw new System.InvalidOperationException("BinaryHeap está vacío.");
         NodeRecord min = heap[0];
         int last = heap.Count - 1;
         heap[0] = heap[last];
