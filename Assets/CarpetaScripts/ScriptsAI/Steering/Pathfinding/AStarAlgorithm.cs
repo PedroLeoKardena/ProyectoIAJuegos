@@ -91,6 +91,101 @@ public class BinaryHeap
     }
 }
 
-// Placeholder para que el archivo compile en este paso.
-// Se completará en la Task 2.
-public static class AStarAlgorithm { }
+// Algoritmo A* puro. No hereda de MonoBehaviour. Solo calcula caminos.
+// IMPORTANTE: Este algoritmo NO escribe en los campos gCost/hCost/parent de Node.
+// Usar NodeRecord para todo el estado de búsqueda y preservar la integridad del grid.
+public static class AStarAlgorithm
+{
+    // Delegado que encapsula el coste de traversar una arista (terreno + táctica).
+    public delegate float CostProvider(Node from, Node to);
+
+    // Calcula el camino óptimo desde start hasta target usando A*.
+    // Devuelve un Path con las posiciones en orden (inicio → destino), o null si no hay camino.
+    public static Path FindPath(Node start, Node target, GridManager grid,
+        CostProvider costProvider, HeuristicType heuristic)
+    {
+        if (start == null || target == null || !start.isWalkable || !target.isWalkable)
+            return null;
+
+        var open       = new BinaryHeap();
+        var closed     = new HashSet<Node>();
+        var openLookup = new Dictionary<Node, NodeRecord>();
+
+        float h0          = Heuristic(start, target, grid.cellSize, heuristic);
+        var   startRecord = new NodeRecord(start, null, 0f, h0);
+        open.Insert(startRecord);
+        openLookup[start] = startRecord;
+
+        while (open.Count > 0)
+        {
+            NodeRecord current = open.ExtractMin();
+
+            // Registro obsoleto: el nodo ya fue procesado con un coste menor (lazy deletion).
+            if (closed.Contains(current.node)) continue;
+
+            openLookup.Remove(current.node);
+
+            if (current.node == target)
+                return ReconstructPath(current);
+
+            closed.Add(current.node);
+
+            foreach (Node neighbor in grid.GetNeighbors(current.node))
+            {
+                if (!neighbor.isWalkable || closed.Contains(neighbor)) continue;
+
+                // Garantía de admisibilidad: el coste de arista nunca es negativo.
+                float edgeCost = Mathf.Max(0f, costProvider(current.node, neighbor));
+                float newG     = current.gCost + edgeCost;
+
+                // Si ya existe un registro en OPEN con coste igual o mejor, no actualizar.
+                if (openLookup.TryGetValue(neighbor, out NodeRecord existing) && existing.gCost <= newG)
+                    continue;
+
+                float newH  = Heuristic(neighbor, target, grid.cellSize, heuristic);
+                var   record = new NodeRecord(neighbor, current, newG, newH);
+                open.Insert(record);
+                openLookup[neighbor] = record;
+            }
+        }
+
+        return null; // Sin camino disponible
+    }
+
+    // Reconstruye el Path siguiendo la cadena de padres desde el NodeRecord final.
+    private static Path ReconstructPath(NodeRecord end)
+    {
+        var positions = new List<Vector3>();
+        NodeRecord current = end;
+        while (current != null)
+        {
+            positions.Add(current.node.worldPosition);
+            current = current.parent;
+        }
+        positions.Reverse();
+        return new Path(positions.ToArray());
+    }
+
+    // Calcula la estimación heurística entre dos nodos según el tipo seleccionado.
+    // Fórmulas idénticas a LRTA.cs para consistencia del proyecto.
+    private static float Heuristic(Node a, Node b, float cellSize, HeuristicType type)
+    {
+        float dx = Mathf.Abs(a.x - b.x);
+        float dz = Mathf.Abs(a.z - b.z);
+        float D  = cellSize;
+        float D2 = Mathf.Sqrt(2f) * D;
+
+        switch (type)
+        {
+            case HeuristicType.Manhattan:
+                return D * (dx + dz);
+            case HeuristicType.Chebyshev:
+                float hDiag = Mathf.Min(dx, dz);
+                return D2 * hDiag + D * (dx + dz - 2f * hDiag);
+            case HeuristicType.Euclidean:
+                return D * Mathf.Sqrt(dx * dx + dz * dz);
+            default:
+                return 0f;
+        }
+    }
+}
