@@ -105,7 +105,7 @@ public static class AStarAlgorithm
     // Calcula el camino óptimo desde start hasta target usando A*.
     // Devuelve un Path con las posiciones en orden (inicio → destino), o null si no hay camino.
     public static Path FindPath(Node start, Node target, GridManager grid,
-        CostProvider costProvider, HeuristicType heuristic)
+        CostProvider costProvider, HeuristicType heuristic, float heuristicScale = 1f)
     {
         if (grid == null || costProvider == null || start == null || target == null
             || !start.isWalkable || !target.isWalkable)
@@ -115,7 +115,7 @@ public static class AStarAlgorithm
         var closed     = new HashSet<Node>();
         var openLookup = new Dictionary<Node, NodeRecord>();
 
-        float h0          = Heuristic(start, target, grid.cellSize, heuristic);
+        float h0          = Heuristic(start, target, grid.cellSize, heuristic) * heuristicScale;
         var   startRecord = new NodeRecord(start, null, 0f, h0);
         open.Insert(startRecord);
         openLookup[start] = startRecord;
@@ -145,7 +145,7 @@ public static class AStarAlgorithm
                 if (openLookup.TryGetValue(neighbor, out NodeRecord existing) && existing.gCost <= newG)
                     continue;
 
-                float newH  = Heuristic(neighbor, target, grid.cellSize, heuristic);
+                float newH  = Heuristic(neighbor, target, grid.cellSize, heuristic) * heuristicScale;
                 var   record = new NodeRecord(neighbor, current, newG, newH);
                 open.Insert(record);
                 openLookup[neighbor] = record;
