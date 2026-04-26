@@ -28,10 +28,15 @@ public class AStarPathfinder : MonoBehaviour
     // Último camino calculado. Null si no hay camino o aún no se ha calculado.
     public Path CurrentPath { get; private set; }
 
+    private TerrainSpeedModifier _terrainMod;
+
     private void Start()
     {
         // Depende de que GridManager.Awake() haya ejecutado primero (seguro en escena estática).
         if (grid == null) grid = FindFirstObjectByType<GridManager>();
+        _terrainMod = GetComponent<TerrainSpeedModifier>();
+        if (_terrainMod == null)
+            Debug.LogWarning("[AStarPathfinder] No se encontró TerrainSpeedModifier. Se usará coste base (distancia euclídea).");
         ComputePath();
     }
 
@@ -56,7 +61,8 @@ public class AStarPathfinder : MonoBehaviour
         Node target = grid.NodeFromWorldPoint(objetivo.position);
 
         AStarAlgorithm.CostProvider provider = BuildCostProvider();
-        CurrentPath = AStarAlgorithm.FindPath(start, target, grid, provider, heuristicType);
+        float hScale = (_terrainMod != null) ? 1f / TerrainSpeedModifier.GetMaxSpeed(_terrainMod.unitType) : 1f;
+        CurrentPath = AStarAlgorithm.FindPath(start, target, grid, provider, heuristicType, hScale);
 
         if (CurrentPath == null)
             Debug.LogWarning($"[AStarPathfinder] No se encontró camino. Start=({start?.x},{start?.z}) Target=({target?.x},{target?.z})");
@@ -67,12 +73,24 @@ public class AStarPathfinder : MonoBehaviour
     }
 
     // Construye el CostProvider adecuado según el estado del toggle táctico.
+    // Si hay TerrainSpeedModifier, usa coste basado en tiempo de viaje (distancia/velocidad).
     private AStarAlgorithm.CostProvider BuildCostProvider()
     {
         if (useTacticalCost && costProvider != null)
             return costProvider;
 
-        // Coste base: distancia euclídea entre centros de celda.
+        if (_terrainMod != null)
+        {
+            UnitType unitType = _terrainMod.unitType;
+            // Coste = tiempo de viaje: distancia / velocidad en ese terreno.
+            return (from, to) =>
+            {
+                float speed = TerrainSpeedModifier.GetSpeed(unitType, to.terrainTag);
+                return Vector3.Distance(from.worldPosition, to.worldPosition) / speed;
+            };
+        }
+
+        // Fallback sin TerrainSpeedModifier: distancia euclídea.
         return (from, to) => Vector3.Distance(from.worldPosition, to.worldPosition);
     }
 
