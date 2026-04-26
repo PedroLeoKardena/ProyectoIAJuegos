@@ -15,6 +15,9 @@ public class GridManager : MonoBehaviour
     
     [Tooltip("Layer que designa a los obstáculos")]
     public LayerMask obstacleLayer;
+
+    [Tooltip("Capas del terreno para detectar su tag (Camino, Llanura, Bosque).")]
+    [SerializeField] private LayerMask groundLayer = ~0;
     public bool drawGizmos = true;
 
     // Propiedades internas
@@ -91,6 +94,15 @@ public class GridManager : MonoBehaviour
                 // Comprueba si hay obstáculos en la capa definida
                 bool isWalkable = !Physics.CheckSphere(worldPos, cellSize * 0.4f, obstacleLayer);
                 node.isWalkable = isWalkable;
+
+                // Detecta el tag del terreno bajo el nodo para el coste de pathfinding.
+                node.terrainTag = "Llanura";
+                if (Physics.Raycast(worldPos + Vector3.up * 0.5f, Vector3.down, out RaycastHit terrainHit, 2f, groundLayer))
+                {
+                    string tag = terrainHit.collider.tag;
+                    if (tag == "Camino" || tag == "Bosque" || tag == "Llanura")
+                        node.terrainTag = tag;
+                }
             }
         }
     }
