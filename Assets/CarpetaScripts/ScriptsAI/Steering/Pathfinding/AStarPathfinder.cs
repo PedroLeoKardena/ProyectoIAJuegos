@@ -75,4 +75,47 @@ public class AStarPathfinder : MonoBehaviour
         // Coste base: distancia euclídea entre centros de celda.
         return (from, to) => Vector3.Distance(from.worldPosition, to.worldPosition);
     }
+
+#if UNITY_EDITOR
+    // Dibuja el camino calculado, el nodo de inicio y el nodo de destino en la vista Scene.
+    private void OnDrawGizmos()
+    {
+        if (!drawDebug) return;
+
+        float radius = (grid != null) ? grid.cellSize * 0.4f : 0.5f;
+
+        // Destino: visible en Edit Mode y Play Mode
+        if (objetivo != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(objetivo.position, radius);
+        }
+
+        // Inicio y camino: solo disponibles en Play Mode (grid inicializado)
+        if (!Application.isPlaying || grid == null) return;
+
+        Node startNode = grid.NodeFromWorldPoint(transform.position);
+        if (startNode != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(startNode.worldPosition, radius);
+        }
+
+        if (CurrentPath == null || CurrentPath.nodes == null) return;
+
+        for (int i = 0; i < CurrentPath.nodes.Length; i++)
+        {
+            // Waypoint
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(CurrentPath.nodes[i], grid.cellSize * 0.25f);
+
+            // Línea al siguiente waypoint
+            if (i < CurrentPath.nodes.Length - 1)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawLine(CurrentPath.nodes[i], CurrentPath.nodes[i + 1]);
+            }
+        }
+    }
+#endif
 }
