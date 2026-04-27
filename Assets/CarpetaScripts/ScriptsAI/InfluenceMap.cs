@@ -77,14 +77,14 @@ public class InfluenceMap : MonoBehaviour
     // Devuelve la influencia aliada acumulada en el nodo dado. Devuelve 0 si es null o fuera del grid.
     public float GetAlliedInfluence(Node node)
     {
-        if (node == null || node.x < 0 || node.z < 0 || node.x >= _width || node.z >= _height) return 0f;
+        if (node == null || _allied == null || node.x < 0 || node.z < 0 || node.x >= _width || node.z >= _height) return 0f;
         return _allied[node.x, node.z];
     }
 
     // Devuelve la influencia enemiga acumulada en el nodo dado. Devuelve 0 si es null o fuera del grid.
     public float GetEnemyInfluence(Node node)
     {
-        if (node == null || node.x < 0 || node.z < 0 || node.x >= _width || node.z >= _height) return 0f;
+        if (node == null || _enemy == null || node.x < 0 || node.z < 0 || node.x >= _width || node.z >= _height) return 0f;
         return _enemy[node.x, node.z];
     }
 
@@ -92,13 +92,25 @@ public class InfluenceMap : MonoBehaviour
     public float GetControl(Node node) => GetAlliedInfluence(node) - GetEnemyInfluence(node);
 
     // Devuelve la influencia aliada en la posición del mundo dada.
-    public float GetAlliedInfluence(Vector3 worldPos) => GetAlliedInfluence(gridManager.NodeFromWorldPoint(worldPos));
+    public float GetAlliedInfluence(Vector3 worldPos)
+    {
+        if (gridManager == null) return 0f;
+        return GetAlliedInfluence(gridManager.NodeFromWorldPoint(worldPos));
+    }
 
     // Devuelve la influencia enemiga en la posición del mundo dada.
-    public float GetEnemyInfluence(Vector3 worldPos) => GetEnemyInfluence(gridManager.NodeFromWorldPoint(worldPos));
+    public float GetEnemyInfluence(Vector3 worldPos)
+    {
+        if (gridManager == null) return 0f;
+        return GetEnemyInfluence(gridManager.NodeFromWorldPoint(worldPos));
+    }
 
     // Devuelve el balance de control en la posición del mundo dada.
-    public float GetControl(Vector3 worldPos) => GetControl(gridManager.NodeFromWorldPoint(worldPos));
+    public float GetControl(Vector3 worldPos)
+    {
+        if (gridManager == null) return 0f;
+        return GetControl(gridManager.NodeFromWorldPoint(worldPos));
+    }
 
     // Devuelve I₀ según el UnitType del GameObject. Usa I0_Exploradores como fallback.
     private float GetI0(GameObject unit)
