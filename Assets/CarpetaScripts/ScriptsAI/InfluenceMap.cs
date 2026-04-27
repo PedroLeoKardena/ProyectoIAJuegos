@@ -132,6 +132,8 @@ public class InfluenceMap : MonoBehaviour
     // Recalcula toda la influencia del mapa. Llamado periódicamente, nunca en Update.
     private void RefreshMap()
     {
+        if (_allied == null || _enemy == null) return;
+
         System.Array.Clear(_allied, 0, _allied.Length);
         System.Array.Clear(_enemy,  0, _enemy.Length);
 
