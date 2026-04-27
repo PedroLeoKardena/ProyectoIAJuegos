@@ -183,7 +183,7 @@ public class InfluenceMap : MonoBehaviour
     // Azul = dominio aliado, Rojo = dominio enemigo, Gris = equilibrio.
     private void OnDrawGizmos()
     {
-        if (!debugMode || !Application.isPlaying || _allied == null || gridManager == null) return;
+        if (!debugMode || !Application.isPlaying || _allied == null || _nodeCache == null || gridManager == null) return;
 
         // Calcular el valor máximo para normalizar los colores.
         float maxAbs = 0.001f;
