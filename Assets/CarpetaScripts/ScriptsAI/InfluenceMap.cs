@@ -178,4 +178,49 @@ public class InfluenceMap : MonoBehaviour
         ProcessUnits(GameObject.FindGameObjectsWithTag("Aliado"), _allied);
         ProcessUnits(GameObject.FindGameObjectsWithTag("Enemigo"), _enemy);
     }
+
+    // Visualiza el balance de control sobre el grid en el Scene View.
+    // Azul = dominio aliado, Rojo = dominio enemigo, Gris = equilibrio.
+    private void OnDrawGizmos()
+    {
+        if (!debugMode || !Application.isPlaying || _allied == null || gridManager == null) return;
+
+        // Calcular el valor máximo para normalizar los colores.
+        float maxAbs = 0.001f;
+        for (int x = 0; x < _width; x++)
+            for (int z = 0; z < _height; z++)
+            {
+                float abs = Mathf.Abs(_allied[x, z] - _enemy[x, z]);
+                if (abs > maxAbs) maxAbs = abs;
+            }
+
+        float cs = gridManager.cellSize;
+
+        for (int x = 0; x < _width; x++)
+        {
+            for (int z = 0; z < _height; z++)
+            {
+                Node node = _nodeCache[x, z];
+                if (node == null || !node.isWalkable) continue;
+
+                float control = _allied[x, z] - _enemy[x, z];
+                float t = Mathf.Clamp01(Mathf.Abs(control) / maxAbs);
+
+                Color col = control > 0f
+                    ? Color.Lerp(Color.gray, Color.blue, t)
+                    : control < 0f
+                        ? Color.Lerp(Color.gray, Color.red, t)
+                        : Color.gray;
+                col.a = Mathf.Lerp(0.1f, 0.6f, t);
+
+                Gizmos.color = col;
+                Gizmos.DrawCube(node.worldPosition, new Vector3(cs, 0.1f, cs) * 0.9f);
+
+#if UNITY_EDITOR
+                if (showNumericValues)
+                    UnityEditor.Handles.Label(node.worldPosition + Vector3.up * 0.2f, control.ToString("F1"));
+#endif
+            }
+        }
+    }
 }
