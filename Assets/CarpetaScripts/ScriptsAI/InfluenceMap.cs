@@ -54,6 +54,13 @@ public class InfluenceMap : MonoBehaviour
     // Reserva arrays, cachea nodos del grid (ya inicializado por GridManager.Awake) y arranca el refresco.
     private void Start()
     {
+        if (gridManager == null)
+        {
+            Debug.LogError("[InfluenceMap] gridManager es null. Asigna el componente en el Inspector.");
+            enabled = false;
+            return;
+        }
+
         _width  = gridManager.width;
         _height = gridManager.height;
         _allied = new float[_width, _height];
