@@ -44,7 +44,7 @@ Implementar un Mapa de Influencia (`InfluenceMap`) como `MonoBehaviour` singleto
 | `refreshInterval` | float | 1.0 | Segundos entre refrescos del mapa |
 | `influenceRadius` | float | 10.0 | Radio máximo de efecto por unidad (unidades de mundo) |
 | `bosqueMultiplier` | float | 0.8 | Modificador terreno Bosque |
-| `llanuaMultiplier` | float | 1.2 | Modificador terreno Llanura |
+| `llanuraMultiplier` | float | 1.2 | Modificador terreno Llanura |
 | `caminoMultiplier` | float | 1.0 | Modificador terreno Camino |
 | `I0_InfanteriaPesada` | float | 15.0 | Potencia base InfanteriaPesada |
 | `I0_Velites` | float | 8.0 | Potencia base Velites |
@@ -136,3 +136,4 @@ Activo cuando `debugMode = true`, solo en Play Mode.
 - No modificar `Node`, `Grid<T>`, `GridManager`, `AStarAlgorithm` ni `AStarPathfinder`.
 - Todos los métodos y clases con comentario breve en español.
 - Sin actualización en `Update`; únicamente refresco periódico.
+- El bloque `showNumericValues` con `UnityEditor.Handles.Label` debe estar dentro de `#if UNITY_EDITOR` para evitar errores de compilación en builds.
