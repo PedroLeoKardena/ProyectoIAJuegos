@@ -74,9 +74,68 @@ public class InfluenceMap : MonoBehaviour
         InvokeRepeating(nameof(RefreshMap), 0f, refreshInterval);
     }
 
+    // Devuelve I₀ según el UnitType del GameObject. Usa I0_Exploradores como fallback.
+    private float GetI0(GameObject unit)
+    {
+        TerrainSpeedModifier tsm = unit.GetComponent<TerrainSpeedModifier>();
+        if (tsm == null) return I0_Exploradores;
+        switch (tsm.unitType)
+        {
+            case UnitType.InfanteriaPesada: return I0_InfanteriaPesada;
+            case UnitType.Velites:          return I0_Velites;
+            case UnitType.Exploradores:     return I0_Exploradores;
+            default:                        return I0_Exploradores;
+        }
+    }
+
+    // Devuelve el multiplicador de terreno para el terrainTag del nodo candidato.
+    private float GetTerrainMultiplier(string terrainTag)
+    {
+        switch (terrainTag)
+        {
+            case "Bosque":  return bosqueMultiplier;
+            case "Llanura": return llanuraMultiplier;
+            case "Camino":  return caminoMultiplier;
+            default:        return 1f;
+        }
+    }
+
+    // Acumula la influencia de un grupo de unidades sobre el array target.
+    // Fórmula: I_d = I₀ / √(1 + d), con d = distancia euclídea en unidades de mundo.
+    private void ProcessUnits(GameObject[] units, float[,] target)
+    {
+        foreach (GameObject unit in units)
+        {
+            Node origin = gridManager.NodeFromWorldPoint(unit.transform.position);
+            if (origin == null) continue;
+
+            float i0 = GetI0(unit);
+
+            for (int x = 0; x < _width; x++)
+            {
+                for (int z = 0; z < _height; z++)
+                {
+                    Node candidate = _nodeCache[x, z];
+                    if (candidate == null) continue;
+
+                    float d = Vector3.Distance(origin.worldPosition, candidate.worldPosition);
+                    if (d > influenceRadius) continue;
+
+                    float influence = i0 / Mathf.Sqrt(1f + d);
+                    influence *= GetTerrainMultiplier(candidate.terrainTag);
+                    target[x, z] += influence;
+                }
+            }
+        }
+    }
+
     // Recalcula toda la influencia del mapa. Llamado periódicamente, nunca en Update.
     private void RefreshMap()
     {
-        // Stub — se implementa en Task 2
+        System.Array.Clear(_allied, 0, _allied.Length);
+        System.Array.Clear(_enemy,  0, _enemy.Length);
+
+        ProcessUnits(GameObject.FindGameObjectsWithTag("Aliado"), _allied);
+        ProcessUnits(GameObject.FindGameObjectsWithTag("Enemigo"), _enemy);
     }
 }
