@@ -224,7 +224,7 @@ public class InfluenceMap : MonoBehaviour
                 if (alpha < 0.01f) continue;
 
                 // Canal rojo = enemigos, canal azul = aliados; magenta donde ambos coinciden.
-                Color col = new Color(enemyNorm, 0f, alliedNorm, Mathf.Lerp(0.3f, 0.9f, alpha));
+                Color col = new Color(enemyNorm, 0f, alliedNorm, Mathf.Lerp(0.7f, 0.9f, alpha));
 
                 Gizmos.color = col;
                 Gizmos.DrawCube(node.worldPosition, new Vector3(cs, 0.2f, cs) * 0.95f);
