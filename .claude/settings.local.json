@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git commit *)",
+      "Bash(git -C \"C:/Users/migue/Documents/Carrera/4-2/IADJ/ProyectoIAJuegos\" diff HEAD~1 8fb5243 -- \"Assets/CarpetaScripts/ScriptsAI/Steering/Pathfinding/AStarAlgorithm.cs\")",
+      "Bash(git -C \"C:/Users/migue/Documents/Carrera/4-2/IADJ/ProyectoIAJuegos\" show 8fb5243 -- \"Assets/CarpetaScripts/ScriptsAI/Steering/Pathfinding/AStarAlgorithm.cs\")",
+      "Bash(git *)",
+      "Bash(git diff *)",
+      "Bash(git show *)",
+      "Bash(node -e ' *)",
+      "Bash(grep -rn \"class.*comment\\\\|//.*clase\\\\|/// <summary>\" Assets/CarpetaScripts/ScriptsAI/NPC/TerrainSpeedModifier.cs)",
+      "Bash(grep -n \"^//\" Assets/CarpetaScripts/ScriptsAI/NPC/TerrainSpeedModifier.cs)",
+      "Bash(grep -n \"^//\" Assets/CarpetaScripts/ScriptsAI/Grid/Node.cs)"
+    ]
+  }
+}

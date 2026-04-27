@@ -36,7 +36,7 @@ public class AgentNPC : Agent
         }
 
         //Asignamos el tag "NPC"
-        this.gameObject.tag = "NPC";
+        //this.gameObject.tag = "NPC";
 
         // Asiganmos el SelectorVisual
         if (selectionVisual == null)

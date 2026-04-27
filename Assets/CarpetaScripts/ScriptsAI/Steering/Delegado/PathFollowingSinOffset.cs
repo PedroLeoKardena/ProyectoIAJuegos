@@ -26,9 +26,17 @@ public class PathFollowingSinOffset : Seek
     private GameObject auxTargetObj;
     private Agent auxTargetAgent;
 
+    // Cache del AStarPathfinder en este mismo GameObject. Null si el agente no usa A*.
+    private AStarPathfinder astarPathfinder;
+    // Guarda el último camino activo para detectar cambios y reiniciar el índice.
+    private Path lastPath;
+
     void Start()
     {
         this.nameSteering = "PathFollowingSinOffset";
+
+        // Si el agente tiene AStarPathfinder, sus caminos tendrán prioridad sobre path manual.
+        astarPathfinder = GetComponent<AStarPathfinder>();
 
         // Inicializamos el target fantasma
         auxTargetObj = new GameObject("PathFollowingGhost");
@@ -47,16 +55,26 @@ public class PathFollowingSinOffset : Seek
 
     public override Steering GetSteering(Agent agent)
     {
+        // Usar el camino de AStarPathfinder si está disponible; si no, el path manual.
+        Path effectivePath = (astarPathfinder != null) ? astarPathfinder.CurrentPath : path;
+
+        // Al cambiar de camino (nuevo recálculo A* o asignación manual), reiniciar índice.
+        if (effectivePath != lastPath)
+        {
+            currentNode = 0;
+            lastPath = effectivePath;
+        }
+
         // Verificar que tenemos un camino válido
-        if (path == null || path.nodes == null || path.nodes.Length == 0)
+        if (effectivePath == null || effectivePath.nodes == null || effectivePath.nodes.Length == 0)
         {
             return new Steering();
         }
 
         // 1. Verificar si hemos llegado al target actual
-        Vector3 targetPosition = path.GetPosition(currentNode);
+        Vector3 targetPosition = effectivePath.GetPosition(currentNode);
         float distanceToTarget = Vector3.Distance(agent.Position, targetPosition);
-        
+
         if (distanceToTarget <= radius)
         {
             // Si hemos llegado, pasar al siguiente nodo o cambiar dirección según modo
@@ -64,36 +82,36 @@ public class PathFollowingSinOffset : Seek
             {
                 case PathFollowingMode.StayAtEnd:
                     currentNode += pathDir;
-                    if (currentNode >= path.nodes.Length)
-                        currentNode = path.nodes.Length - 1;
+                    if (currentNode >= effectivePath.nodes.Length)
+                        currentNode = effectivePath.nodes.Length - 1;
                     else if (currentNode < 0)
                         currentNode = 1;
                     break;
 
                 case PathFollowingMode.Patrol:
                     currentNode += pathDir;
-                    if (currentNode >= path.nodes.Length || currentNode < 0)
+                    if (currentNode >= effectivePath.nodes.Length || currentNode < 0)
                     {
                         pathDir = -pathDir;
                         currentNode += 2 * pathDir; // Retrocedemos al nodo anterior
                         // Asegurar dentro de rango
-                        currentNode = Mathf.Clamp(currentNode, 0, path.nodes.Length - 1);
+                        currentNode = Mathf.Clamp(currentNode, 0, effectivePath.nodes.Length - 1);
                     }
                     break;
 
                 case PathFollowingMode.Loop:
                     currentNode += pathDir;
-                    if (currentNode >= path.nodes.Length)
+                    if (currentNode >= effectivePath.nodes.Length)
                         currentNode = 0;
                     else if (currentNode < 0)
-                        currentNode = path.nodes.Length - 1;
+                        currentNode = effectivePath.nodes.Length - 1;
                     break;
 
             }
         }
 
         // 2. Obtener la posición del target
-        targetPosition = path.GetPosition(currentNode);
+        targetPosition = effectivePath.GetPosition(currentNode);
 
         // 3. Colocar el target fantasma en la posición del nodo actual
         auxTargetAgent.Position = targetPosition;
@@ -106,27 +124,29 @@ public class PathFollowingSinOffset : Seek
     // Dibuja el camino y el target para depuración
     void OnDrawGizmos()
     {
-        if (path != null && path.nodes != null && path.nodes.Length > 0)
+        Path effectivePath = (astarPathfinder != null) ? astarPathfinder.CurrentPath : path;
+
+        if (effectivePath != null && effectivePath.nodes != null && effectivePath.nodes.Length > 0)
         {
             // Dibujar los nodos del camino
             Gizmos.color = Color.blue;
-            for (int i = 0; i < path.nodes.Length; i++)
+            for (int i = 0; i < effectivePath.nodes.Length; i++)
             {
-                Gizmos.DrawSphere(path.nodes[i], 0.5f);
-                
+                Gizmos.DrawSphere(effectivePath.nodes[i], 0.5f);
+
                 // Dibujar líneas entre nodos
-                if (i < path.nodes.Length - 1)
+                if (i < effectivePath.nodes.Length - 1)
                 {
-                    Gizmos.DrawLine(path.nodes[i], path.nodes[i + 1]);
+                    Gizmos.DrawLine(effectivePath.nodes[i], effectivePath.nodes[i + 1]);
                 }
             }
 
             // Dibujar el nodo actual en rojo
-            if (currentNode >= 0 && currentNode < path.nodes.Length)
+            if (currentNode >= 0 && currentNode < effectivePath.nodes.Length)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawSphere(path.nodes[currentNode], 0.7f);
-                Gizmos.DrawWireSphere(path.nodes[currentNode], radius);
+                Gizmos.DrawSphere(effectivePath.nodes[currentNode], 0.7f);
+                Gizmos.DrawWireSphere(effectivePath.nodes[currentNode], radius);
             }
 
             // Dibujar el target fantasma

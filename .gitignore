@@ -34,3 +34,9 @@
 # Builds
 *.apk
 *.unitypackage
+
+# Claude Code
+CLAUDE.md
+prompt.txt
+docs/
+

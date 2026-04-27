@@ -5,6 +5,7 @@ using UnityEditor;
 
 // Mapa de influencia táctico. Calcula periódicamente la proyección de fuerza
 // militar de cada bando sobre el grid y expone una API de consulta.
+// Debug: Azul = influencia aliada, Rojo = influencia enemiga, Magenta = zona contestada.
 public class InfluenceMap : MonoBehaviour
 {
     // Instancia única accesible globalmente.
@@ -27,19 +28,20 @@ public class InfluenceMap : MonoBehaviour
     [SerializeField] private float caminoMultiplier  = 1.0f;
 
     [Header("Potencia Base (I₀) por Tipo de Unidad")]
-    [SerializeField] private float I0_InfanteriaPesada = 15f;
-    [SerializeField] private float I0_Velites           = 8f;
-    [SerializeField] private float I0_Exploradores      = 5f;
+    [SerializeField] private float I0_InfanteriaPesada = 50f;
+    [SerializeField] private float I0_Velites           = 30f;
+    [SerializeField] private float I0_Exploradores      = 15f;
 
     [Header("Debug")]
     [SerializeField] private bool debugMode         = false;
     [SerializeField] private bool showNumericValues = false;
+    [SerializeField] private int debugFontSize      = 8;
 
-    private float[,] _allied;
-    private float[,] _enemy;
-    private int _width;
-    private int _height;
-    private Node[,] _nodeCache;
+    private float[,] allied;
+    private float[,] enemy;
+    private int width;
+    private int height;
+    private Node[,] nodeCache;
 
     // Inicializa el singleton. Solo asigna la referencia al gridManager; el grid aún no está listo.
     private void Awake()
@@ -61,15 +63,15 @@ public class InfluenceMap : MonoBehaviour
             return;
         }
 
-        _width  = gridManager.width;
-        _height = gridManager.height;
-        _allied = new float[_width, _height];
-        _enemy  = new float[_width, _height];
+        width  = gridManager.width;
+        height = gridManager.height;
+        allied = new float[width, height];
+        enemy  = new float[width, height];
 
-        _nodeCache = new Node[_width, _height];
-        for (int x = 0; x < _width; x++)
-            for (int z = 0; z < _height; z++)
-                _nodeCache[x, z] = gridManager.NodeFromWorldPoint(gridManager.GridToWorld(x, z));
+        nodeCache = new Node[width, height];
+        for (int x = 0; x < width; x++)
+            for (int z = 0; z < height; z++)
+                nodeCache[x, z] = gridManager.NodeFromWorldPoint(gridManager.GridToWorld(x, z));
 
         InvokeRepeating(nameof(RefreshMap), 0f, refreshInterval);
     }
@@ -77,15 +79,15 @@ public class InfluenceMap : MonoBehaviour
     // Devuelve la influencia aliada acumulada en el nodo dado. Devuelve 0 si es null o fuera del grid.
     public float GetAlliedInfluence(Node node)
     {
-        if (node == null || _allied == null || node.x < 0 || node.z < 0 || node.x >= _width || node.z >= _height) return 0f;
-        return _allied[node.x, node.z];
+        if (node == null || allied == null || node.x < 0 || node.z < 0 || node.x >= width || node.z >= height) return 0f;
+        return allied[node.x, node.z];
     }
 
     // Devuelve la influencia enemiga acumulada en el nodo dado. Devuelve 0 si es null o fuera del grid.
     public float GetEnemyInfluence(Node node)
     {
-        if (node == null || _enemy == null || node.x < 0 || node.z < 0 || node.x >= _width || node.z >= _height) return 0f;
-        return _enemy[node.x, node.z];
+        if (node == null || enemy == null || node.x < 0 || node.z < 0 || node.x >= width || node.z >= height) return 0f;
+        return enemy[node.x, node.z];
     }
 
     // Devuelve el balance de control (aliado - enemigo) en el nodo dado.
@@ -112,8 +114,8 @@ public class InfluenceMap : MonoBehaviour
         return GetControl(gridManager.NodeFromWorldPoint(worldPos));
     }
 
-    // Devuelve I₀ según el UnitType del GameObject. Usa I0_Exploradores como fallback.
-    private float GetI0(GameObject unit)
+    // Devuelve I₀ según el UnitType del agente. Usa I0_Exploradores como fallback.
+    private float GetI0(Agent unit)
     {
         TerrainSpeedModifier tsm = unit.GetComponent<TerrainSpeedModifier>();
         if (tsm == null) return I0_Exploradores;
@@ -138,22 +140,22 @@ public class InfluenceMap : MonoBehaviour
         }
     }
 
-    // Acumula la influencia de un grupo de unidades sobre el array target.
+    // Acumula la influencia de un grupo de agentes sobre el array target.
     // Fórmula: I_d = I₀ / √(1 + d), con d = distancia euclídea en unidades de mundo.
-    private void ProcessUnits(GameObject[] units, float[,] target)
+    private void ProcessUnits(Agent[] units, float[,] target)
     {
-        foreach (GameObject unit in units)
+        foreach (Agent unit in units)
         {
-            Node origin = gridManager.NodeFromWorldPoint(unit.transform.position);
+            Node origin = gridManager.NodeFromWorldPoint(unit.Position);
             if (origin == null) continue;
 
             float i0 = GetI0(unit);
 
-            for (int x = 0; x < _width; x++)
+            for (int x = 0; x < width; x++)
             {
-                for (int z = 0; z < _height; z++)
+                for (int z = 0; z < height; z++)
                 {
-                    Node candidate = _nodeCache[x, z];
+                    Node candidate = nodeCache[x, z];
                     if (candidate == null) continue;
 
                     float d = Vector3.Distance(origin.worldPosition, candidate.worldPosition);
@@ -170,55 +172,69 @@ public class InfluenceMap : MonoBehaviour
     // Recalcula toda la influencia del mapa. Llamado periódicamente, nunca en Update.
     private void RefreshMap()
     {
-        if (_allied == null || _enemy == null) return;
+        if (allied == null || enemy == null) return;
 
-        System.Array.Clear(_allied, 0, _allied.Length);
-        System.Array.Clear(_enemy,  0, _enemy.Length);
+        System.Array.Clear(allied, 0, allied.Length);
+        System.Array.Clear(enemy,  0, enemy.Length);
 
-        ProcessUnits(GameObject.FindGameObjectsWithTag("Aliado"), _allied);
-        ProcessUnits(GameObject.FindGameObjectsWithTag("Enemigo"), _enemy);
+        Agent[] allAgents = FindObjectsByType<Agent>(FindObjectsSortMode.None);
+        ProcessUnits(System.Array.FindAll(allAgents, a => a.faction == Faction.Aliado),  allied);
+        ProcessUnits(System.Array.FindAll(allAgents, a => a.faction == Faction.Enemigo), enemy);
     }
 
-    // Visualiza el balance de control sobre el grid en el Scene View.
-    // Azul = dominio aliado, Rojo = dominio enemigo, Gris = equilibrio.
+    // Visualiza la influencia de ambos bandos sobre el grid en el Scene View.
+    // Azul = aliados (players), Rojo = enemigos (NPCs), Magenta = zona contestada.
     private void OnDrawGizmos()
     {
-        if (!debugMode || !Application.isPlaying || _allied == null || _nodeCache == null || gridManager == null) return;
+        if (!debugMode || !Application.isPlaying || allied == null || nodeCache == null || gridManager == null) return;
 
-        // Calcular el valor máximo para normalizar los colores.
-        float maxAbs = 0.001f;
-        for (int x = 0; x < _width; x++)
-            for (int z = 0; z < _height; z++)
+        // Normalizar cada bando por separado para que ambos sean visibles independientemente.
+        float maxAllied = 0.001f;
+        float maxEnemy  = 0.001f;
+        for (int x = 0; x < width; x++)
+            for (int z = 0; z < height; z++)
             {
-                float abs = Mathf.Abs(_allied[x, z] - _enemy[x, z]);
-                if (abs > maxAbs) maxAbs = abs;
+                if (allied[x, z] > maxAllied) maxAllied = allied[x, z];
+                if (enemy[x, z]  > maxEnemy)  maxEnemy  = enemy[x, z];
             }
 
         float cs = gridManager.cellSize;
 
-        for (int x = 0; x < _width; x++)
+#if UNITY_EDITOR
+        GUIStyle debugStyle = null;
+        if (showNumericValues)
         {
-            for (int z = 0; z < _height; z++)
+            debugStyle = new GUIStyle();
+            debugStyle.fontSize = debugFontSize;
+            debugStyle.normal.textColor = Color.white;
+            debugStyle.alignment = TextAnchor.MiddleCenter;
+        }
+#endif
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < height; z++)
             {
-                Node node = _nodeCache[x, z];
+                Node node = nodeCache[x, z];
                 if (node == null || !node.isWalkable) continue;
 
-                float control = _allied[x, z] - _enemy[x, z];
-                float t = Mathf.Clamp01(Mathf.Abs(control) / maxAbs);
+                float alliedNorm = Mathf.Clamp01(allied[x, z] / maxAllied);
+                float enemyNorm  = Mathf.Clamp01(enemy[x, z]  / maxEnemy);
+                float alpha = Mathf.Max(alliedNorm, enemyNorm);
+                if (alpha < 0.01f) continue;
 
-                Color col = control > 0f
-                    ? Color.Lerp(Color.gray, Color.blue, t)
-                    : control < 0f
-                        ? Color.Lerp(Color.gray, Color.red, t)
-                        : Color.gray;
-                col.a = Mathf.Lerp(0.1f, 0.6f, t);
+                // Canal rojo = enemigos, canal azul = aliados; magenta donde ambos coinciden.
+                Color col = new Color(enemyNorm, 0f, alliedNorm, Mathf.Lerp(0.3f, 0.9f, alpha));
 
                 Gizmos.color = col;
-                Gizmos.DrawCube(node.worldPosition, new Vector3(cs, 0.1f, cs) * 0.9f);
+                Gizmos.DrawCube(node.worldPosition, new Vector3(cs, 0.2f, cs) * 0.95f);
 
 #if UNITY_EDITOR
-                if (showNumericValues)
-                    UnityEditor.Handles.Label(node.worldPosition + Vector3.up * 0.2f, control.ToString("F1"));
+                if (showNumericValues && debugStyle != null)
+                {
+                    float control = allied[x, z] - enemy[x, z];
+                    UnityEditor.Handles.Label(node.worldPosition + Vector3.up * 0.2f, control.ToString("F1"), debugStyle);
+                }
 #endif
             }
         }
