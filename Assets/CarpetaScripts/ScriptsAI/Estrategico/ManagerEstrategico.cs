@@ -1,7 +1,7 @@
 using UnityEngine;
 
-//[RequireComponent(typeof(TraductorTactico))]
-//[RequireComponent(typeof(CondicionVictoria))]
+[RequireComponent(typeof(TraductorTactico))]
+[RequireComponent(typeof(CondicionVictoria))]
 public class ManagerEstrategico : MonoBehaviour
 {
     [Header("Configuración")]
