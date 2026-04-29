@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Bando al que pertenece un agente. Usado por InfluenceMap para calcular influencia por facción.
-public enum Faction { Aliado, Enemigo }
+public enum Faction { Aliado, Enemigo, Neutro }
 
 [AddComponentMenu("Steering/InteractiveObject/Agent")]
 public class Agent : Bodi
@@ -25,7 +25,7 @@ public class Agent : Bodi
 
     [Header("Facción")]
     [Tooltip("Bando al que pertenece este agente. Usado por el Mapa de Influencia.")]
-    public Faction faction = Faction.Aliado;
+    public Faction faction = Faction.Neutro;
 
     [Header("Grid System")]
     [Tooltip("Referencia al Grid Manager de la escena")]
