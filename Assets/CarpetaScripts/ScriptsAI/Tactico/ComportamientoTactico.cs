@@ -41,8 +41,14 @@ public class ComportamientoTactico : MonoBehaviour
     private Component lookExacto;
     private PathFollowingSinOffset patrolSteering;
 
+    // --- Contexto estratégico (asignado por TraductorTactico) ---
+    [HideInInspector] public ContextoGrupo contextoGrupo;
+    [HideInInspector] public Transform destinoEstrategico;
+    private AgentNPC npc;
+
     private void Start()
     {
+        npc = GetComponent<AgentNPC>();
         tipoUnidad = GetComponent<TerrainSpeedModifier>().unitType;
 
         // Búsqueda nativa de Unity (100% segura para evitar que se queden en null)
@@ -224,6 +230,25 @@ public class ComportamientoTactico : MonoBehaviour
 
     private void LanzarModoBase(string gritoReposo)
     {
+        if (destinoEstrategico != null && npc != null)
+        {
+            float dist = Vector3.Distance(transform.position, destinoEstrategico.position);
+            if (dist > 2f)
+            {
+                CambiarEstado(EstadoTactico.Explorando, "Ejecutando orden...");
+                npc.SetTarget(destinoEstrategico.position, npc.Orientation);
+
+                // arrive.target = null → Arrive usará TargetFormacion automáticamente
+                if (arrive != null) { arrive.target = null; arrive.enabled = true; }
+                Activar((MonoBehaviour)lookExacto, true);
+                if (TryGetComponent<WallAvoidance>(out var wall)) wall.enabled = true;
+                Activar(wander, false);
+                Activar(flee, false);
+                Activar((MonoBehaviour)alignExacto, false);
+                return;
+            }
+        }
+
         if (esPatrulla && patrolSteering != null)
         {
             CambiarEstado(EstadoTactico.Explorando, "Patrullando ruta...");
@@ -231,12 +256,12 @@ public class ComportamientoTactico : MonoBehaviour
         }
         else
         {
-            if (tipoUnidad == UnitType.InfanteriaPesada) 
+            if (tipoUnidad == UnitType.InfanteriaPesada)
             {
                 CambiarEstado(EstadoTactico.Reposo, gritoReposo);
                 SetModoReposo();
-            } 
-            else 
+            }
+            else
             {
                 CambiarEstado(EstadoTactico.Explorando, gritoReposo);
                 SetModoExplorar();
@@ -298,9 +323,7 @@ public class ComportamientoTactico : MonoBehaviour
 
     private Transform BuscarEnemigoCercano()
     {
-        // Forzamos "Enemigo" por parámetro por si la variable pública se vació misteriosamente
-        GameObject objByName = GameObject.Find("Enemigo"); 
-        GameObject[] enemigos = GameObject.FindGameObjectsWithTag("Enemigo");
+        GameObject[] enemigos = GameObject.FindGameObjectsWithTag(tagEnemigo);
         
         Transform enemigoCercano = null;
         float distanciaMinima = Mathf.Infinity;
@@ -314,12 +337,6 @@ public class ComportamientoTactico : MonoBehaviour
                 distanciaMinima = dist;
                 enemigoCercano = obj.transform;
             }
-        }
-
-        // Si falló la Tag por cualquier motivo, intentamos por el nombre explícito del GameObject
-        if (enemigoCercano == null && objByName != null)
-        {
-            enemigoCercano = objByName.transform;
         }
 
         return enemigoCercano;
