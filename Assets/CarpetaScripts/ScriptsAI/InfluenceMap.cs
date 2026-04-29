@@ -6,7 +6,11 @@ using UnityEditor;
 // Mapa de influencia táctico. Calcula periódicamente la proyección de fuerza
 // militar de cada bando sobre el grid y expone una API de consulta.
 // Debug: Azul = influencia aliada, Rojo = influencia enemiga, Magenta = zona contestada.
-public class InfluenceMap : MonoBehaviour
+//
+// Implementa IMapaTactico para que los consumidores (ComportamientoTactico,
+// Minimapa, ...) trabajen contra el contrato y no contra esta clase
+// concreta.  Se auto-registra en ServicioMapaTactico al activarse.
+public class InfluenceMap : MonoBehaviour, IMapaTactico
 {
     // Instancia única accesible globalmente.
     public static InfluenceMap Instance { get; private set; }
@@ -53,6 +57,10 @@ public class InfluenceMap : MonoBehaviour
             gridManager = FindFirstObjectByType<GridManager>();
     }
 
+    // Registro/desregistro en el servicio para que los consumidores resuelvan el mapa por interfaz.
+    private void OnEnable()  { ServicioMapaTactico.Registrar(this); }
+    private void OnDisable() { ServicioMapaTactico.Quitar(this); }
+
     // Reserva arrays, cachea nodos del grid (ya inicializado por GridManager.Awake) y arranca el refresco.
     private void Start()
     {
@@ -75,6 +83,54 @@ public class InfluenceMap : MonoBehaviour
 
         InvokeRepeating(nameof(RefreshMap), 0f, refreshInterval);
     }
+
+    // ===== IMapaTactico + ACCESORES (apartado e y desacoplamiento) =====
+    // El bloque siguiente es la implementación EXPLÍCITA del contrato IMapaTactico
+    // y el resto son métodos auxiliares que reutilizamos internamente.
+
+    public string Nombre => "Influencia";
+
+    // Ancho del grid (columnas).
+    public int Width  => width;
+    // Alto del grid (filas).
+    public int Height => height;
+
+    // Influencia aliada/enemiga por celda. Validan bounds para cumplir el contrato de IMapaTactico.
+    public float ValorAliadoEn(int x, int z)
+        => (allied != null && x >= 0 && z >= 0 && x < width && z < height) ? allied[x, z] : 0f;
+
+    public float ValorEnemigoEn(int x, int z)
+        => (enemy  != null && x >= 0 && z >= 0 && x < width && z < height) ? enemy[x, z]  : 0f;
+
+    // Devuelve si una celda es transitable (para que el minimapa pinte de un color base las no transitables).
+    public bool IsWalkable(int x, int z)
+        => nodeCache != null && x >= 0 && z >= 0 && x < width && z < height
+           && nodeCache[x, z] != null && nodeCache[x, z].isWalkable;
+
+    // Máximo aliado / enemigo sobre todo el mapa (para normalizar intensidades en el minimapa).
+    public float MaxAliado()
+    {
+        if (allied == null) return 0f;
+        float max = 0f;
+        for (int x = 0; x < width; x++)
+            for (int z = 0; z < height; z++)
+                if (allied[x, z] > max) max = allied[x, z];
+        return max;
+    }
+
+    public float MaxEnemigo()
+    {
+        if (enemy == null) return 0f;
+        float max = 0f;
+        for (int x = 0; x < width; x++)
+            for (int z = 0; z < height; z++)
+                if (enemy[x, z] > max) max = enemy[x, z];
+        return max;
+    }
+
+    // Implementación de IMapaTactico.Control: balance neto en una posición del mundo.
+    // Reutiliza el GetControl(Vector3) original del compañero (delega en él).
+    public float Control(Vector3 worldPos) => GetControl(worldPos);
 
     // Devuelve la influencia aliada acumulada en el nodo dado. Devuelve 0 si es null o fuera del grid.
     public float GetAlliedInfluence(Node node)
