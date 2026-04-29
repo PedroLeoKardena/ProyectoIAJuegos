@@ -78,11 +78,17 @@ public class ManagerEstrategico : MonoBehaviour
             return;
         }
 
-        if (faction == Faction.Enemigo)
+        if (faction == Faction.Enemigo && Contexto.basePropia != null)
         {
-            Contexto.modo = Contexto.influenciaPropia >= Contexto.influenciaEnemiga
-                ? ModoEstrategico.Ofensivo
-                : ModoEstrategico.Defensivo;
+            float amenazaEnBase = InfluenceMap.Instance != null
+                ? InfluenceMap.Instance.GetAlliedInfluence(Contexto.basePropia.position)
+                : 0f;
+            float propiaEnBase = InfluenceMap.Instance != null
+                ? InfluenceMap.Instance.GetEnemyInfluence(Contexto.basePropia.position)
+                : 0f;
+            Contexto.modo = amenazaEnBase > propiaEnBase
+                ? ModoEstrategico.Defensivo
+                : ModoEstrategico.Ofensivo;
         }
     }
 

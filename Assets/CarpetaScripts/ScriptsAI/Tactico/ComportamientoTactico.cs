@@ -323,9 +323,7 @@ public class ComportamientoTactico : MonoBehaviour
 
     private Transform BuscarEnemigoCercano()
     {
-        // Forzamos "Enemigo" por parámetro por si la variable pública se vació misteriosamente
-        GameObject objByName = GameObject.Find("Enemigo"); 
-        GameObject[] enemigos = GameObject.FindGameObjectsWithTag("Enemigo");
+        GameObject[] enemigos = GameObject.FindGameObjectsWithTag(tagEnemigo);
         
         Transform enemigoCercano = null;
         float distanciaMinima = Mathf.Infinity;
@@ -339,12 +337,6 @@ public class ComportamientoTactico : MonoBehaviour
                 distanciaMinima = dist;
                 enemigoCercano = obj.transform;
             }
-        }
-
-        // Si falló la Tag por cualquier motivo, intentamos por el nombre explícito del GameObject
-        if (enemigoCercano == null && objByName != null)
-        {
-            enemigoCercano = objByName.transform;
         }
 
         return enemigoCercano;
