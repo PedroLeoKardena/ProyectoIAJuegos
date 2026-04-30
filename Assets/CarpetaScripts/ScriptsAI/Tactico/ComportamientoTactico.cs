@@ -41,7 +41,13 @@ public class ComportamientoTactico : MonoBehaviour
     private Component lookExacto;
     private PathFollowingSinOffset patrolSteering;
 
-    // --- Contexto estratégico (asignado por TraductorTactico) ---
+    // --- Hook apartado f (Ana, bloque2-ana) ---
+    // Si el GameObject tiene un componente SelectorObjetivoInfluencia, este
+    // script lo cachea en Start() y lo usa en lugar de la búsqueda por distancia.
+    // Si NO está, la lógica táctica sigue funcionando con el criterio "más cercano".
+    private SelectorObjetivoInfluencia selectorObjetivo;
+
+    // --- Contexto estratégico (apartados b/g/k, asignado por TraductorTactico) ---
     [HideInInspector] public ContextoGrupo contextoGrupo;
     [HideInInspector] public Transform destinoEstrategico;
     private AgentNPC npc;
@@ -50,6 +56,9 @@ public class ComportamientoTactico : MonoBehaviour
     {
         npc = GetComponent<AgentNPC>();
         tipoUnidad = GetComponent<TerrainSpeedModifier>().unitType;
+
+        // Apartado f (opcional): null si no se ha añadido el componente.
+        selectorObjetivo = GetComponent<SelectorObjetivoInfluencia>();
 
         // Búsqueda nativa de Unity (100% segura para evitar que se queden en null)
         arrive = GetComponent<Arrive>();
@@ -77,7 +86,11 @@ public class ComportamientoTactico : MonoBehaviour
 
     private void Update()
     {
-        Transform enemigo = BuscarEnemigoCercano();
+        // Si está presente el hook del apartado f, usa su selección (que consulta
+        // el mapa táctico). Si no, cae a la búsqueda por distancia original.
+        Transform enemigo = (selectorObjetivo != null)
+            ? selectorObjetivo.SeleccionarObjetivo(transform.position, radioVision, tagEnemigo)
+            : BuscarEnemigoCercano();
 
         // Ejecutar FSM (Máquina de Estados) dependiendo del tipo
         switch (tipoUnidad)
@@ -324,7 +337,7 @@ public class ComportamientoTactico : MonoBehaviour
     private Transform BuscarEnemigoCercano()
     {
         GameObject[] enemigos = GameObject.FindGameObjectsWithTag(tagEnemigo);
-        
+
         Transform enemigoCercano = null;
         float distanciaMinima = Mathf.Infinity;
 

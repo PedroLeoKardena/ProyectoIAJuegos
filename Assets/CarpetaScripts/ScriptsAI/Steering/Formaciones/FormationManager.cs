@@ -67,8 +67,8 @@ public class FormationManager : MonoBehaviour
             UpdateSlots();
         }
         
-        // Control del bucle Wander (Pulsar 'S' para parar)
-        if (Input.GetKeyDown(KeyCode.S)) DetenerTodo();
+        // Control del bucle Wander (Pulsar 'B' para parar)
+        if (Input.GetKeyDown(KeyCode.B)) DetenerTodo();
     }
 
     //Código extraido de: https://code.tutsplus.com/understanding-steering-behaviors-leader-following--gamedev-10810t
