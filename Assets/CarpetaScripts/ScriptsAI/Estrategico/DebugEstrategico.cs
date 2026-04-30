@@ -6,6 +6,10 @@ public class DebugEstrategico : MonoBehaviour
     private ManagerEstrategico[] managers;
     private CondicionVictoria[]  condiciones;
 
+    // API pública para que el HUDBotones pueda alternar el debug sin simular F1.
+    public void ToggleActivo() { activo = !activo; }
+    public bool EsActivo       => activo;
+
     private void Start()
     {
         managers    = FindObjectsByType<ManagerEstrategico>(FindObjectsSortMode.None);
@@ -25,7 +29,11 @@ public class DebugEstrategico : MonoBehaviour
         GUIStyle caja = new GUIStyle(GUI.skin.box) { fontSize = 13, alignment = TextAnchor.UpperLeft };
         caja.normal.textColor = Color.white;
 
-        float y = 10f;
+        // Posicionamos las cajas en la esquina INFERIOR IZQUIERDA, apilando hacia
+        // arriba para no solaparnos con el HUD de estrategia (esquina superior izda).
+        const float ALTURA_CAJA = 80f; // 72 de la caja + 8 de separación
+        int n = managers != null ? managers.Length : 0;
+        float y = Screen.height - 10f - n * ALTURA_CAJA;
         foreach (var mgr in managers)
         {
             if (mgr == null || mgr.Contexto == null) continue;

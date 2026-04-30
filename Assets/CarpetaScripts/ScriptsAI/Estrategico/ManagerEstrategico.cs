@@ -122,7 +122,8 @@ public class ManagerEstrategico : MonoBehaviour
         }
     }
 
-    private void ActivarGuerraTotal()
+    // Antes era private. Hecho público para que el HUDBotones pueda dispararlo desde un click.
+    public void ActivarGuerraTotal()
     {
         foreach (var m in FindObjectsByType<ManagerEstrategico>(FindObjectsSortMode.None))
         {
@@ -130,5 +131,14 @@ public class ManagerEstrategico : MonoBehaviour
             m.Contexto.modo = ModoEstrategico.GuerraTotal;
         }
         Debug.Log("[GUERRA TOTAL] ¡Modo Guerra Total activado!");
+    }
+
+    // Setter de modo accesible públicamente. Solo afecta a este bando (su Contexto).
+    // Si la guerra total está activa, no permitimos volver atrás (igual que la lógica de Update).
+    public void SetModo(ModoEstrategico nuevoModo)
+    {
+        if (Contexto == null || Contexto.guerraTotal) return;
+        Contexto.modo = nuevoModo;
+        Debug.Log($"[{faction}] Modo (HUD): {nuevoModo}");
     }
 }

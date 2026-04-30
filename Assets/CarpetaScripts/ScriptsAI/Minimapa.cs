@@ -101,6 +101,10 @@ public class Minimapa : MonoBehaviour
         canvas.enabled = visibleAtStart;
     }
 
+    // API pública para que el HUDBotones pueda alternar la visibilidad sin simular teclas.
+    public void ToggleVisible() { if (canvas != null) canvas.enabled = !canvas.enabled; }
+    public bool EsVisible       => canvas != null && canvas.enabled;
+
     private void Update()
     {
         // Toggle visibilidad
