@@ -9,7 +9,16 @@ public class CondicionVictoria : MonoBehaviour
     public float TiempoCaptura     { get; private set; } = 0f;
     public bool  VictoriaDeclarada { get; private set; } = false;
 
+    // Cuando un bando declara victoria, ningún OTRO bando puede
+    // ganar después aunque también cumpla las condiciones. 
+    public static bool JuegoTerminado { get; private set; } = false;
+
     private ManagerEstrategico manager;
+
+    private void Awake()
+    {
+        JuegoTerminado = false;
+    }
 
     private void Start()
     {
@@ -18,7 +27,8 @@ public class CondicionVictoria : MonoBehaviour
 
     private void Update()
     {
-        if (VictoriaDeclarada || manager == null || manager.Contexto == null) return;
+        // Si yo ya gané, si ya ganó cualquier otro bando, o si no hay manager → no compruebo.
+        if (VictoriaDeclarada || JuegoTerminado || manager == null || manager.Contexto == null) return;
         if (manager.Contexto.baseEnemiga == null) return;
 
         if (HayUnidadPropiaCercaDeBaseEnemiga())
@@ -27,6 +37,7 @@ public class CondicionVictoria : MonoBehaviour
             if (TiempoCaptura >= tiempoNecesario)
             {
                 VictoriaDeclarada = true;
+                JuegoTerminado    = true;   // bloquea a todos los demás bandos
                 manager.DeclararVictoria();
             }
         }

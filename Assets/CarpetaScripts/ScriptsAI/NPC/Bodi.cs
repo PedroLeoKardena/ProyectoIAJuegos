@@ -199,8 +199,16 @@ public class Bodi : MonoBehaviour
     // public Vector3 Position. Recuerda. Esta es la única propiedad que trabaja sobre transform.
     public Vector3 Position
     {
-        get { return transform.position; }
-        set { transform.position = value; }
+        get
+        {
+            if (this == null) return Vector3.zero;
+            return transform.position;
+        }
+        set
+        {
+            if (this == null) return;
+            transform.position = value;
+        }
     }
 
 
