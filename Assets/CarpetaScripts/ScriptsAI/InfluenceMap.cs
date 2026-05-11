@@ -1,17 +1,88 @@
+using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-// Mapa de influencia táctico. Calcula periódicamente la proyección de fuerza
-// militar de cada bando sobre el grid y expone una API de consulta.
+// Mapa de influencia táctico basado en inundación (Dijkstra / Map Flooding, Millington cap. 5).
+// Calcula periódicamente la proyección de fuerza militar de cada bando expandiendo
+// la influencia nodo a nodo a través del grafo del grid, respetando obstáculos.
 // Debug: Azul = influencia aliada, Rojo = influencia enemiga, Magenta = zona contestada.
 //
 // Implementa IMapaTactico para que los consumidores (ComportamientoTactico,
-// Minimapa, ...) trabajen contra el contrato y no contra esta clase
-// concreta.  Se auto-registra en ServicioMapaTactico al activarse.
+// Minimapa, ...) trabajen contra el contrato y no contra esta clase concreta.
+// Se auto-registra en ServicioMapaTactico al activarse.
 public class InfluenceMap : MonoBehaviour, IMapaTactico
 {
+    // Registro de un nodo en la lista abierta del algoritmo de inundación.
+    private struct LocationRecord
+    {
+        public Node  node;
+        public float influence; // Fuerza actual en este nodo
+    }
+
+    // Heap máximo ordenado por influencia descendente. Evita el coste O(n²) de ordenar una lista.
+    private sealed class MaxHeap
+    {
+        private readonly List<LocationRecord> data = new List<LocationRecord>();
+
+        public int Count => data.Count;
+
+        // Inserta un registro y restaura la propiedad de heap.
+        public void Push(LocationRecord r)
+        {
+            data.Add(r);
+            BubbleUp(data.Count - 1);
+        }
+
+        // Extrae y devuelve el registro de mayor influencia.
+        public LocationRecord Pop()
+        {
+            LocationRecord top = data[0];
+            int last = data.Count - 1;
+            data[0] = data[last];
+            data.RemoveAt(last);
+            if (data.Count > 0) SiftDown(0);
+            return top;
+        }
+
+        public void Clear() => data.Clear();
+
+        private void BubbleUp(int i)
+        {
+            while (i > 0)
+            {
+                int parent = (i - 1) / 2;
+                if (data[parent].influence >= data[i].influence) break;
+                Swap(i, parent);
+                i = parent;
+            }
+        }
+
+        private void SiftDown(int i)
+        {
+            int n = data.Count;
+            while (true)
+            {
+                int largest = i;
+                int left    = 2 * i + 1;
+                int right   = 2 * i + 2;
+                if (left  < n && data[left].influence  > data[largest].influence) largest = left;
+                if (right < n && data[right].influence > data[largest].influence) largest = right;
+                if (largest == i) break;
+                Swap(i, largest);
+                i = largest;
+            }
+        }
+
+        private void Swap(int a, int b)
+        {
+            LocationRecord tmp = data[a];
+            data[a] = data[b];
+            data[b] = tmp;
+        }
+    }
+
     // Instancia única accesible globalmente.
     public static InfluenceMap Instance { get; private set; }
 
@@ -22,9 +93,11 @@ public class InfluenceMap : MonoBehaviour, IMapaTactico
     [Tooltip("Segundos entre refrescos del mapa (0.5 – 2 recomendado).")]
     [SerializeField] private float refreshInterval = 1f;
 
-    [Header("Influencia")]
-    [Tooltip("Radio máximo de efecto por unidad en unidades de mundo.")]
-    [SerializeField] private float influenceRadius = 10f;
+    [Header("Influencia – Inundación")]
+    [Tooltip("Coste de influencia por cada paso de nodo.")]
+    [SerializeField] private float decayAmount = 5f;
+    [Tooltip("Influencia mínima para seguir propagando. Ramas por debajo se cierran.")]
+    [SerializeField] private float influenceThreshold = 0.5f;
 
     [Header("Modificadores de Terreno")]
     [SerializeField] private float bosqueMultiplier  = 0.8f;
@@ -46,6 +119,12 @@ public class InfluenceMap : MonoBehaviour, IMapaTactico
     private int width;
     private int height;
     private Node[,] nodeCache;
+
+    // Array de nodos cerrados reutilizado entre refrescos para evitar allocations.
+    private bool[,] closed;
+
+    // Heap compartido entre las dos llamadas a FloodFill por refresco.
+    private readonly MaxHeap heap = new MaxHeap();
 
     // Inicializa el singleton. Solo asigna la referencia al gridManager; el grid aún no está listo.
     private void Awake()
@@ -75,6 +154,7 @@ public class InfluenceMap : MonoBehaviour, IMapaTactico
         height = gridManager.height;
         allied = new float[width, height];
         enemy  = new float[width, height];
+        closed = new bool[width, height];
 
         nodeCache = new Node[width, height];
         for (int x = 0; x < width; x++)
@@ -84,9 +164,7 @@ public class InfluenceMap : MonoBehaviour, IMapaTactico
         InvokeRepeating(nameof(RefreshMap), 0f, refreshInterval);
     }
 
-    // ===== IMapaTactico + ACCESORES (apartado e y desacoplamiento) =====
-    // El bloque siguiente es la implementación EXPLÍCITA del contrato IMapaTactico
-    // y el resto son métodos auxiliares que reutilizamos internamente.
+    // ===== IMapaTactico + ACCESORES =====
 
     public string Nombre => "Influencia";
 
@@ -129,17 +207,16 @@ public class InfluenceMap : MonoBehaviour, IMapaTactico
     }
 
     // Implementación de IMapaTactico.Control: balance neto en una posición del mundo.
-    // Reutiliza el GetControl(Vector3) original del compañero (delega en él).
     public float Control(Vector3 worldPos) => GetControl(worldPos);
 
-    // Devuelve la influencia aliada acumulada en el nodo dado. Devuelve 0 si es null o fuera del grid.
+    // Devuelve la influencia aliada acumulada en el nodo dado.
     public float GetAlliedInfluence(Node node)
     {
         if (node == null || allied == null || node.x < 0 || node.z < 0 || node.x >= width || node.z >= height) return 0f;
         return allied[node.x, node.z];
     }
 
-    // Devuelve la influencia enemiga acumulada en el nodo dado. Devuelve 0 si es null o fuera del grid.
+    // Devuelve la influencia enemiga acumulada en el nodo dado.
     public float GetEnemyInfluence(Node node)
     {
         if (node == null || enemy == null || node.x < 0 || node.z < 0 || node.x >= width || node.z >= height) return 0f;
@@ -196,31 +273,53 @@ public class InfluenceMap : MonoBehaviour, IMapaTactico
         }
     }
 
-    // Acumula la influencia de un grupo de agentes sobre el array target.
-    // Fórmula: I_d = I₀ / √(1 + d), con d = distancia euclídea en unidades de mundo.
-    private void ProcessUnits(Agent[] units, float[,] target)
+    // Algoritmo de inundación lineal (Millington, Map Flooding / Dijkstra).
+    // I_vecino = I_actual - decayAmount/terreno. Regla "highest strength wins".
+    private void FloodFill(Agent[] units, float[,] target)
     {
+        System.Array.Clear(closed, 0, closed.Length);
+        heap.Clear();
+
+        // Inicialización de la frontera: una entrada por unidad con su I₀.
         foreach (Agent unit in units)
         {
             Node origin = gridManager.NodeFromWorldPoint(unit.Position);
-            if (origin == null) continue;
+            if (origin == null || !origin.isWalkable) continue;
 
             float i0 = GetI0(unit);
 
-            for (int x = 0; x < width; x++)
+            // Solo encolamos si mejoramos la influencia ya registrada en el origen.
+            if (i0 <= target[origin.x, origin.z]) continue;
+
+            target[origin.x, origin.z] = i0;
+            heap.Push(new LocationRecord { node = origin, influence = i0 });
+        }
+
+        // Expansión por prioridad descendente de influencia.
+        while (heap.Count > 0)
+        {
+            LocationRecord current = heap.Pop();
+            Node u = current.node;
+
+            // Lazy deletion: si ya fue cerrado por un camino de mayor influencia, se descarta.
+            if (closed[u.x, u.z]) continue;
+            closed[u.x, u.z] = true;
+
+            foreach (Node v in gridManager.GetNeighbors(u))
             {
-                for (int z = 0; z < height; z++)
-                {
-                    Node candidate = nodeCache[x, z];
-                    if (candidate == null) continue;
+                if (v == null || !v.isWalkable || closed[v.x, v.z]) continue;
 
-                    float d = Vector3.Distance(origin.worldPosition, candidate.worldPosition);
-                    if (d > influenceRadius) continue;
+                // El terreno modifica el coste del paso: bosque (0.8) cuesta más, llanura (1.2) menos.
+                // stepCost = decayAmount / terrainMult → la influencia nunca puede crecer entre nodos.
+                float terrainMult  = GetTerrainMultiplier(v.terrainTag);
+                float newInfluence = current.influence - decayAmount / terrainMult;
 
-                    float influence = i0 / Mathf.Sqrt(1f + d);
-                    influence *= GetTerrainMultiplier(candidate.terrainTag);
-                    target[x, z] += influence;
-                }
+                // Cierre de rama: influencia por debajo del umbral o inferior a la ya registrada.
+                if (newInfluence < influenceThreshold) continue;
+                if (newInfluence <= target[v.x, v.z]) continue;
+
+                target[v.x, v.z] = newInfluence;
+                heap.Push(new LocationRecord { node = v, influence = newInfluence });
             }
         }
     }
@@ -234,17 +333,16 @@ public class InfluenceMap : MonoBehaviour, IMapaTactico
         System.Array.Clear(enemy,  0, enemy.Length);
 
         Agent[] allAgents = FindObjectsByType<Agent>(FindObjectsSortMode.None);
-        ProcessUnits(System.Array.FindAll(allAgents, a => a.faction == Faction.Aliado),  allied);
-        ProcessUnits(System.Array.FindAll(allAgents, a => a.faction == Faction.Enemigo), enemy);
+        FloodFill(System.Array.FindAll(allAgents, a => a.faction == Faction.Aliado),  allied);
+        FloodFill(System.Array.FindAll(allAgents, a => a.faction == Faction.Enemigo), enemy);
     }
 
     // Visualiza la influencia de ambos bandos sobre el grid en el Scene View.
-    // Azul = aliados (players), Rojo = enemigos (NPCs), Magenta = zona contestada.
+    // Azul = aliados, Rojo = enemigos, Magenta = zona contestada.
     private void OnDrawGizmos()
     {
         if (!debugMode || !Application.isPlaying || allied == null || nodeCache == null || gridManager == null) return;
 
-        // Normalizar cada bando por separado para que ambos sean visibles independientemente.
         float maxAllied = 0.001f;
         float maxEnemy  = 0.001f;
         for (int x = 0; x < width; x++)
@@ -279,7 +377,6 @@ public class InfluenceMap : MonoBehaviour, IMapaTactico
                 float alpha = Mathf.Max(alliedNorm, enemyNorm);
                 if (alpha < 0.01f) continue;
 
-                // Canal rojo = enemigos, canal azul = aliados; magenta donde ambos coinciden.
                 Color col = new Color(enemyNorm, 0f, alliedNorm, Mathf.Lerp(0.7f, 0.9f, alpha));
 
                 Gizmos.color = col;
