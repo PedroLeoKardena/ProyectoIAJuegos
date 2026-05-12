@@ -59,14 +59,15 @@ public class Minimapa : MonoBehaviour
     // -----------------------------------------------------------------------
     public enum TipoVista
     {
-        Influencia,   // Apartado e obligatorio: aliados azul, enemigos rojo, magenta = disputado.
-        // --- Reservado para posible futura ampliación (apartados opcionales): ---
+        Influencia,   // Aliados azul, enemigos rojo, magenta = disputado.
+        Visibilidad,  // Amarillo claro = celda expuesta. Gris/negro = celda cubierta.
     }
 
     [Tooltip("Lista ordenada de vistas que se podrán alternar con la tecla N.")]
     [SerializeField] private List<TipoVista> vistasRegistradas = new List<TipoVista>
     {
-        TipoVista.Influencia
+        TipoVista.Influencia,
+        TipoVista.Visibilidad
     };
     [SerializeField] private int vistaActualIdx = 0;
 
@@ -95,6 +96,13 @@ public class Minimapa : MonoBehaviour
             Debug.LogError("[Minimapa] No hay ningún IMapaTactico registrado en ServicioMapaTactico.");
             enabled = false;
             return;
+        }
+
+        if (ServicioMapaTactico.GetMapa("Visibilidad") != null
+            && !vistasRegistradas.Contains(TipoVista.Visibilidad))
+        {
+            vistasRegistradas.Add(TipoVista.Visibilidad);
+            Debug.Log("[Minimapa] Auto-registrada vista Visibilidad (detectado MapaVisibilidad en escena).");
         }
 
         ConstruirHUD();
@@ -202,8 +210,26 @@ public class Minimapa : MonoBehaviour
     {
         if (etiquetaVista == null) return;
         TipoVista v = vistasRegistradas[vistaActualIdx];
-        string nombreMapa = (mapa != null) ? mapa.Nombre : "(sin mapa)";
+        IMapaTactico mapaVista = ResolverMapaParaVista(v);
+        string nombreMapa = (mapaVista != null) ? mapaVista.Nombre : "(no registrado)";
         etiquetaVista.text = $"Mapa: {nombreMapa} ({v})  [{toggleVisibleKey}]ocultar  [{cycleViewKey}]cambiar";
+    }
+
+    // -----------------------------------------------------------------------
+    //  Resolver el IMapaTactico que corresponde a una vista.
+    //  Influencia  → busca el mapa con Nombre "Influencia" (o cae al primario).
+    //  Visibilidad → busca el mapa con Nombre "Visibilidad".
+    // -----------------------------------------------------------------------
+    private IMapaTactico ResolverMapaParaVista(TipoVista vista)
+    {
+        switch (vista)
+        {
+            case TipoVista.Visibilidad:
+                return ServicioMapaTactico.GetMapa("Visibilidad");
+            case TipoVista.Influencia:
+            default:
+                return ServicioMapaTactico.GetMapa("Influencia") ?? mapa;
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -211,28 +237,38 @@ public class Minimapa : MonoBehaviour
     // -----------------------------------------------------------------------
     private void RedibujarTextura()
     {
-        if (mapa == null || textura == null) return;
+        if (textura == null) return;
+
+        TipoVista vista = vistasRegistradas[vistaActualIdx];
+        IMapaTactico mapaVista = ResolverMapaParaVista(vista);
+
+        // Si el mapa de esta vista no está registrado, dejamos la textura vacía
+        if (mapaVista == null)
+        {
+            for (int i = 0; i < pixelBuffer.Length; i++) pixelBuffer[i] = nonWalkableColor;
+            textura.SetPixels32(pixelBuffer);
+            textura.Apply(false);
+            return;
+        }
 
         // Por seguridad si el grid cambió en runtime.
-        if (mapa.Width != texW || mapa.Height != texH)
+        if (mapaVista.Width != texW || mapaVista.Height != texH)
         {
-            texW = Mathf.Max(1, mapa.Width);
-            texH = Mathf.Max(1, mapa.Height);
+            texW = Mathf.Max(1, mapaVista.Width);
+            texH = Mathf.Max(1, mapaVista.Height);
             textura.Reinitialize(texW, texH);
             pixelBuffer = new Color32[texW * texH];
         }
 
-        TipoVista vista = vistasRegistradas[vistaActualIdx];
-
-        float maxAllied = Mathf.Max(0.001f, mapa.MaxAliado());
-        float maxEnemy  = Mathf.Max(0.001f, mapa.MaxEnemigo());
+        float maxAllied = Mathf.Max(0.001f, mapaVista.MaxAliado());
+        float maxEnemy  = Mathf.Max(0.001f, mapaVista.MaxEnemigo());
 
         for (int z = 0; z < texH; z++)
         {
             for (int x = 0; x < texW; x++)
             {
                 int idx = z * texW + x;
-                pixelBuffer[idx] = PintarPixel(vista, x, z, maxAllied, maxEnemy);
+                pixelBuffer[idx] = PintarPixel(vista, mapaVista, x, z, maxAllied, maxEnemy);
             }
         }
 
@@ -240,26 +276,23 @@ public class Minimapa : MonoBehaviour
         textura.Apply(false);
     }
 
-    // Dispatcher por vista: facilita añadir más mapas tácticos en el futuro.
-    private Color PintarPixel(TipoVista vista, int x, int z, float maxAllied, float maxEnemy)
+    private Color PintarPixel(TipoVista vista, IMapaTactico m, int x, int z, float maxAllied, float maxEnemy)
     {
-        if (!mapa.IsWalkable(x, z))
-            return nonWalkableColor;
+        if (!m.IsWalkable(x, z)) return nonWalkableColor;
 
         switch (vista)
         {
-            case TipoVista.Influencia: return PintarInfluencia(x, z, maxAllied, maxEnemy);
-            // case TipoVista.ControlNeto:  return PintarControl(x, z, maxAllied, maxEnemy);
-            // case TipoVista.CosteTerreno: return PintarCosteTerreno(x, z);
+            case TipoVista.Influencia:  return PintarInfluencia (m, x, z, maxAllied, maxEnemy);
+            case TipoVista.Visibilidad: return PintarVisibilidad(m, x, z, maxAllied);
             default: return emptyCellColor;
         }
     }
 
-    // Vista combinada azul/rojo/magenta solicitada por el enunciado del apartado e.
-    private Color PintarInfluencia(int x, int z, float maxAllied, float maxEnemy)
+    // Vista combinada azul/rojo/magenta.
+    private Color PintarInfluencia(IMapaTactico m, int x, int z, float maxAllied, float maxEnemy)
     {
-        float a = Mathf.Clamp01(mapa.ValorAliadoEn(x, z)  / maxAllied);
-        float e = Mathf.Clamp01(mapa.ValorEnemigoEn(x, z) / maxEnemy);
+        float a = Mathf.Clamp01(m.ValorAliadoEn(x, z)  / maxAllied);
+        float e = Mathf.Clamp01(m.ValorEnemigoEn(x, z) / maxEnemy);
 
         if (a < 0.01f && e < 0.01f) return emptyCellColor;
 
@@ -273,6 +306,18 @@ public class Minimapa : MonoBehaviour
         // Mantener un fondo gris cuando ambos son muy bajos para que el píxel no quede negro.
         float intensidad = Mathf.Max(a, e);
         return Color.Lerp(emptyCellColor, col, intensidad);
+    }
+
+    // Mapa mono-canal: ValorAliadoEn = ValorEnemigoEn = exposición de la celda
+    //   amarillo claro = celda muy expuesta (rayos llegan lejos sin chocar).
+    //   gris oscuro    = celda muy cubierta (rayos cortan rápido por obstáculos).
+    private Color PintarVisibilidad(IMapaTactico m, int x, int z, float maxValor)
+    {
+        float v = Mathf.Clamp01(m.ValorAliadoEn(x, z) / maxValor);
+        v = Mathf.Pow(v, 1.4f);
+        // Color base: amarillo cálido. Mezclamos con el fondo gris según intensidad.
+        Color expuesta = new Color(1f, 0.95f, 0.2f, 1f);
+        return Color.Lerp(emptyCellColor, expuesta, v);
     }
 
     private void OnDestroy()

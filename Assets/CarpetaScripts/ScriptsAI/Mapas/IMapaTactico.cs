@@ -5,11 +5,7 @@ using UnityEngine;
 // -----------------------------------------------------------------------------
 //  El objetivo de esta interfaz es que las capas que CONSUMEN un mapa táctico
 //  (toma de decisiones tácticas en ComportamientoTactico, visualización en
-//  Minimapa, etc.) no dependan de la implementación concreta
-//  InfluenceMap.  Si en el futuro se añade un mapa de visibilidad, de coste de
-//  terreno o cualquier otro mapa táctico, los consumidores no necesitan saber
-//  contra qué tipo concreto están hablando: basta con que ese mapa implemente
-//  IMapaTactico y se registre en el ServicioMapaTactico.
+//  Minimapa, etc.) no dependan de una implementación concreta de un mapa táctico.
 // =============================================================================
 public interface IMapaTactico
 {
@@ -43,25 +39,42 @@ public interface IMapaTactico
 // =============================================================================
 //  ServicioMapaTactico
 // -----------------------------------------------------------------------------
-//  Localizador estático mínimo para que los consumidores resuelvan el mapa
-//  táctico activo sin conocer su implementación concreta.  El mapa concreto se
-//  auto-registra en su Awake/OnEnable.  Si en el futuro hay varios mapas, este
-//  servicio puede ampliarse a un diccionario por nombre.
+//  Localizador estático para que los consumidores resuelvan los mapas tácticos
+//  activos sin conocer su implementación concreta.  Cada mapa concreto se
+//  auto-registra en su OnEnable y se quita en OnDisable.
+//
+//  Soporta VARIOS mapas a la vez. El "MapaPrimario" es el primero que se registró — típicamente
+//  el InfluenceMap.
 // =============================================================================
 public static class ServicioMapaTactico
 {
-    public static IMapaTactico MapaPrimario { get; private set; }
+    private static readonly System.Collections.Generic.List<IMapaTactico> _mapas
+        = new System.Collections.Generic.List<IMapaTactico>();
 
-    // Devuelve el mapa primario o null si nadie se ha registrado.
+    // Mapa principal: el primero registrado. Coincide con InfluenceMap en escenas normales.
+    public static IMapaTactico MapaPrimario => _mapas.Count > 0 ? _mapas[0] : null;
+
+    // Lista de TODOS los mapas registrados (solo lectura para el cliente).
+    public static System.Collections.Generic.IReadOnlyList<IMapaTactico> Mapas => _mapas;
+
     public static void Registrar(IMapaTactico mapa)
     {
         if (mapa == null) return;
-        MapaPrimario = mapa;
+        if (!_mapas.Contains(mapa)) _mapas.Add(mapa);
     }
 
-    // Si el mapa que se desregistra es el primario, lo borra. Si no, no hace nada.
     public static void Quitar(IMapaTactico mapa)
     {
-        if (MapaPrimario == mapa) MapaPrimario = null;
+        if (mapa == null) return;
+        _mapas.Remove(mapa);
+    }
+
+    // Búsqueda por nombre (usa la propiedad IMapaTactico.Nombre, ej. "Influencia", "Visibilidad").
+    public static IMapaTactico GetMapa(string nombre)
+    {
+        if (string.IsNullOrEmpty(nombre)) return null;
+        foreach (var m in _mapas)
+            if (m != null && m.Nombre == nombre) return m;
+        return null;
     }
 }

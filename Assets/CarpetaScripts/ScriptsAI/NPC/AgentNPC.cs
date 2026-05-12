@@ -95,6 +95,23 @@ public class AgentNPC : Agent
         if (TryGetComponent<WallAvoidance>(out var wall)) wall.enabled = true;
     }
 
+    // Steerings Modo Path Follow: la unidad sigue el camino calculado por
+    // AStarPathfinder / AStarPathfinderInfluence usando PathFollowingSinOffset.
+    // Usado por SelectionManager al dar una orden de movimiento con click derecho
+    // para que la unidad bordee zonas peligrosas en vez de ir en línea recta.
+    public void SetModoPathFollow()
+    {
+        if (TryGetComponent<PathFollowingSinOffset>(out var pf)) pf.enabled = true;
+        if (TryGetComponent<LookWhereYouGoing>(out var look))    look.enabled = true;
+        if (TryGetComponent<WallAvoidance>(out var wall))        wall.enabled = true;
+        if (TryGetComponent<Separation>(out var sep))            sep.enabled  = true;
+
+        if (TryGetComponent<Arrive>(out var arrive)) arrive.enabled = false;
+        if (TryGetComponent<Align>(out var align))   align.enabled  = false;
+        if (TryGetComponent<Wander>(out var wander)) wander.enabled = false;
+        if (TryGetComponent<Flee>(out var flee))     flee.enabled   = false;
+    }
+
 
 
     private void ApplySteering(float deltaTime)

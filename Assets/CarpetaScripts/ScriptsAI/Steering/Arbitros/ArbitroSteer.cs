@@ -21,14 +21,11 @@ public abstract class ArbitroSteer : MonoBehaviour
 
         // Añadimos los Steering a la lista
         steeringList = new List<SteeringBehaviour>();
-        
         SteeringBehaviour[] behaviours = GetComponents<SteeringBehaviour>();
-
-        foreach(var b in behaviours)
+        foreach (var b in behaviours)
         {
-            if (b.enabled) steeringList.Add(b);
+            steeringList.Add(b);
         }
-
     }
 
     public abstract Steering GetSteering();

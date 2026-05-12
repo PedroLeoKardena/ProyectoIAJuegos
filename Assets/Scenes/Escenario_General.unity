@@ -982,8 +982,9 @@ GameObject:
   - component: {fileID: 144035849}
   - component: {fileID: 144035848}
   - component: {fileID: 144035847}
+  - component: {fileID: 144035850}
   m_Layer: 0
-  m_Name: InfluenceMap
+  m_Name: MapasTacticos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1026,7 +1027,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridManager: {fileID: 215787211}
   refreshInterval: 1
-  influenceRadius: 10
+  decayAmount: 5
+  influenceThreshold: 0.5
   bosqueMultiplier: 0.8
   llanuraMultiplier: 1.2
   caminoMultiplier: 1
@@ -1051,6 +1053,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &144035850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144035846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c57a90e058817422dbb3d6442b053078, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridManager: {fileID: 215787211}
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  numRayos: 12
+  rangoMaximo: 30
+  alturaOjos: 1.5
+  debugMode: 0
 --- !u!1001 &145821896
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1355,6 +1377,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2098511125}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2098511128}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2098511127}
   m_SourcePrefab: {fileID: 100100000, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
 --- !u!4 &147540463 stripped
 Transform:
@@ -2332,6 +2360,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 234589847}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 234589851}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 234589850}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!4 &234589832 stripped
 Transform:
@@ -2575,6 +2609,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &234589850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 234589833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &234589851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 234589833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1001 &234783132
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4708,6 +4783,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &355733034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355733017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &355733035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355733017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1 &360542926 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
@@ -4950,6 +5066,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &360542944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360542926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &360542945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360542926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!4 &361022470 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4731548797671380, guid: 37bf6b4eaddee8d448771b63238e03d1, type: 3}
@@ -5667,6 +5824,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &391637480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 391637462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &391637481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 391637462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1001 &391674397
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5906,6 +6104,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 391674413}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 391674416}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 391674415}
   m_SourcePrefab: {fileID: 100100000, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
 --- !u!4 &391674398 stripped
 Transform:
@@ -6149,6 +6353,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &391674415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 391674399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &391674416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 391674399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1001 &397214808
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6531,6 +6776,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 407396098}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 407396101}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 407396100}
   m_SourcePrefab: {fileID: 100100000, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
 --- !u!4 &407396083 stripped
 Transform:
@@ -6774,6 +7025,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &407396100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407396084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &407396101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407396084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1 &413422077 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1051370914222626, guid: d7de6c400fc6dce4e847672adb026364, type: 3}
@@ -10494,6 +10786,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 665982034}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 665982037}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 665982036}
   m_SourcePrefab: {fileID: 100100000, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
 --- !u!4 &665982019 stripped
 Transform:
@@ -10737,6 +11035,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &665982036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 665982020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &665982037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 665982020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1001 &670637228
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11041,6 +11380,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 686068768}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 686068772}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 686068771}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!4 &686068753 stripped
 Transform:
@@ -11284,6 +11629,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &686068771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686068754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &686068772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686068754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1001 &694343957
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11604,6 +11990,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 697005434}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 697005437}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 697005436}
   m_SourcePrefab: {fileID: 100100000, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
 --- !u!4 &697005419 stripped
 Transform:
@@ -11847,6 +12239,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &697005436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697005420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &697005437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697005420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1001 &700509520
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12676,6 +13109,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 803108902}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 803108906}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 803108905}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!4 &803108887 stripped
 Transform:
@@ -12919,6 +13358,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &803108905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803108888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &803108906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803108888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1001 &807251725
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13137,6 +13617,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 360542941}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 360542945}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 360542944}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1 &812475417
 GameObject:
@@ -13291,6 +13777,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 814003453}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 814003457}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 814003456}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!4 &814003438 stripped
 Transform:
@@ -13534,6 +14026,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &814003456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814003439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &814003457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814003439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1 &817359848 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1836039897307064, guid: 37bf6b4eaddee8d448771b63238e03d1, type: 3}
@@ -14049,6 +14582,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &862648979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 862648961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &862648980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 862648961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1 &866070479
 GameObject:
   m_ObjectHideFlags: 0
@@ -17278,6 +17852,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1064838684}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1064838688}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1064838687}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!4 &1064838669 stripped
 Transform:
@@ -17521,6 +18101,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &1064838687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1064838670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &1064838688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1064838670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1 &1071312062 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1051370914222626, guid: d7de6c400fc6dce4e847672adb026364, type: 3}
@@ -18276,6 +18897,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1097522252}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1097522255}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1097522254}
   m_SourcePrefab: {fileID: 100100000, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
 --- !u!4 &1097522237 stripped
 Transform:
@@ -18519,6 +19146,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &1097522254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097522238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &1097522255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097522238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1 &1098485968 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1836039897307064, guid: 37bf6b4eaddee8d448771b63238e03d1, type: 3}
@@ -19093,6 +19761,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1112975864}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1112975867}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1112975866}
   m_SourcePrefab: {fileID: 100100000, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
 --- !u!4 &1112975849 stripped
 Transform:
@@ -19336,6 +20010,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &1112975866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112975850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &1112975867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112975850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1 &1123304295 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2638607709940817045, guid: 4b6c823c8250950458397687732387d5, type: 3}
@@ -20116,6 +20831,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1445315896}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1445315899}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1445315898}
   m_SourcePrefab: {fileID: 100100000, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
 --- !u!4 &1162065297 stripped
 Transform:
@@ -20707,6 +21428,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1193477991}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1193477994}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1193477993}
   m_SourcePrefab: {fileID: 100100000, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
 --- !u!4 &1193477976 stripped
 Transform:
@@ -20950,6 +21677,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &1193477993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193477977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &1193477994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193477977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1001 &1195451659
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21168,6 +21936,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1209455090}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1209455094}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1209455093}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!4 &1209455075 stripped
 Transform:
@@ -21411,6 +22185,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &1209455093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209455076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &1209455094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209455076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1001 &1220461016
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24133,6 +24948,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 391637477}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 391637481}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 391637480}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1001 &1365802097
 PrefabInstance:
@@ -24241,6 +25062,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1365802113}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1365802117}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1365802116}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!4 &1365802098 stripped
 Transform:
@@ -24484,6 +25311,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &1365802116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1365802099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &1365802117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1365802099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1 &1369102602 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1836039897307064, guid: 37bf6b4eaddee8d448771b63238e03d1, type: 3}
@@ -24640,6 +25508,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1371092446}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1371092450}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1371092449}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!4 &1371092431 stripped
 Transform:
@@ -24883,6 +25757,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &1371092449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1371092432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &1371092450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1371092432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1001 &1373656439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26296,6 +27211,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &1445315898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445315881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &1445315899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445315881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1001 &1447250768
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27094,6 +28050,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1562388449}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1562388453}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1562388452}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!4 &1562388434 stripped
 Transform:
@@ -27337,6 +28299,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &1562388452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562388435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &1562388453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562388435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1001 &1564608521
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29433,6 +30436,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 355733032}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 355733035}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 355733034}
   m_SourcePrefab: {fileID: 100100000, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
 --- !u!1001 &1695816701
 PrefabInstance:
@@ -34762,6 +35771,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1936595531}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1936595534}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1936595533}
   m_SourcePrefab: {fileID: 100100000, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
 --- !u!4 &1936595516 stripped
 Transform:
@@ -35005,6 +36020,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &1936595533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1936595517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &1936595534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1936595517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1001 &1941557164
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35818,6 +36874,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1984808643}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1984808646}
+    - targetCorrespondingSourceObject: {fileID: 1845742921716089003, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1984808645}
   m_SourcePrefab: {fileID: 100100000, guid: 8e0a6622d44f340dcaaad3e958e43e0d, type: 3}
 --- !u!4 &1984808628 stripped
 Transform:
@@ -36061,6 +37123,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &1984808645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1984808629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &1984808646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1984808629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!43 &1989557831
 Mesh:
   m_ObjectHideFlags: 0
@@ -36371,6 +37474,7 @@ MonoBehaviour:
     m_Bits: 128
   formationManager: {fileID: 0}
   selectionTexture: {fileID: 2800000, guid: 3bfa67fdf5c51194b956242e4f00fcbe, type: 3}
+  usarPathfindingTactico: 1
 --- !u!4 &1994549506
 Transform:
   m_ObjectHideFlags: 0
@@ -37724,6 +38828,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 862648976}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 862648980}
+    - targetCorrespondingSourceObject: {fileID: 3136820629370392942, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 862648979}
   m_SourcePrefab: {fileID: 100100000, guid: 32d2eabfca65643c39dce9e42ac98f59, type: 3}
 --- !u!1001 &2077918407
 PrefabInstance:
@@ -38255,6 +39365,47 @@ MonoBehaviour:
   vidaActual: 0
   calidad: 100
   constanteImpacto: 20
+--- !u!114 &2098511127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098511110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309e2fbf39386b946b382bce45bacf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 215787211}
+  objetivo: {fileID: 0}
+  heuristicType: 2
+  useTacticalPathfinding: 1
+  weightExploradores: 2
+  weightInfanteriaPesada: 0.3
+  weightVelites: 1
+  multiplicadorOfensivo: 0.3
+  multiplicadorDefensivo: 2.5
+  recomputeKey: 32
+  drawDebug: 1
+--- !u!114 &2098511128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098511110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dda353c5485a2448b36dda27546676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  weight: 2
+  path:
+    nodes: []
+  radius: 30
+  behaviorMode: 0
 --- !u!1 &2098643891 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1863068996201187659, guid: dfe0ded46da2be248833f5a0eb632767, type: 3}

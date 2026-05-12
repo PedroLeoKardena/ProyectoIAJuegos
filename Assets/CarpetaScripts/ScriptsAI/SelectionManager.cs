@@ -9,7 +9,16 @@ public class SelectionManager : MonoBehaviour
     public FormationManager formationManager;
     public Texture2D selectionTexture;
 
+    [Header("Click derecho")]
+    [Tooltip("Si está activo Y la unidad tiene AStarPathfinderInfluence, el click derecho dispara pathfinding táctico " +
+             "(la unidad bordea zonas con influencia enemiga). Si está desactivado o falta el componente, " +
+             "la unidad va en línea recta con Arrive (comportamiento original).")]
+    public bool usarPathfindingTactico = true;
+
     private Vector3 startMousePos; // Posición inicial del clic para arrastrar selección
+
+    // Mapeo NPC -> Transform fantasma usado como destino del AStarPathfinderInfluence.
+    private Dictionary<AgentNPC, Transform> destinosFantasma = new Dictionary<AgentNPC, Transform>();
 
     void Update()
     {
@@ -194,12 +203,48 @@ public class SelectionManager : MonoBehaviour
     {
         if (selectedUnits.Count == 0) return;
 
-        foreach(var npc in selectedUnits)
+        foreach (var npc in selectedUnits)
         {
+            if (npc == null) continue;
             npc.tag = "NPC";
+
+            // ---- Intento de movimiento con A* táctico ----
+            AStarPathfinderInfluence aStar  = npc.GetComponent<AStarPathfinderInfluence>();
+            PathFollowingSinOffset   follow = npc.GetComponent<PathFollowingSinOffset>();
+
+            if (usarPathfindingTactico && aStar != null && follow != null)
+            {
+                Transform fantasma = ObtenerOFantasmaPara(npc);
+                fantasma.position  = destination;
+
+                aStar.SetObjetivo(fantasma);  // asigna y dispara ComputePath()
+                npc.SetModoPathFollow();      // activa PathFollowingSinOffset, apaga Arrive
+                continue;
+            }
+
+            // ---- Comportamiento original (Arrive en línea recta) ----
             SetSteeringsViaje(npc);
             npc.SetTarget(destination, 0);
         }
+    }
+
+    // Devuelve un Transform fantasma asociado a este NPC.
+    private Transform ObtenerOFantasmaPara(AgentNPC npc)
+    {
+        if (destinosFantasma.TryGetValue(npc, out Transform t) && t != null) return t;
+
+        GameObject go = new GameObject($"DestinoClick_{npc.name}");
+        go.transform.SetParent(this.transform, false);
+        destinosFantasma[npc] = go.transform;
+        return go.transform;
+    }
+
+    // Limpieza al destruir el SelectionManager: borra los fantasmas creados.
+    private void OnDestroy()
+    {
+        foreach (var t in destinosFantasma.Values)
+            if (t != null) Destroy(t.gameObject);
+        destinosFantasma.Clear();
     }
 
     
@@ -226,7 +271,4 @@ public class SelectionManager : MonoBehaviour
         var bottomRight = Vector3.Max(screenPos1, screenPos2);
         return Rect.MinMaxRect(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
     }
-
-
-
 }

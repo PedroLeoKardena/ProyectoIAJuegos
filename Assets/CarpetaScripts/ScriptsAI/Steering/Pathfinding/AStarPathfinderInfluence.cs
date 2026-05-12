@@ -40,6 +40,15 @@ public class AStarPathfinderInfluence : UnityEngine.MonoBehaviour
     // Último camino calculado. Null si no hay camino o aún no se ha calculado.
     public Path CurrentPath { get; private set; }
 
+    // Método público para asignar destino y recalcular desde código (usado por
+    // SelectionManager al hacer click derecho).
+    public void SetObjetivo(Transform nuevoObjetivo)
+    {
+        objetivo = nuevoObjetivo;
+        if (isActiveAndEnabled) ComputePath();
+    }
+    public Transform Objetivo => objetivo;
+
     private TerrainSpeedModifier _terrainMod;
     // Referencia al comportamiento táctico del mismo agente para leer el modo estratégico activo.
     private ComportamientoTactico _comportamiento;
