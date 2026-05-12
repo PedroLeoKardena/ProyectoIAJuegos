@@ -3,7 +3,7 @@ using UnityEngine;
 // MonoBehaviour que implementa A* con coste táctico basado en el Mapa de Influencia (Millington, cap. 5).
 // Fórmula: C = D + w_i × T_i, donde D es el coste base de terreno (distancia/velocidad),
 // w_i es la sensibilidad de la unidad al peligro y T_i la influencia enemiga media en la arista.
-// Permite al profesor comparar la ruta normal frente a la táctica mediante el toggle useTacticalPathfinding.
+
 [RequireComponent(typeof(TerrainSpeedModifier))]
 public class AStarPathfinderInfluence : UnityEngine.MonoBehaviour
 {
@@ -25,6 +25,12 @@ public class AStarPathfinderInfluence : UnityEngine.MonoBehaviour
     [Tooltip("Velites / Infantería Ligera: peso moderado.")]
     [SerializeField] private float weightVelites = 1.0f;
 
+    [Header("Multiplicadores Estratégicos")]
+    [Tooltip("Escala de w_i en modo Ofensivo. 0.3 = 30% del valor base; las unidades ignoran parcialmente el peligro y toman rutas directas.")]
+    [SerializeField] private float multiplicadorOfensivo = 0.3f;
+    [Tooltip("Escala de w_i en modo Defensivo. 2.5 = rutas muy evasivas, rodeando zonas de influencia enemiga aunque la ruta sea más larga.")]
+    [SerializeField] private float multiplicadorDefensivo = 2.5f;
+
     [Tooltip("Tecla para recalcular el camino en tiempo de ejecución (demo al profesor).")]
     [SerializeField] private KeyCode recomputeKey = KeyCode.Space;
 
@@ -35,19 +41,39 @@ public class AStarPathfinderInfluence : UnityEngine.MonoBehaviour
     public Path CurrentPath { get; private set; }
 
     private TerrainSpeedModifier _terrainMod;
+    // Referencia al comportamiento táctico del mismo agente para leer el modo estratégico activo.
+    private ComportamientoTactico _comportamiento;
+    // Último modo estratégico con el que se calculó el camino; detecta cambios de modo.
+    private ModoEstrategico? _ultimoModo;
 
-    private void Start()
+    // Espera un frame antes de calcular el camino para garantizar que ManagerEstrategico.Start()
+    // haya ejecutado InicializarConContexto y asignado contextoGrupo a ComportamientoTactico.
+    private System.Collections.IEnumerator Start()
     {
         if (grid == null) grid = FindFirstObjectByType<GridManager>();
-        _terrainMod = GetComponent<TerrainSpeedModifier>();
+        _terrainMod     = GetComponent<TerrainSpeedModifier>();
+        _comportamiento = GetComponent<ComportamientoTactico>();
+        yield return null;
         ComputePath();
+        _ultimoModo = _comportamiento?.contextoGrupo?.modo;
     }
 
     private void Update()
     {
         // Permite recalcular el camino en tiempo real durante la demo.
         if (Input.GetKeyDown(recomputeKey))
+        {
             ComputePath();
+            return;
+        }
+
+        // Recalcula automáticamente si el modo estratégico cambió (ofensivo ↔ defensivo ↔ guerra total).
+        ModoEstrategico? modoActual = _comportamiento?.contextoGrupo?.modo;
+        if (modoActual != _ultimoModo)
+        {
+            _ultimoModo = modoActual;
+            ComputePath();
+        }
     }
 
     // Calcula el camino desde la posición actual hasta el objetivo configurado.
@@ -70,19 +96,28 @@ public class AStarPathfinderInfluence : UnityEngine.MonoBehaviour
         if (CurrentPath == null)
             Debug.LogWarning($"[AStarPathfinderInfluence] No se encontró camino. Start=({start?.x},{start?.z}) Target=({target?.x},{target?.z})");
         else
+        {
+            float sensBase  = GetSensitivity(_terrainMod.unitType);
+            float mult      = GetMultiplicadorEstrategico();
+            string modo     = _comportamiento?.contextoGrupo?.modo.ToString() ?? "N/A";
             Debug.Log($"[AStarPathfinderInfluence] Camino encontrado: {CurrentPath.nodes.Length} waypoints. " +
-                      $"Táctico={useTacticalPathfinding} | Unidad={_terrainMod.unitType} | Sensibilidad={GetSensitivity(_terrainMod.unitType):F2}");
+                      $"Táctico={useTacticalPathfinding} | Unidad={_terrainMod.unitType} | " +
+                      $"Modo={modo} | SensBase={sensBase:F2} | Mult={mult:F2} | SensEfectiva={sensBase * mult:F2}");
+        }
 
         return CurrentPath;
     }
 
-    // Construye el CostProvider adecuado según el toggle táctico.
+    // Construye el CostProvider adecuado según el toggle táctico y el modo estratégico activo.
     // Modo normal: coste = distancia / velocidad en ese terreno.
-    // Modo táctico: coste = D + w_i × T_i, usando la influencia enemiga media de la arista.
+    // Modo táctico: coste = D + (w_i × mult_estrategico) × T_i.
+    //   Ofensivo → mult=0.2: sensibilidad mínima, rutas directas "camorristas".
+    //   Defensivo → mult=2.5: sensibilidad máxima, rutas evasivas aunque más largas.
+    //   GuerraTotal → mult=0: sin penalización táctica, camino más corto absoluto.
     private AStarAlgorithm.CostProvider BuildCostProvider()
     {
-        UnitType unitType   = _terrainMod.unitType;
-        float    sensitivity = GetSensitivity(unitType);
+        UnitType unitType    = _terrainMod.unitType;
+        float    sensitivity = GetSensitivity(unitType) * GetMultiplicadorEstrategico();
 
         if (useTacticalPathfinding && InfluenceMap.Instance != null)
         {
@@ -92,13 +127,17 @@ public class AStarPathfinderInfluence : UnityEngine.MonoBehaviour
                 float baseTerrainCost = UnityEngine.Vector3.Distance(from.worldPosition, to.worldPosition)
                                         / TerrainSpeedModifier.GetSpeed(unitType, to.terrainTag);
 
-                // T_i: promedio de influencia enemiga entre nodo origen y destino
-                // (conversión nodo → arista, Millington cap. 5)
+                // T_i: promedio de influencia enemiga entre nodo origen y destino, normalizado a [0,1].
+                // La normalización es necesaria porque I₀ varía por tipo de unidad (15–50),
+                // de lo contrario w_i escalaría valores crudos y los pesos perderían su significado.
+                float maxEnemy      = InfluenceMap.Instance.MaxEnemigo();
                 float influenceFrom = InfluenceMap.Instance.GetEnemyInfluence(from);
                 float influenceTo   = InfluenceMap.Instance.GetEnemyInfluence(to);
-                float avgInfluence  = (influenceFrom + influenceTo) * 0.5f;
+                float avgInfluence  = (maxEnemy > 0f)
+                                      ? (influenceFrom + influenceTo) * 0.5f / maxEnemy
+                                      : 0f;
 
-                // Penalización táctica: w_i × T_i
+                // Penalización táctica: w_i × T_i  (T_i ∈ [0,1])
                 float tacticalPenalty = sensitivity * avgInfluence;
                 float total           = baseTerrainCost + tacticalPenalty;
 
@@ -130,6 +169,24 @@ public class AStarPathfinderInfluence : UnityEngine.MonoBehaviour
             case UnitType.Velites:          return weightVelites;
             default:                        return weightVelites;
         }
+    }
+
+    // Devuelve el multiplicador estratégico que escala w_i según el modo de combate activo.
+    // GuerraTotal=0 (ruta más corta sin evasión), Ofensivo=0.2 (ignora parcialmente el peligro),
+    // Defensivo=2.5 (evasión máxima, rodea zonas de influencia enemiga).
+    // Si no hay ContextoGrupo asignado, devuelve 1 (comportamiento neutro).
+    private float GetMultiplicadorEstrategico()
+    {
+        if (_comportamiento == null || _comportamiento.contextoGrupo == null)
+            return 1f;
+
+        return _comportamiento.contextoGrupo.modo switch
+        {
+            ModoEstrategico.GuerraTotal => 0f,
+            ModoEstrategico.Ofensivo    => multiplicadorOfensivo,
+            ModoEstrategico.Defensivo   => multiplicadorDefensivo,
+            _                           => 1f
+        };
     }
 
 #if UNITY_EDITOR

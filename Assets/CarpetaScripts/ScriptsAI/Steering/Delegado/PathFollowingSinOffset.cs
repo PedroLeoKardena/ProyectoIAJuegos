@@ -26,8 +26,10 @@ public class PathFollowingSinOffset : Seek
     private GameObject auxTargetObj;
     private Agent auxTargetAgent;
 
-    // Cache del AStarPathfinder en este mismo GameObject. Null si el agente no usa A*.
+    // Cache de pathfinders en este mismo GameObject. Null si el agente no los usa.
+    // Prioridad: AStarPathfinderInfluence > AStarPathfinder > path manual.
     private AStarPathfinder astarPathfinder;
+    private AStarPathfinderInfluence astarInfluence;
     // Guarda el último camino activo para detectar cambios y reiniciar el índice.
     private Path lastPath;
 
@@ -35,17 +37,15 @@ public class PathFollowingSinOffset : Seek
     {
         this.nameSteering = "PathFollowingSinOffset";
 
-        // Si el agente tiene AStarPathfinder, sus caminos tendrán prioridad sobre path manual.
         astarPathfinder = GetComponent<AStarPathfinder>();
+        astarInfluence  = GetComponent<AStarPathfinderInfluence>();
 
         // Inicializamos el target fantasma
         auxTargetObj = new GameObject("PathFollowingGhost");
         auxTargetAgent = auxTargetObj.AddComponent<AgentNPC>();
 
-        // Buscamos el componente Face en este mismo NPC
         Face faceScript = GetComponent<Face>();
-
-            faceScript.target = auxTargetAgent;
+        if (faceScript != null) faceScript.target = auxTargetAgent;
     }
 
     void OnDestroy()
@@ -55,8 +55,10 @@ public class PathFollowingSinOffset : Seek
 
     public override Steering GetSteering(Agent agent)
     {
-        // Usar el camino de AStarPathfinder si está disponible; si no, el path manual.
-        Path effectivePath = (astarPathfinder != null) ? astarPathfinder.CurrentPath : path;
+        // Prioridad: táctico (influencia) > clásico > path manual.
+        Path effectivePath = (astarInfluence != null)  ? astarInfluence.CurrentPath
+                           : (astarPathfinder != null) ? astarPathfinder.CurrentPath
+                           : path;
 
         // Al cambiar de camino (nuevo recálculo A* o asignación manual), reiniciar índice.
         if (effectivePath != lastPath)
@@ -124,7 +126,9 @@ public class PathFollowingSinOffset : Seek
     // Dibuja el camino y el target para depuración
     void OnDrawGizmos()
     {
-        Path effectivePath = (astarPathfinder != null) ? astarPathfinder.CurrentPath : path;
+        Path effectivePath = (astarInfluence != null)  ? astarInfluence.CurrentPath
+                           : (astarPathfinder != null) ? astarPathfinder.CurrentPath
+                           : path;
 
         if (effectivePath != null && effectivePath.nodes != null && effectivePath.nodes.Length > 0)
         {
