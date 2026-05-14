@@ -59,6 +59,12 @@ public class FormationManager : MonoBehaviour
 
 
     void Update() {
+        // Limpiamos personajes destruidos (muertos) de los slots
+        int eliminados = slotAssignments.RemoveAll(sa => sa.character == null);
+        if (eliminados > 0) {
+            UpdateSlotAssignments();
+        }
+
         // Si el líder actual desaparece, buscamos un sustituto
         if (liderNPC == null && slotAssignments.Count > 0) {
             ValidarLider();
@@ -156,8 +162,8 @@ public class FormationManager : MonoBehaviour
         npc.GetComponent<Arrive>().enabled = true;
     }
 
-    // Elige automáticamente al primer personaje de la lista como líder
     private void ValidarLider() {
+        slotAssignments.RemoveAll(sa => sa.character == null);
         if (slotAssignments.Count > 0) {
             liderNPC = slotAssignments[0].character;
             Debug.Log("Nuevo líder asignado: " + liderNPC.name);

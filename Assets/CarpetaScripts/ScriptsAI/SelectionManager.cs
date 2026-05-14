@@ -22,6 +22,9 @@ public class SelectionManager : MonoBehaviour
 
     void Update()
     {
+        // Limpiamos referencias nulas por si alguna unidad seleccionada ha sido destruida (muerta)
+        selectedUnits.RemoveAll(item => item == null);
+
         // Selección con clic izquierdo
         if (Input.GetMouseButtonDown(0))
         {
@@ -156,6 +159,7 @@ public class SelectionManager : MonoBehaviour
 
     public void DeselectAllUnits()
     {
+        selectedUnits.RemoveAll(item => item == null);
         foreach(var unit in selectedUnits) 
         {
             unit.tag = "NPC";
