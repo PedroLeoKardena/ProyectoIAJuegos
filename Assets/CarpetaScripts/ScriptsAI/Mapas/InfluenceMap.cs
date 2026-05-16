@@ -4,14 +4,10 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-// Mapa de influencia táctico basado en inundación (Dijkstra / Map Flooding, Millington cap. 5).
+// Mapa de influencia táctico basado en inundación (Dijkstra / Map Flooding).
 // Calcula periódicamente la proyección de fuerza militar de cada bando expandiendo
 // la influencia nodo a nodo a través del grafo del grid, respetando obstáculos.
 // Debug: Azul = influencia aliada, Rojo = influencia enemiga, Magenta = zona contestada.
-//
-// Implementa IMapaTactico para que los consumidores (ComportamientoTactico,
-// Minimapa, ...) trabajen contra el contrato y no contra esta clase concreta.
-// Se auto-registra en ServicioMapaTactico al activarse.
 public class InfluenceMap : MonoBehaviour, IMapaTactico
 {
     // Registro de un nodo en la lista abierta del algoritmo de inundación.
@@ -21,7 +17,7 @@ public class InfluenceMap : MonoBehaviour, IMapaTactico
         public float influence; // Fuerza actual en este nodo
     }
 
-    // Heap máximo ordenado por influencia descendente. Evita el coste O(n²) de ordenar una lista.
+    // Heap máximo ordenado por influencia descendente.
     private sealed class MaxHeap
     {
         private readonly List<LocationRecord> data = new List<LocationRecord>();

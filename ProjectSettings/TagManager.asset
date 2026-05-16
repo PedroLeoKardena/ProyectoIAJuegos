@@ -12,6 +12,7 @@ TagManager:
   - Llanura
   - Enemigo
   - Aliado
+  - "Monta\xF1a"
   layers:
   - Default
   - TransparentFX

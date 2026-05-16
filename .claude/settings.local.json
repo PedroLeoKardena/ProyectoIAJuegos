@@ -12,7 +12,11 @@
       "Bash(node -e ' *)",
       "Bash(grep -rn \"class.*comment\\\\|//.*clase\\\\|/// <summary>\" Assets/CarpetaScripts/ScriptsAI/NPC/TerrainSpeedModifier.cs)",
       "Bash(grep -n \"^//\" Assets/CarpetaScripts/ScriptsAI/NPC/TerrainSpeedModifier.cs)",
-      "Bash(grep -n \"^//\" Assets/CarpetaScripts/ScriptsAI/Grid/Node.cs)"
+      "Bash(grep -n \"^//\" Assets/CarpetaScripts/ScriptsAI/Grid/Node.cs)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\migue\\\\Documents\\\\Carrera\\\\4-2\\\\IADJ\\\\ProyectoIAJuegos\\\\Assets\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(xargs grep -l \"public class Node\\\\|struct Node\")",
+      "PowerShell(\\(Get-Content \"C:\\\\Users\\\\migue\\\\Documents\\\\Carrera\\\\4-2\\\\IADJ\\\\ProyectoIAJuegos\\\\Assets\\\\CarpetaScripts\\\\ScriptsAI\\\\Steering\\\\Generic\\\\Path.cs\" | Measure-Object -Line\\).Lines)"
     ]
   }
 }
