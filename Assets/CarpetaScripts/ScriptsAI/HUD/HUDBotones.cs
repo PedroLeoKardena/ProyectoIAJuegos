@@ -116,7 +116,7 @@ public class HUDBotones : MonoBehaviour
     // -----------------------------------------------------------------------
     private void DibujarPanelToggles()
     {
-        const float W = 220f, H = 130f, M = 10f;
+        const float W = 220f, H = 160f, M = 10f;
         float x = Screen.width - W - M;
         GUI.Box(new Rect(x, M, W, H), "");
 
@@ -137,7 +137,6 @@ public class HUDBotones : MonoBehaviour
             debugStrat.ToggleActivo();
 
         // Influencia en selección de objetivo (apartado f)
-        // Recorremos todos los SelectorObjetivoInfluencia y los flippeamos en bloque.
         var selectores = FindObjectsByType<SelectorObjetivoInfluencia>(FindObjectsSortMode.None);
         bool hayInfluencia = selectores != null && selectores.Length > 0;
         bool todosOn = false;
@@ -153,6 +152,14 @@ public class HUDBotones : MonoBehaviour
             bool nuevoEstado = !todosOn;
             foreach (var s in selectores) s.usarInfluencia = nuevoEstado;
         }
+
+        // Pathfinding táctico (independiente del debug)
+        bool tacticoVis = debugStrat != null && debugStrat.EsTacticoActivo;
+        GUI.enabled = debugStrat != null;
+        if (GUI.Button(new Rect(x + 8, M + 116, W - 16, 26),
+                       $"PF táctico: {(tacticoVis ? "ON" : "OFF")}  [T]", styleBoton))
+            debugStrat.ToggleTacticalPathfinding();
+
         GUI.enabled = true;
     }
 
@@ -233,7 +240,7 @@ public class HUDBotones : MonoBehaviour
 
         // ScrollView para que, sea cual sea la resolución, el texto siempre se pueda leer.
         Rect viewport  = new Rect(x + 8, y + 34, W - 16, H - 42);
-        Rect contenido = new Rect(0, 0, viewport.width - 20, 580);
+        Rect contenido = new Rect(0, 0, viewport.width - 20, 600);
 
         scrollAyuda = GUI.BeginScrollView(viewport, scrollAyuda, contenido);
 
@@ -264,6 +271,7 @@ public class HUDBotones : MonoBehaviour
             "  R / Home ...................... Reset cámara\n" +
             "\n" +
             "<b>OTROS</b>\n" +
+            "  T ............................. Activar/desactivar pathfinding táctico (todas las unidades)\n" +
             "  Espacio ....................... Recalcular A* (configurable por unidad)\n" +
             "  H / botón ? ................... Mostrar/ocultar esta ayuda";
 

@@ -35,7 +35,7 @@ public class AStarPathfinderInfluence : UnityEngine.MonoBehaviour
     [SerializeField] private KeyCode recomputeKey = KeyCode.Space;
 
     [Header("Debug")]
-    [SerializeField] private bool drawDebug = true;
+    [SerializeField] private bool drawDebug = false;
 
     // Último camino calculado. Null si no hay camino o aún no se ha calculado.
     public Path CurrentPath { get; private set; }
