@@ -1489,7 +1489,7 @@ GameObject:
   - component: {fileID: 1247176059}
   m_Layer: 0
   m_Name: Bosque
-  m_TagString: Camino
+  m_TagString: Desierto
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1503,7 +1503,7 @@ Transform:
   m_GameObject: {fileID: 1247176057}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -20.86, y: -1.4273012, z: 1.13}
+  m_LocalPosition: {x: -14.3, y: -1.3, z: 1.13}
   m_LocalScale: {x: 1.08114, y: 1, z: 1.50228}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1973,6 +1973,7 @@ MonoBehaviour:
   _interiorAngle: 3
   _exteriorAngle: 8
   drawGizmos: 1
+  faction: 2
   gridManager: {fileID: 1402028765}
   drawGizmosSteerNPC: 0
   steer:
