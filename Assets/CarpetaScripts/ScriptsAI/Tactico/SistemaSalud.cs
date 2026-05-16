@@ -17,6 +17,12 @@ public class SistemaSalud : MonoBehaviour
         vidaActual = vidaMaxima;
     }
 
+    public void Curar(float cantidad)
+    {
+        vidaActual += cantidad;
+        if (vidaActual > vidaMaxima) vidaActual = vidaMaxima;
+    }
+
     public void RecibirDano(float cantidad)
     {
         vidaActual -= cantidad;
@@ -32,7 +38,27 @@ public class SistemaSalud : MonoBehaviour
 
     private void Morir()
     {
-        // En un juego final aquí habría animaciones, partículas, etc.
-        Destroy(gameObject);
+        // Si hemos creado un Gestor de Respawn en la escena, le cedemos la gestión de la muerte
+        if (GestorRespawn.Instancia != null)
+        {
+            GestorRespawn.Instancia.ProgramarRespawn(this.gameObject, transform.position);
+            
+            // Forzamos deselección si estamos usando SelectionManager
+            SelectionManager sm = Object.FindFirstObjectByType<SelectionManager>();
+            if (sm != null)
+            {
+                AgentNPC ag = GetComponent<AgentNPC>();
+                if (ag != null && sm.getSelectedUnits().Contains(ag)) {
+                    sm.getSelectedUnits().Remove(ag);
+                    ag.SetSelected(false);
+                    ag.tag = "NPC";
+                }
+            }
+        }
+        else
+        {
+            // Fallback: Si no hay base, destruimos normalmente.
+            Destroy(gameObject);
+        }
     }
 }
