@@ -45,10 +45,11 @@ public class DebugEstrategico : MonoBehaviour
     public void ToggleTacticalPathfinding()
     {
         tacticoActivo = !tacticoActivo;
-        foreach (var pf in FindObjectsByType<AStarPathfinderInfluence>(FindObjectsSortMode.None))
+        foreach (var pf in _pathfinders)
         {
+            if (pf == null) continue;
             pf.useTacticalPathfinding = tacticoActivo;
-            pf.ComputePath();
+            pf.RequestRecompute();
         }
         Debug.Log($"[Debug] Pathfinding táctico: {(tacticoActivo ? "ON" : "OFF")}");
     }
