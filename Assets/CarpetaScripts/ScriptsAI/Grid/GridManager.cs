@@ -100,7 +100,7 @@ public class GridManager : MonoBehaviour
                 if (Physics.Raycast(worldPos + Vector3.up * 0.5f, Vector3.down, out RaycastHit terrainHit, 2f, groundLayer))
                 {
                     string tag = terrainHit.collider.tag;
-                    if (tag == "Camino" || tag == "Bosque" || tag == "Llanura")
+                    if (tag == "Camino" || tag == "Bosque" || tag == "Llanura" || tag == "Desierto")
                         node.terrainTag = tag;
                 }
             }

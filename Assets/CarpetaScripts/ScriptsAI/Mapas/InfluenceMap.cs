@@ -96,9 +96,10 @@ public class InfluenceMap : MonoBehaviour, IMapaTactico
     [SerializeField] private float influenceThreshold = 0.5f;
 
     [Header("Modificadores de Terreno")]
-    [SerializeField] private float bosqueMultiplier  = 0.8f;
-    [SerializeField] private float llanuraMultiplier = 1.2f;
-    [SerializeField] private float caminoMultiplier  = 1.0f;
+    [SerializeField] private float bosqueMultiplier   = 0.8f;
+    [SerializeField] private float llanuraMultiplier  = 1.2f;
+    [SerializeField] private float caminoMultiplier   = 1.0f;
+    [SerializeField] private float desiertoMultiplier = 1.1f;
 
     [Header("Potencia Base (I₀) por Tipo de Unidad")]
     [SerializeField] private float I0_InfanteriaPesada = 50f;
@@ -262,10 +263,11 @@ public class InfluenceMap : MonoBehaviour, IMapaTactico
     {
         switch (terrainTag)
         {
-            case "Bosque":  return bosqueMultiplier;
-            case "Llanura": return llanuraMultiplier;
-            case "Camino":  return caminoMultiplier;
-            default:        return 1f;
+            case "Bosque":   return bosqueMultiplier;
+            case "Llanura":  return llanuraMultiplier;
+            case "Camino":   return caminoMultiplier;
+            case "Desierto": return desiertoMultiplier;
+            default:         return 1f;
         }
     }
 

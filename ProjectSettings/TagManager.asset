@@ -13,6 +13,7 @@ TagManager:
   - Enemigo
   - Aliado
   - "Monta\xF1a"
+  - Desierto
   layers:
   - Default
   - TransparentFX

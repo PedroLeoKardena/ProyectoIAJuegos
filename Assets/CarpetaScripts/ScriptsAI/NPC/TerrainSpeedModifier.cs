@@ -47,7 +47,7 @@ public class TerrainSpeedModifier : MonoBehaviour
 
     private bool IsValidTerrainTag(string tag)
     {
-        return tag == "Camino" || tag == "Bosque" || tag == "Llanura";
+        return tag == "Camino" || tag == "Bosque" || tag == "Llanura" || tag == "Desierto";
     }
 
     // Devuelve la velocidad de la unidad en el terreno dado. Fuente única de verdad para movimiento y pathfinding.
@@ -56,16 +56,19 @@ public class TerrainSpeedModifier : MonoBehaviour
         switch (unitType)
         {
             case UnitType.InfanteriaPesada:
-                if (terrainTag == "Camino") return 3.5f;
-                if (terrainTag == "Bosque") return 2f;
+                if (terrainTag == "Camino")   return 3.5f;
+                if (terrainTag == "Bosque")   return 2.0f;
+                if (terrainTag == "Desierto") return 1.5f;
                 return 3f;
             case UnitType.Velites:
-                if (terrainTag == "Camino") return 5f;
-                if (terrainTag == "Bosque") return 3.5f;
+                if (terrainTag == "Camino")   return 5.0f;
+                if (terrainTag == "Bosque")   return 3.5f;
+                if (terrainTag == "Desierto") return 2.5f;
                 return 4f;
             case UnitType.Exploradores:
-                if (terrainTag == "Camino") return 7f;
-                if (terrainTag == "Bosque") return 5.5f;
+                if (terrainTag == "Camino")   return 7.0f;
+                if (terrainTag == "Bosque")   return 5.5f;
+                if (terrainTag == "Desierto") return 4.0f;
                 return 6f;
             default:
                 return 3f;
