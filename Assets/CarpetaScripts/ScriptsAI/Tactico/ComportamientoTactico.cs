@@ -51,6 +51,8 @@ public class ComportamientoTactico : MonoBehaviour
     [HideInInspector] public ContextoGrupo contextoGrupo;
     [HideInInspector] public Transform destinoEstrategico;
     private AgentNPC npc;
+    private AStarPathfinderInfluence pathfinder;
+    private Transform _ultimoDestino;
 
     private void Start()
     {
@@ -65,6 +67,7 @@ public class ComportamientoTactico : MonoBehaviour
         wander = GetComponent<Wander>();
         flee = GetComponent<Flee>();
         patrolSteering = GetComponent<PathFollowingSinOffset>();
+        pathfinder     = GetComponent<AStarPathfinderInfluence>();
 
         // Rescate manual exclusivo para los que comparten la herencia "Align"
         foreach (var c in GetComponents<SteeringBehaviour>())
@@ -249,15 +252,27 @@ public class ComportamientoTactico : MonoBehaviour
             if (dist > 2f)
             {
                 CambiarEstado(EstadoTactico.Explorando, "Ejecutando orden...");
-                npc.SetTarget(destinoEstrategico.position, npc.Orientation);
 
-                // arrive.target = null → Arrive usará TargetFormacion automáticamente
-                if (arrive != null) { arrive.target = null; arrive.enabled = true; }
-                Activar((MonoBehaviour)lookExacto, true);
-                if (TryGetComponent<WallAvoidance>(out var wall)) wall.enabled = true;
-                Activar(wander, false);
-                Activar(flee, false);
-                Activar((MonoBehaviour)alignExacto, false);
+                if (pathfinder != null && destinoEstrategico != _ultimoDestino)
+                {
+                    _ultimoDestino = destinoEstrategico;
+                    pathfinder.SetObjetivo(destinoEstrategico);
+                }
+
+                if (pathfinder != null && pathfinder.CurrentPath != null && patrolSteering != null)
+                {
+                    SetModoPatrulla();
+                }
+                else
+                {
+                    npc.SetTarget(destinoEstrategico.position, npc.Orientation);
+                    if (arrive != null) { arrive.target = null; arrive.enabled = true; }
+                    Activar((MonoBehaviour)lookExacto, true);
+                    if (TryGetComponent<WallAvoidance>(out var wall)) wall.enabled = true;
+                    Activar(wander, false);
+                    Activar(flee, false);
+                    Activar((MonoBehaviour)alignExacto, false);
+                }
                 return;
             }
         }

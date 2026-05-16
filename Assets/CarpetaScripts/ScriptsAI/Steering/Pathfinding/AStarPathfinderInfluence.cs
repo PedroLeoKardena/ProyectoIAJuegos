@@ -35,53 +35,62 @@ public class AStarPathfinderInfluence : UnityEngine.MonoBehaviour
     [SerializeField] private KeyCode recomputeKey = KeyCode.Space;
 
     [Header("Debug")]
-    [SerializeField] private bool drawDebug = true;
+    [SerializeField] private bool drawDebug = false;
 
     // Último camino calculado. Null si no hay camino o aún no se ha calculado.
     public Path CurrentPath { get; private set; }
 
-    // Método público para asignar destino y recalcular desde código (usado por
-    // SelectionManager al hacer click derecho).
+    // Escalonado: cada instancia computa en un frame distinto para evitar picos de CPU.
+    private static int _totalInstancias = 0;
+    private int  _miIndice;
+    private bool _recomputePending = false;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetContador() { _totalInstancias = 0; }
+
     public void SetObjetivo(Transform nuevoObjetivo)
     {
         objetivo = nuevoObjetivo;
-        if (isActiveAndEnabled) ComputePath();
+        if (isActiveAndEnabled) RequestRecompute();
     }
+    public void RequestRecompute() { _recomputePending = true; }
     public Transform Objetivo => objetivo;
 
     private TerrainSpeedModifier _terrainMod;
-    // Referencia al comportamiento táctico del mismo agente para leer el modo estratégico activo.
     private ComportamientoTactico _comportamiento;
-    // Último modo estratégico con el que se calculó el camino; detecta cambios de modo.
     private ModoEstrategico? _ultimoModo;
 
-    // Espera un frame antes de calcular el camino para garantizar que ManagerEstrategico.Start()
-    // haya ejecutado InicializarConContexto y asignado contextoGrupo a ComportamientoTactico.
     private System.Collections.IEnumerator Start()
     {
+        // Índice secuencial único: NPC 0 computa en frame 0, NPC 1 en frame 1, etc.
+        _miIndice = _totalInstancias++;
         if (grid == null) grid = FindFirstObjectByType<GridManager>();
         _terrainMod     = GetComponent<TerrainSpeedModifier>();
         _comportamiento = GetComponent<ComportamientoTactico>();
         yield return null;
-        ComputePath();
+        if (objetivo != null) ComputePath();
         _ultimoModo = _comportamiento?.contextoGrupo?.modo;
     }
 
     private void Update()
     {
-        // Permite recalcular el camino en tiempo real durante la demo.
         if (Input.GetKeyDown(recomputeKey))
-        {
-            ComputePath();
-            return;
-        }
+            _recomputePending = true;
 
-        // Recalcula automáticamente si el modo estratégico cambió (ofensivo ↔ defensivo ↔ guerra total).
         ModoEstrategico? modoActual = _comportamiento?.contextoGrupo?.modo;
         if (modoActual != _ultimoModo)
         {
             _ultimoModo = modoActual;
-            ComputePath();
+            if (objetivo != null) _recomputePending = true;
+        }
+
+        // Procesa el recompute solo en el frame que le corresponde a esta instancia.
+        // Con N instancias: NPC 0 computa en frames 0,N,2N,... NPC 1 en frames 1,N+1,2N+1,...
+        int spread = Mathf.Max(_totalInstancias, 1);
+        if (_recomputePending && Time.frameCount % spread == _miIndice % spread)
+        {
+            _recomputePending = false;
+            if (objetivo != null) ComputePath();
         }
     }
 
