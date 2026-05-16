@@ -28,12 +28,13 @@ public class HUDBotones : MonoBehaviour
     public bool ayudaVisibleAlInicio = false;
 
     // Referencias resueltas en Start.
-    private ManagerEstrategico managerAliado;
-    private ManagerEstrategico managerEnemigo;
-    private DebugEstrategico   debugStrat;
-    private Minimapa           minimapa;
-    private CondicionVictoria  condicionAliada;
-    private CondicionVictoria  condicionEnemiga;
+    private ManagerEstrategico          managerAliado;
+    private ManagerEstrategico          managerEnemigo;
+    private DebugEstrategico            debugStrat;
+    private Minimapa                    minimapa;
+    private CondicionVictoria           condicionAliada;
+    private CondicionVictoria           condicionEnemiga;
+    private SelectorObjetivoInfluencia[] selectores;
 
     // Estado UI.
     private bool mostrarAyuda;
@@ -57,6 +58,8 @@ public class HUDBotones : MonoBehaviour
 
         if (managerAliado  != null) condicionAliada  = managerAliado .GetComponent<CondicionVictoria>();
         if (managerEnemigo != null) condicionEnemiga = managerEnemigo.GetComponent<CondicionVictoria>();
+
+        selectores = FindObjectsByType<SelectorObjetivoInfluencia>(FindObjectsSortMode.None);
     }
 
     private void Update()
@@ -137,7 +140,6 @@ public class HUDBotones : MonoBehaviour
             debugStrat.ToggleActivo();
 
         // Influencia en selección de objetivo (apartado f)
-        var selectores = FindObjectsByType<SelectorObjetivoInfluencia>(FindObjectsSortMode.None);
         bool hayInfluencia = selectores != null && selectores.Length > 0;
         bool todosOn = false;
         if (hayInfluencia)

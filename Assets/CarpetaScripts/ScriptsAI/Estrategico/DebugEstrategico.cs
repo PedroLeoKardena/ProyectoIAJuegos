@@ -8,20 +8,38 @@ public class DebugEstrategico : MonoBehaviour
     private CondicionVictoria[]  condiciones;
     private Material _glMat;
 
+    private TacticalWaypoint[]         _waypoints;
+    private AgentNPC[]                 _npcs;
+    private AStarPathfinderInfluence[] _pathfinders;
+
     public void ToggleActivo() { activo = !activo; }
     public bool EsActivo        => activo;
     public bool EsTacticoActivo => tacticoActivo;
 
     private void Start()
     {
-        managers    = FindObjectsByType<ManagerEstrategico>(FindObjectsSortMode.None);
-        condiciones = FindObjectsByType<CondicionVictoria>(FindObjectsSortMode.None);
+        managers      = FindObjectsByType<ManagerEstrategico>(FindObjectsSortMode.None);
+        condiciones   = FindObjectsByType<CondicionVictoria>(FindObjectsSortMode.None);
+        _waypoints    = FindObjectsByType<TacticalWaypoint>(FindObjectsSortMode.None);
+        _npcs         = FindObjectsByType<AgentNPC>(FindObjectsSortMode.None);
+        _pathfinders  = FindObjectsByType<AStarPathfinderInfluence>(FindObjectsSortMode.None);
     }
+
+    private float _tiempoRefrescoCaché = 0f;
+    private const float INTERVALO_REFRESCO = 3f;
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.F1)) activo = !activo;
         if (Input.GetKeyDown(KeyCode.T))  ToggleTacticalPathfinding();
+
+        _tiempoRefrescoCaché += Time.deltaTime;
+        if (_tiempoRefrescoCaché >= INTERVALO_REFRESCO)
+        {
+            _tiempoRefrescoCaché = 0f;
+            _npcs        = FindObjectsByType<AgentNPC>(FindObjectsSortMode.None);
+            _pathfinders = FindObjectsByType<AStarPathfinderInfluence>(FindObjectsSortMode.None);
+        }
     }
 
     public void ToggleTacticalPathfinding()
@@ -47,7 +65,7 @@ public class DebugEstrategico : MonoBehaviour
         GL.Begin(GL.LINES);
 
         // Waypoints: haz vertical de 10 unidades + cruz en la cima
-        foreach (var wp in FindObjectsByType<TacticalWaypoint>(FindObjectsSortMode.None))
+        foreach (var wp in _waypoints)
         {
             Color c = wp.role switch
             {
@@ -76,11 +94,11 @@ public class DebugEstrategico : MonoBehaviour
         // }
 
         // Caminos de pathfinding: magenta=táctico, cian=distancia mínima
-        foreach (var npc in FindObjectsByType<AgentNPC>(FindObjectsSortMode.None))
+        foreach (var pf in _pathfinders)
         {
-            if (npc.faction == Faction.Neutro) continue;
-            var pf = npc.GetComponent<AStarPathfinderInfluence>();
-            if (pf?.CurrentPath?.nodes == null) continue;
+            if (pf == null || pf.CurrentPath?.nodes == null) continue;
+            var npc = pf.GetComponent<AgentNPC>();
+            if (npc == null || npc.faction == Faction.Neutro) continue;
 
             GL.Color(pf.useTacticalPathfinding ? Color.magenta : Color.cyan);
             for (int i = 0; i < pf.CurrentPath.nodes.Length - 1; i++)
@@ -126,9 +144,9 @@ public class DebugEstrategico : MonoBehaviour
             string guerraTxt = mgr.Contexto.guerraTotal ? " [GUERRA TOTAL]" : "";
 
             int total = 0, enCombate = 0;
-            foreach (var npc in FindObjectsByType<AgentNPC>(FindObjectsSortMode.None))
+            foreach (var npc in _npcs)
             {
-                if (npc.faction != mgr.faction) continue;
+                if (npc == null || npc.faction != mgr.faction) continue;
                 total++;
                 var ct = npc.GetComponent<ComportamientoTactico>();
                 if (ct != null &&

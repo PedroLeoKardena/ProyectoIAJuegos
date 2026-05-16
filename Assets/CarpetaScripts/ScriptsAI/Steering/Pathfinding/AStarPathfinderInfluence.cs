@@ -63,7 +63,7 @@ public class AStarPathfinderInfluence : UnityEngine.MonoBehaviour
         _terrainMod     = GetComponent<TerrainSpeedModifier>();
         _comportamiento = GetComponent<ComportamientoTactico>();
         yield return null;
-        ComputePath();
+        if (objetivo != null) ComputePath();
         _ultimoModo = _comportamiento?.contextoGrupo?.modo;
     }
 
@@ -81,7 +81,7 @@ public class AStarPathfinderInfluence : UnityEngine.MonoBehaviour
         if (modoActual != _ultimoModo)
         {
             _ultimoModo = modoActual;
-            ComputePath();
+            if (objetivo != null) ComputePath();
         }
     }
 
